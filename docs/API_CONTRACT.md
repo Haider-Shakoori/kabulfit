@@ -100,3 +100,22 @@ Authenticated bearer-token endpoints:
 - `PUT|DELETE /api/v1/{locale}/account/addresses/{address_uuid}`
 
 Account/address responses intentionally use public UUIDs and do not expose database primary keys. Password reset revokes existing API tokens. Email verification links are locale-aware signed web URLs.
+
+## Cart, wishlist and checkout
+
+Authenticated web/mobile commerce uses the same Laravel domain rules.
+
+- `GET /api/v1/{locale}/cart`
+- `POST /api/v1/{locale}/cart/items`
+- `PUT|DELETE /api/v1/{locale}/cart/items/{item}`
+- `GET|POST /api/v1/{locale}/wishlist`
+- `DELETE /api/v1/{locale}/wishlist/{product_slug}`
+- `POST /api/v1/{locale}/checkout`
+- `GET /api/v1/{locale}/orders/{order_uuid}`
+
+Checkout accepts a saved address UUID, shipping-method code and optional coupon. The server recalculates prices, discounts, shipping and stock; clients must never submit authoritative totals.
+
+The checkout response contains an order UUID/number and Stripe PaymentIntent client secret. Payment completion is not authoritative until the signed Stripe webhook is processed.
+
+Stock is reserved while payment is pending. Abandoned checkout reservations expire on the configured schedule and are released.
+

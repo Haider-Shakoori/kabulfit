@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Contracts\Payments\PaymentGateway;
+use App\Services\Payments\StripePaymentGateway;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -16,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
     }
 
     public function boot(): void

@@ -151,9 +151,42 @@ Validation evidence from GitHub Actions run `35636248691`:
 - PR-triggered CI: **green before merge**.
 - Post-merge `main` CI run `35636887850`: **quality + MySQL smoke both green**.
 
+## Batch 5 — Cart, wishlist, checkout + Stripe platform payments
+
+Status: **implementation validated green on `feat/batch-05-commerce-stripe`; final PR gate pending**.
+
+Implemented:
+
+- Durable authenticated carts and cart items shared by web/mobile business rules.
+- Customer wishlists for web and versioned mobile API.
+- Integer-minor-unit server-authoritative subtotal, discount, shipping and total calculations.
+- Deterministic shipping methods and coupon seed data.
+- Transactional checkout with immutable order-item snapshots.
+- Variant inventory reservation with row locking and bounded checkout reservation lifetime.
+- Scheduled abandoned-checkout cancellation and stock release.
+- Stripe PHP SDK integration using PaymentIntents and per-order idempotency keys.
+- Stripe Payment Element web flow and mobile-ready PaymentIntent client-secret contract.
+- Verified Stripe webhook endpoint; invalid signatures return HTTP 400.
+- Deduplicated provider event log and idempotent payment success handling.
+- Webhook-authoritative paid/failed/cancelled order state.
+- Successful payments convert reservations to sold stock exactly once.
+- Failed/cancelled payments release reserved inventory.
+- Payment gateway abstraction with Stripe cancellation/refund capability for later admin operations.
+- Localized English/Dari/Pashto commerce UI and private noindex cart/checkout/payment pages.
+- Automated cart, checkout, payment idempotency, webhook rejection and reservation-expiry tests.
+- Payment/checkout operational documentation.
+
+Validation evidence from GitHub Actions run `35639422198`:
+
+- PHPUnit: **49 tests, 271 assertions, zero warnings**.
+- Laravel Pint: **137 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
-- Cart, wishlist, checkout and Stripe platform implementation.
 - Measurement profiles and tailoring workflow.
 - Orders/shipping/notifications.
 - Admin/tailor dashboards and authorization matrix.
@@ -166,4 +199,4 @@ Validation evidence from GitHub Actions run `35636248691`:
 
 ## Release gate
 
-Batch 4 is merged and post-merge CI is green. The next implementation gate is Batch 5 — cart, wishlist, checkout and Stripe platform payments.
+Batch 5 implementation CI is green. The final documentation head and PR-triggered CI must remain green before merge.
