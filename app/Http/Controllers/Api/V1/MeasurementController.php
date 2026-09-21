@@ -15,16 +15,27 @@ class MeasurementController extends Controller
 {
     public function definitions(Request $request): JsonResponse
     {
-        $data = $request->validate(['garment_type' => 'required|in:perahan_tunban,dress,waistcoat', 'unit' => 'nullable|in:cm,in']);
+        $data = $request->validate([
+            'garment_type' => 'required|in:perahan_tunban,dress,waistcoat',
+            'unit' => 'nullable|in:cm,in',
+        ]);
         $unit = $data['unit'] ?? 'cm';
-        $definitions = MeasurementDefinition::where('garment_type', $data['garment_type'])->where('is_active', true)->with('translations')->orderBy('sort_order')->get();
+
+        $definitions = MeasurementDefinition::query()
+            ->where('garment_type', $data['garment_type'])
+            ->where('is_active', true)
+            ->with('translations')
+            ->orderBy('sort_order')
+            ->get();
 
         return response()->json(['data' => $definitions->map(fn ($definition) => [
             'uuid' => $definition->uuid,
             'code' => $definition->code,
             'name' => $definition->translation()?->name,
             'instructions' => $definition->translation()?->instructions,
-            'guide_image' => $definition->translation()?->guide_image_path,
+            'guide_image' => $definition->translation()?->guide_image_path
+                ? asset($definition->translation()->guide_image_path)
+                : null,
             'required' => $definition->is_required,
             'min' => MeasurementConverter::fromCm($definition->min_cm, $unit),
             'max' => MeasurementConverter::fromCm($definition->max_cm, $unit),
@@ -35,23 +46,39 @@ class MeasurementController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        return response()->json(['data' => $request->user()->measurementProfiles()->with('values.definition.translations')->get()->map(fn ($profile) => $this->profileData($profile))]);
+        $profiles = $request->user()
+            ->measurementProfiles()
+            ->with('values.definition.translations')
+            ->orderByDesc('is_default')
+            ->orderBy('name')
+            ->get();
+
+        return response()->json(['data' => $profiles->map(fn ($profile) => $this->profileData($profile))]);
     }
 
     public function store(MeasurementProfileRequest $request, MeasurementProfileService $service): JsonResponse
     {
-        return response()->json(['data' => $this->profileData($service->save($request->user(), $request->validated()))], 201);
+        return response()->json([
+            'data' => $this->profileData($service->save($request->user(), $request->validated())),
+        ], 201);
     }
 
-    public function update(MeasurementProfileRequest $request, MeasurementProfile $profile, MeasurementProfileService $service): JsonResponse
-    {
-        return response()->json(['data' => $this->profileData($service->save($request->user(), $request->validated(), $profile))]);
+    public function update(
+        MeasurementProfileRequest $request,
+        MeasurementProfile $profile,
+        MeasurementProfileService $service,
+    ): JsonResponse {
+        return response()->json([
+            'data' => $this->profileData($service->save($request->user(), $request->validated(), $profile)),
+        ]);
     }
 
-    public function destroy(Request $request, MeasurementProfile $profile): JsonResponse
-    {
-        abort_unless($profile->user_id === $request->user()->id, 404);
-        $profile->delete();
+    public function destroy(
+        Request $request,
+        MeasurementProfile $profile,
+        MeasurementProfileService $service,
+    ): JsonResponse {
+        $service->delete($request->user(), $profile);
 
         return response()->json([], 204);
     }

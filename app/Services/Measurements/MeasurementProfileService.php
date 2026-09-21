@@ -30,18 +30,29 @@ class MeasurementProfileService
             $values = collect($data['measurements'] ?? [])->keyBy('code');
             $errors = [];
 
+            foreach ($values->keys() as $code) {
+                if (! $definitions->has($code)) {
+                    $errors["measurements.$code"] = __('measurements.unknown_definition', ['code' => $code]);
+                }
+            }
+
             foreach ($definitions as $code => $definition) {
                 $input = $values->get($code);
+
                 if ($definition->is_required && ($input === null || ! isset($input['value']))) {
-                    $errors["measurements.$code"] = __('measurements.required_value', ['name' => $definition->translation()?->name ?? $code]);
+                    $errors["measurements.$code"] = __('measurements.required_value', [
+                        'name' => $definition->translation()?->name ?? $code,
+                    ]);
 
                     continue;
                 }
+
                 if ($input === null || ! isset($input['value'])) {
                     continue;
                 }
 
                 $cm = (float) MeasurementConverter::toCm($input['value'], $data['display_unit']);
+
                 if ($cm < (float) $definition->min_cm || $cm > (float) $definition->max_cm) {
                     $errors["measurements.$code"] = __('measurements.out_of_range', [
                         'name' => $definition->translation()?->name ?? $code,
@@ -56,21 +67,33 @@ class MeasurementProfileService
                 throw ValidationException::withMessages($errors);
             }
 
-            $profile ??= new MeasurementProfile(['uuid' => (string) Str::uuid(), 'user_id' => $user->id]);
+            $profile ??= new MeasurementProfile([
+                'uuid' => (string) Str::uuid(),
+                'user_id' => $user->id,
+            ]);
+
+            $makeDefault = (bool) ($data['is_default'] ?? false)
+                || ! MeasurementProfile::query()->where('user_id', $user->id)->whereKeyNot($profile->id)->exists();
+
             $profile->fill([
                 'name' => $data['name'],
                 'garment_type' => $data['garment_type'],
                 'display_unit' => $data['display_unit'],
-                'is_default' => (bool) ($data['is_default'] ?? false),
+                'is_default' => $makeDefault,
             ])->save();
 
             if ($profile->is_default) {
-                MeasurementProfile::where('user_id', $user->id)->whereKeyNot($profile->id)->update(['is_default' => false]);
+                MeasurementProfile::query()
+                    ->where('user_id', $user->id)
+                    ->whereKeyNot($profile->id)
+                    ->update(['is_default' => false]);
             }
 
             $profile->values()->delete();
+
             foreach ($definitions as $code => $definition) {
                 $input = $values->get($code);
+
                 if ($input !== null && isset($input['value'])) {
                     $profile->values()->create([
                         'measurement_definition_id' => $definition->id,
@@ -80,6 +103,24 @@ class MeasurementProfileService
             }
 
             return $profile->load('values.definition.translations');
+        });
+    }
+
+    public function delete(User $user, MeasurementProfile $profile): void
+    {
+        abort_unless($profile->user_id === $user->id, 404);
+
+        DB::transaction(function () use ($user, $profile): void {
+            $wasDefault = $profile->is_default;
+            $profile->delete();
+
+            if ($wasDefault) {
+                MeasurementProfile::query()
+                    ->where('user_id', $user->id)
+                    ->oldest('id')
+                    ->first()
+                    ?->update(['is_default' => true]);
+            }
         });
     }
 }

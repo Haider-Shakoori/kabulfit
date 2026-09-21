@@ -39,6 +39,7 @@ class ProductSummaryResource extends JsonResource
                 'height' => $media->height,
             ] : null,
             'featured' => $this->is_featured,
+            'tailoring_enabled' => $this->tailoring_enabled,
         ];
     }
 }
