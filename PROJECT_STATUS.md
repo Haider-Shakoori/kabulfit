@@ -90,7 +90,7 @@ Key architectural decisions:
 
 ## Batch 3 — Catalog domain + mobile catalog API
 
-Status: **implemented on `feat/batch-03-catalog-domain-v2`; CI validation pending**.
+Status: **implementation validated green on `feat/batch-03-catalog-domain-v2`; final PR gate pending**.
 
 Implemented:
 
@@ -109,7 +109,16 @@ Implemented:
 - Public catalog API rate limiting and contract documentation.
 - Automated catalog domain, filter, API, recently-viewed and SEO tests.
 
+Validation evidence from GitHub Actions run `35633550158`:
 
+- PHPUnit: **30 tests, 168 assertions, zero warnings**.
+- Laravel Pint: **76 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
+## Not yet complete
 
 - Authentication/customer account and mobile API authentication.
 - Cart, wishlist, checkout and Stripe platform implementation.
@@ -125,4 +134,4 @@ Implemented:
 
 ## Release gate
 
-Batch 3 must not merge until feature-branch and PR CI are green.
+Batch 3 implementation CI is green. The final documentation commit and PR-triggered CI must also remain green before merge.
