@@ -117,6 +117,7 @@ Validation evidence from GitHub Actions run `35633550158`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35639706516`: **quality + MySQL smoke both green**.
 - PR-triggered CI run `35636598809`: **quality + MySQL smoke both green**.
 - PR-triggered CI run `35633833786`: **quality + MySQL smoke both green**.
 
@@ -153,7 +154,7 @@ Validation evidence from GitHub Actions run `35636248691`:
 
 ## Batch 5 — Cart, wishlist, checkout + Stripe platform payments
 
-Status: **implementation validated green on `feat/batch-05-commerce-stripe`; final PR gate pending**.
+Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #8**.
 
 Implemented:
 
@@ -199,4 +200,4 @@ Validation evidence from GitHub Actions run `35639422198`:
 
 ## Release gate
 
-Batch 5 implementation CI is green. The final documentation head and PR-triggered CI must remain green before merge.
+Batch 5 has met its implementation and CI gates. PR #8 may merge while this final documentation-only head remains green.
