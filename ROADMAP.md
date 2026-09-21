@@ -2,8 +2,8 @@
 
 Work is delivered in reviewable production-sized batches. Every batch must update `PROJECT_STATUS.md`, run relevant tests, pass formatting/build/security checks and remain unmerged until CI is green.
 
-1. **Foundation, localization and SEO primitives** — Laravel 12 scaffold, `en/fa/ps`, RTL, design tokens, catalog foundation, robots/sitemap, legacy redirect architecture, tests and CI.
-2. **Reference visual-fidelity system** — complete live-site visual inventory, exact reusable components/tokens, responsive header/footer/homepage, production media strategy and accessibility pass.
+1. ✅ **Foundation, localization and SEO primitives** — Laravel 12 scaffold, `en/fa/ps`, RTL, design tokens, catalog foundation, robots/sitemap, legacy redirect architecture, tests and CI. Merged via PR #1.
+2. 🚧 **Reference visual-fidelity system** — live-site visual/content inventory, reusable components/tokens, responsive header/footer/homepage, media strategy and accessibility pass. Implemented; CI validation in progress.
 3. **Catalog domain** — categories/collections, media, variants, sizes/colors, inventory, search/filter/sort, related/recently viewed products, complete Product/Offer/Breadcrumb/ItemList schema.
 4. **Authentication and customer account** — registration/login/reset/verification, addresses, order history shell, noindex controls, throttling and account authorization.
 5. **Cart, wishlist and checkout** — durable cart, decimal-safe totals, coupons architecture, shipping calculation, checkout state machine and payment interfaces without fake gateways.
