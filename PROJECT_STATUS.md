@@ -153,7 +153,7 @@ Validation evidence from GitHub Actions run `35636248691`:
 
 ## Batch 5 — Cart, wishlist, checkout + Stripe platform payments
 
-Status: **implemented on `feat/batch-05-commerce-stripe`; final CI/PR gate pending**.
+Status: **implementation validated green on `feat/batch-05-commerce-stripe`; final PR gate pending**.
 
 Implemented:
 
@@ -176,6 +176,15 @@ Implemented:
 - Automated cart, checkout, payment idempotency, webhook rejection and reservation-expiry tests.
 - Payment/checkout operational documentation.
 
+Validation evidence from GitHub Actions run `35639422198`:
+
+- PHPUnit: **49 tests, 271 assertions, zero warnings**.
+- Laravel Pint: **137 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
 - Measurement profiles and tailoring workflow.
@@ -190,4 +199,4 @@ Implemented:
 
 ## Release gate
 
-Batch 4 is merged and post-merge CI is green. The next implementation gate is Batch 5 — cart, wishlist, checkout and Stripe platform payments.
+Batch 5 implementation CI is green. The final documentation head and PR-triggered CI must remain green before merge.
