@@ -86,7 +86,11 @@ return new class extends Migration
 
         Schema::create('product_option_value_translations', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('product_option_value_id')->constrained('product_option_values')->cascadeOnDelete();
+            $table->foreignId('product_option_value_id');
+            $table->foreign('product_option_value_id', 'pov_translation_value_fk')
+                ->references('id')
+                ->on('product_option_values')
+                ->cascadeOnDelete();
             $table->string('locale', 5);
             $table->string('name');
             $table->unique(['product_option_value_id', 'locale']);
