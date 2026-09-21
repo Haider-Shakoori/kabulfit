@@ -57,7 +57,10 @@ class MeasurementProfileController extends Controller
         abort_unless($profile->user_id === $request->user()->id, 404);
         $profile->load('values.definition.translations');
 
-        return $this->formView($profile, $profile->garment_type, $profile->display_unit);
+        $unit = $request->string('unit')->toString() ?: $profile->display_unit;
+        abort_unless(in_array($unit, ['cm', 'in'], true), 404);
+
+        return $this->formView($profile, $profile->garment_type, $unit);
     }
 
     public function update(
