@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;\nuse Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\PersonalAccessToken;
 use Tests\TestCase;
@@ -80,6 +80,7 @@ class MobileAuthenticationApiTest extends TestCase
             ->assertOk();
 
         $this->assertCount(0, $user->tokens()->get());
+        Auth::forgetGuards();
 
         $this->withToken($token)
             ->getJson('/api/v1/fa/account')
