@@ -13,7 +13,7 @@ Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/ProductDetail', [LegacyRedirectController::class, 'product'])->name('legacy.product');
 
 Route::prefix('{locale}')
-    ->where('locale', 'en|fa|ps')
+    ->where(['locale' => 'en|fa|ps'])
     ->middleware('locale')
     ->group(function (): void {
         Route::get('/', HomeController::class)->name('home');
