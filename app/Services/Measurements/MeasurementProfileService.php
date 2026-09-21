@@ -19,6 +19,16 @@ class MeasurementProfileService
                 abort(404);
             }
 
+            if (
+                $profile
+                && $profile->garment_type !== $data['garment_type']
+                && $profile->tailoringRequests()->where('status', 'ready')->exists()
+            ) {
+                throw ValidationException::withMessages([
+                    'garment_type' => __('measurements.profile_in_active_tailoring'),
+                ]);
+            }
+
             $definitions = MeasurementDefinition::query()
                 ->where('garment_type', $data['garment_type'])
                 ->where('is_active', true)
@@ -67,13 +77,18 @@ class MeasurementProfileService
                 throw ValidationException::withMessages($errors);
             }
 
+            $isExisting = $profile !== null;
             $profile ??= new MeasurementProfile([
                 'uuid' => (string) Str::uuid(),
                 'user_id' => $user->id,
             ]);
 
-            $makeDefault = (bool) ($data['is_default'] ?? false)
-                || ! MeasurementProfile::query()->where('user_id', $user->id)->whereKeyNot($profile->id)->exists();
+            $otherProfiles = MeasurementProfile::query()->where('user_id', $user->id);
+            if ($isExisting) {
+                $otherProfiles->whereKeyNot($profile->id);
+            }
+
+            $makeDefault = (bool) ($data['is_default'] ?? false) || ! $otherProfiles->exists();
 
             $profile->fill([
                 'name' => $data['name'],
@@ -111,6 +126,12 @@ class MeasurementProfileService
         abort_unless($profile->user_id === $user->id, 404);
 
         DB::transaction(function () use ($user, $profile): void {
+            if ($profile->tailoringRequests()->where('status', 'ready')->exists()) {
+                throw ValidationException::withMessages([
+                    'profile' => __('measurements.profile_in_active_tailoring'),
+                ]);
+            }
+
             $wasDefault = $profile->is_default;
             $profile->delete();
 

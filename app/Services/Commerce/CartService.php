@@ -79,6 +79,7 @@ class CartService
         abort_unless($item->cart_id === $cart->id, 404);
 
         if ($quantity === 0) {
+            $item->tailoringRequest?->update(['status' => 'cancelled']);
             $item->delete();
 
             return $this->load($cart);
@@ -100,6 +101,7 @@ class CartService
     public function remove(Cart $cart, CartItem $item): Cart
     {
         abort_unless($item->cart_id === $cart->id, 404);
+        $item->tailoringRequest?->update(['status' => 'cancelled']);
         $item->delete();
 
         return $this->load($cart);

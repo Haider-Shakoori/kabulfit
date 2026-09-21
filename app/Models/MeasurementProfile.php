@@ -25,6 +25,11 @@ class MeasurementProfile extends Model
         return $this->hasMany(MeasurementValue::class);
     }
 
+    public function tailoringRequests(): HasMany
+    {
+        return $this->hasMany(TailoringRequest::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'uuid';

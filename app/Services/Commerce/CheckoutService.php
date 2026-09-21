@@ -94,6 +94,8 @@ class CheckoutService
                     'product_variant_id' => $variant?->id,
                     'tailoring_request_uuid' => $tailoring?->uuid,
                     'is_custom_tailored' => $tailoring !== null,
+                    'measurement_profile_name' => $tailoring?->measurementProfile?->name,
+                    'tailoring_notes' => $tailoring?->customer_notes,
                     'sku' => $variant?->sku ?? $item->product->sku,
                     'name' => $item->product->translation()?->name ?? $item->product->sku,
                     'variant_label' => $variant?->option_key,
@@ -130,6 +132,12 @@ class CheckoutService
     {
         DB::transaction(function () use ($order) {
             foreach ($order->items()->get() as $item) {
+                if ($item->tailoring_request_uuid) {
+                    \App\Models\TailoringRequest::query()
+                        ->where('uuid', $item->tailoring_request_uuid)
+                        ->where('status', 'ordered')
+                        ->update(['status' => 'cancelled']);
+                }
                 if (! $item->product_variant_id) {
                     continue;
                 }

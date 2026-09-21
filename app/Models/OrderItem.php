@@ -10,7 +10,8 @@ class OrderItem extends Model
 {
     protected $fillable = [
         'order_id', 'product_id', 'product_variant_id', 'tailoring_request_uuid',
-        'is_custom_tailored', 'sku', 'name', 'variant_label',
+        'is_custom_tailored', 'measurement_profile_name', 'tailoring_notes',
+        'sku', 'name', 'variant_label',
         'unit_price_minor', 'quantity', 'line_total_minor',
     ];
 

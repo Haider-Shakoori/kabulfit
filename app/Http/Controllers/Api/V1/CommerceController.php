@@ -91,6 +91,12 @@ class CommerceController extends Controller
 
     private function payload($cart): array
     {
-        return ['data' => ['uuid' => $cart->uuid, 'currency' => $cart->currency, 'items' => $cart->items->map(fn ($i) => ['uuid' => $i->uuid, 'product_slug' => $i->product->translation()?->slug, 'sku' => $i->variant?->sku ?? $i->product->sku, 'name' => $i->product->translation()?->name, 'quantity' => $i->quantity, 'unit_price_minor' => $i->unitPriceMinor(), 'line_total_minor' => $i->lineTotalMinor()]), 'subtotal_minor' => $cart->items->sum(fn ($i) => $i->lineTotalMinor())]];
+        return ['data' => ['uuid' => $cart->uuid, 'currency' => $cart->currency, 'items' => $cart->items->map(fn ($i) => ['uuid' => $i->uuid, 'product_slug' => $i->product->translation()?->slug, 'sku' => $i->variant?->sku ?? $i->product->sku, 'name' => $i->product->translation()?->name, 'quantity' => $i->quantity, 'unit_price_minor' => $i->unitPriceMinor(), 'line_total_minor' => $i->lineTotalMinor(),
+            'tailoring' => $i->tailoringRequest ? [
+                'uuid' => $i->tailoringRequest->uuid,
+                'status' => $i->tailoringRequest->status,
+                'measurement_profile' => $i->tailoringRequest->measurementProfile?->name,
+            ] : null,
+        ]), 'subtotal_minor' => $cart->items->sum(fn ($i) => $i->lineTotalMinor())]];
     }
 }

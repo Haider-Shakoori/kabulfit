@@ -93,6 +93,8 @@ return new class extends Migration
         Schema::table('order_items', function (Blueprint $table): void {
             $table->uuid('tailoring_request_uuid')->nullable()->after('product_variant_id')->index();
             $table->boolean('is_custom_tailored')->default(false)->after('tailoring_request_uuid');
+            $table->string('measurement_profile_name')->nullable()->after('is_custom_tailored');
+            $table->text('tailoring_notes')->nullable()->after('measurement_profile_name');
         });
 
         Schema::create('order_item_measurements', function (Blueprint $table): void {
@@ -111,7 +113,12 @@ return new class extends Migration
         Schema::dropIfExists('order_item_measurements');
 
         Schema::table('order_items', function (Blueprint $table): void {
-            $table->dropColumn(['tailoring_request_uuid', 'is_custom_tailored']);
+            $table->dropColumn([
+                'tailoring_request_uuid',
+                'is_custom_tailored',
+                'measurement_profile_name',
+                'tailoring_notes',
+            ]);
         });
 
         Schema::table('cart_items', function (Blueprint $table): void {
