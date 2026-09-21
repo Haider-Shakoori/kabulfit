@@ -84,6 +84,11 @@
                         <label>{{ __('commerce.quantity') }}<input type="number" name="quantity" value="1" min="1" max="99"></label>
                         <button class="button button-primary" type="submit">{{ __('commerce.add_to_cart') }}</button>
                     </form>
+                    @if ($product->tailoring_enabled)
+                        <a class="button button-gold" href="{{ route('tailoring.create', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}">
+                            {{ __('measurements.tailor_this_outfit') }}
+                        </a>
+                    @endif
                     <form method="post" action="{{ route('wishlist.store', ['locale' => app()->getLocale()]) }}">
                         @csrf
                         <input type="hidden" name="product_slug" value="{{ $translation?->slug }}">
@@ -91,6 +96,9 @@
                     </form>
                 @else
                     <a class="button button-primary" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('commerce.sign_in_to_buy') }}</a>
+                    @if ($product->tailoring_enabled)
+                        <a class="button button-gold" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('measurements.tailor_this_outfit') }}</a>
+                    @endif
                 @endauth
 
                 <div class="notice-box">
