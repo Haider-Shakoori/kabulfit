@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#173b2d">
+    <meta name="color-scheme" content="light">
     <title>{{ $seo->title ?? 'KabulFit' }}</title>
     <meta name="description" content="{{ $seo->description ?? '' }}">
     <meta name="robots" content="{{ $seo->robots ?? 'index,follow' }}">
@@ -28,29 +30,40 @@
 </head>
 <body>
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
-<header class="site-header" x-data="{ open: false }">
-    <div class="announcement">{{ __('site.announcement') }}</div>
-    <div class="container nav-shell">
-        <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="brand" aria-label="KabulFit home">
-            <span class="brand-mark" aria-hidden="true">K</span>
-            <span>KabulFit</span>
+
+<header class="site-header" x-data="{ open: false }" @keydown.escape.window="open = false">
+    <div class="announcement">
+        <div class="container announcement-inner">
+            <span>{{ __('site.announcement') }}</span>
+            <span class="announcement-separator" aria-hidden="true">•</span>
+            <span>{{ __('site.global_shipping_text') }}</span>
+        </div>
+    </div>
+
+    <div class="container nav-shell" @click.outside="open = false">
+        <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="brand" aria-label="{{ __('site.kabulfit_home') }}">
+            <x-brand-mark />
+            <span class="brand-word">KabulFit</span>
         </a>
 
-        <button class="mobile-toggle" type="button" @click="open = !open" :aria-expanded="open.toString()" aria-controls="primary-nav">
-            <span class="sr-only">{{ __('site.menu') }}</span>
-            <span aria-hidden="true">☰</span>
-        </button>
-
         <nav id="primary-nav" class="primary-nav" :class="{ 'is-open': open }" aria-label="{{ __('site.primary_navigation') }}">
-            <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop') }}</a>
-            <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#categories">{{ __('site.categories') }}</a>
-            <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring">{{ __('site.custom_tailoring') }}</a>
+            <a @click="open = false" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop') }}</a>
+            <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#categories">{{ __('site.categories') }}</a>
+            <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#story">{{ __('site.our_story') }}</a>
+            <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring">{{ __('site.custom_tailoring') }}</a>
+            <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#contact">{{ __('site.contact') }}</a>
         </nav>
 
-        <div class="locale-switcher" aria-label="{{ __('site.language') }}">
-            @foreach (($seo->alternates ?? []) as $locale => $href)
-                <a href="{{ $href }}" hreflang="{{ $locale }}" lang="{{ $locale }}" @class(['active' => app()->getLocale() === $locale])>{{ strtoupper($locale) }}</a>
-            @endforeach
+        <div class="nav-actions">
+            <div class="locale-switcher" aria-label="{{ __('site.language') }}">
+                @foreach (($seo->alternates ?? []) as $locale => $href)
+                    <a href="{{ $href }}" hreflang="{{ $locale }}" lang="{{ $locale }}" @class(['active' => app()->getLocale() === $locale]) aria-current="{{ app()->getLocale() === $locale ? 'page' : 'false' }}">{{ strtoupper($locale) }}</a>
+                @endforeach
+            </div>
+
+            <button class="mobile-toggle" type="button" @click="open = !open" :aria-expanded="open.toString()" aria-controls="primary-nav" aria-label="{{ __('site.menu') }}">
+                <span class="mobile-toggle-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+            </button>
         </div>
     </div>
 </header>
@@ -59,24 +72,32 @@
     @yield('content')
 </main>
 
-<footer class="site-footer">
+<footer id="contact" class="site-footer">
     <div class="container footer-grid">
-        <div>
-            <div class="brand footer-brand"><span class="brand-mark" aria-hidden="true">K</span><span>KabulFit</span></div>
+        <div class="footer-intro">
+            <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="brand footer-brand" aria-label="{{ __('site.kabulfit_home') }}">
+                <x-brand-mark />
+                <span class="brand-word">KabulFit</span>
+            </a>
             <p>{{ __('site.footer_intro') }}</p>
         </div>
         <div>
             <h2>{{ __('site.explore') }}</h2>
             <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop') }}</a>
+            <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#categories">{{ __('site.categories') }}</a>
             <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring">{{ __('site.custom_tailoring') }}</a>
         </div>
         <div>
             <h2>{{ __('site.contact') }}</h2>
-            <p>info@kabulfit.com</p>
+            <a href="mailto:info@kabulfit.com">info@kabulfit.com</a>
+            <p>{{ __('site.whatsapp_contact') }}</p>
             <p>{{ __('site.locations') }}</p>
         </div>
     </div>
-    <div class="container footer-bottom">© {{ date('Y') }} KabulFit. {{ __('site.rights') }}</div>
+    <div class="container footer-bottom">
+        <span>© {{ date('Y') }} KabulFit. {{ __('site.rights') }}</span>
+        <span>{{ __('site.footer_tagline') }}</span>
+    </div>
 </footer>
 </body>
 </html>

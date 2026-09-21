@@ -29,7 +29,7 @@ For active frontend development use `npm run dev` in a second terminal. Configur
 ## Tests and quality
 
 ```bash
-php artisan test
+vendor/bin/phpunit --display-warnings --fail-on-warning
 vendor/bin/pint --test
 composer audit
 npm run build
@@ -49,19 +49,19 @@ Scheduler cron entry:
 * * * * * cd /path/to/kabulfit && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-No scheduled domain tasks are enabled in Batch 1; this is the production runtime contract for later workflows.
+No scheduled domain tasks are enabled yet; this is the production runtime contract for later workflows.
 
 ## Production deployment baseline
 
 ```bash
 composer install --no-dev --prefer-dist --optimize-autoloader
 php artisan migrate --force
-npm ci && npm run build   # use once lockfile is committed; until then npm install && npm run build
+npm ci && npm run build
 php artisan storage:link
 php artisan optimize
 ```
 
-Serve the application from `public/`, set `APP_ENV=production`, `APP_DEBUG=false`, HTTPS-only cookies, a production cache/queue backend, and real mail/storage credentials through environment variables. Never commit `.env` or production secrets.
+A production lockfile gate remains on the roadmap; until lockfiles are committed, local frontend setup uses `npm install`. Serve the application from `public/`, set `APP_ENV=production`, `APP_DEBUG=false`, HTTPS-only cookies, a production cache/queue backend, and real mail/storage credentials through environment variables. Never commit `.env` or production secrets.
 
 ## SEO architecture
 
@@ -70,5 +70,9 @@ Indexable URLs are localized and slug-based (`/{locale}/products/{slug}`, `/{loc
 ## Translation workflow
 
 UI strings live in `lang/en`, `lang/fa` and `lang/ps`. Product/category localized content is relational database data. Do not hard-code translated interface strings in Blade when a translation key is appropriate.
+
+## Visual reference and media
+
+The live KabulFit site is the visual/content source of truth. The current reference audit, implementation notes, responsive/accessibility decisions and media constraints are documented in `docs/VISUAL_REFERENCE.md`.
 
 See `PROJECT_STATUS.md` and `ROADMAP.md` for implementation status and batch sequencing.

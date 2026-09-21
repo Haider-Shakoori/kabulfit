@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1120" viewBox="0 0 960 1120" role="img" aria-labelledby="title desc">
+<title id="title">KabulFit textile pattern</title>
+<desc id="desc">An original geometric textile-inspired pattern using KabulFit green, burgundy and gold.</desc>
+<rect width="960" height="1120" fill="#173b2d"/>
+<g fill="none" stroke="#c99a4a" stroke-width="4" opacity=".78">
+  <path d="M480 70 670 260 480 450 290 260 480 70Z"/>
+  <path d="M480 165 575 260 480 355 385 260 480 165Z"/>
+  <path d="M160 455 290 585 160 715 30 585 160 455Zm640 0 130 130-130 130-130-130 130-130Z"/>
+  <path d="M480 610 690 820 480 1030 270 820 480 610Z"/>
+</g>
+<g fill="#7c2f28" opacity=".9">
+  <circle cx="480" cy="260" r="26"/><circle cx="160" cy="585" r="20"/><circle cx="800" cy="585" r="20"/><circle cx="480" cy="820" r="30"/>
+</g>
+<g stroke="#fff" stroke-width="2" opacity=".14">
+  <path d="M0 140h960M0 380h960M0 760h960M0 1000h960"/>
+  <path d="M120 0v1120M360 0v1120M600 0v1120M840 0v1120"/>
+</g>
+</svg>
