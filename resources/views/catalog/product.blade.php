@@ -66,6 +66,33 @@
                     </div>
                 @endif
 
+                @auth
+                    <form class="product-purchase" method="post" action="{{ route('cart.items.store', ['locale' => app()->getLocale()]) }}">
+                        @csrf
+                        <input type="hidden" name="product_slug" value="{{ $translation?->slug }}">
+                        @if ($product->variants->isNotEmpty())
+                            <label>{{ __('commerce.option') }}
+                                <select name="variant_sku" required>
+                                    @foreach ($product->variants->where('is_active', true) as $variant)
+                                        <option value="{{ $variant->sku }}" @disabled($variant->availableQuantity() < 1)>
+                                            {{ $variant->option_key }} — {{ $product->formattedPrice($variant->currentPriceMinor()) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        @endif
+                        <label>{{ __('commerce.quantity') }}<input type="number" name="quantity" value="1" min="1" max="99"></label>
+                        <button class="button button-primary" type="submit">{{ __('commerce.add_to_cart') }}</button>
+                    </form>
+                    <form method="post" action="{{ route('wishlist.store', ['locale' => app()->getLocale()]) }}">
+                        @csrf
+                        <input type="hidden" name="product_slug" value="{{ $translation?->slug }}">
+                        <button class="button button-secondary" type="submit">{{ __('commerce.add_to_wishlist') }}</button>
+                    </form>
+                @else
+                    <a class="button button-primary" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('commerce.sign_in_to_buy') }}</a>
+                @endauth
+
                 <div class="notice-box">
                     <strong>{{ __('site.measurement_ready') }}</strong>
                     <p>{{ __('site.measurement_ready_text') }}</p>

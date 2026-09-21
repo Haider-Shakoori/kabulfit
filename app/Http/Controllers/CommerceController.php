@@ -62,6 +62,44 @@ class CommerceController extends Controller
         return back();
     }
 
+    public function wishlist(Request $request): View
+    {
+        $products = Product::query()
+            ->whereHas('wishlists', fn ($query) => $query->where('user_id', $request->user()->id))
+            ->with(['translations', 'category.translations', 'media.translations', 'variants.inventory'])
+            ->get();
+
+        return view('commerce.wishlist', [
+            'products' => $products,
+            'seo' => PrivatePageSeo::make(__('commerce.wishlist'), route('wishlist', ['locale' => app()->getLocale()])),
+        ]);
+    }
+
+    public function wishlistStore(Request $request): RedirectResponse
+    {
+        $data = $request->validate(['product_slug' => 'required|string']);
+        $product = Product::whereHas(
+            'translations',
+            fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $data['product_slug']),
+        )->firstOrFail();
+
+        \App\Models\Wishlist::firstOrCreate(['user_id' => $request->user()->id, 'product_id' => $product->id]);
+
+        return back();
+    }
+
+    public function wishlistDestroy(Request $request, string $slug): RedirectResponse
+    {
+        $product = Product::whereHas(
+            'translations',
+            fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $slug),
+        )->firstOrFail();
+
+        \App\Models\Wishlist::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->delete();
+
+        return back();
+    }
+
     public function checkout(Request $request): View
     {
         $cart = $this->carts->load($this->carts->forUser($request->user()));

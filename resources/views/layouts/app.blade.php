@@ -56,6 +56,8 @@
 
         <div class="nav-actions">
             @auth
+                <a class="nav-account-link" href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}">{{ __('commerce.wishlist') }}</a>
+                <a class="nav-account-link" href="{{ route('cart', ['locale' => app()->getLocale()]) }}">{{ __('commerce.cart') }}</a>
                 <a class="nav-account-link" href="{{ route('account', ['locale' => app()->getLocale()]) }}">{{ __('auth.account') }}</a>
             @else
                 <a class="nav-account-link" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('auth.login') }}</a>

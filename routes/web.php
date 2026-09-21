@@ -66,6 +66,9 @@ Route::prefix('{locale}')
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('cart.items.store');
             Route::put('/cart/items/{item}', [CommerceController::class, 'update'])->name('cart.items.update');
             Route::delete('/cart/items/{item}', [CommerceController::class, 'remove'])->name('cart.items.destroy');
+            Route::get('/wishlist', [CommerceController::class, 'wishlist'])->name('wishlist');
+            Route::post('/wishlist', [CommerceController::class, 'wishlistStore'])->name('wishlist.store');
+            Route::delete('/wishlist/{slug}', [CommerceController::class, 'wishlistDestroy'])->name('wishlist.destroy');
             Route::get('/checkout', [CommerceController::class, 'checkout'])->name('checkout');
             Route::post('/checkout', [CommerceController::class, 'place'])->middleware('throttle:20,1')->name('checkout.place');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
