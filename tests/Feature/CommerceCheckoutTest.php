@@ -120,4 +120,57 @@ class CommerceCheckoutTest extends TestCase
         $this->assertSame($onHand - 1, $inventory->fresh()->quantity_on_hand);
         $this->assertSame(1, PaymentEvent::where('provider_event_id', 'evt_success_1')->count());
     }
+
+    public function test_invalid_stripe_webhook_signature_is_rejected(): void
+    {
+        config(['services.stripe.webhook_secret' => 'whsec_test']);
+
+        $this->call(
+            'POST',
+            '/api/stripe/webhook',
+            [],
+            [],
+            [],
+            ['HTTP_STRIPE_SIGNATURE' => 't=1,v1=invalid'],
+            '{"id":"evt_invalid","type":"payment_intent.succeeded"}',
+        )->assertStatus(400);
+
+        $this->assertDatabaseCount('payment_events', 0);
+    }
+
+    public function test_expired_checkout_releases_reserved_inventory(): void
+    {
+        $user = User::factory()->create();
+        $address = $user->addresses()->create([
+            'uuid' => (string) Str::uuid(),
+            'label' => 'Home',
+            'recipient_name' => 'Customer',
+            'phone' => '+93700000000',
+            'country_code' => 'AF',
+            'province' => 'Kabul',
+            'city' => 'Kabul',
+            'address_line1' => 'Test address',
+            'is_default' => true,
+        ]);
+        $product = Product::where('sku', 'KF-M-PT-001')->firstOrFail();
+        $variant = ProductVariant::where('sku', 'KF-M-PT-001-M-BLACK')->firstOrFail();
+        $inventory = InventoryItem::where('product_variant_id', $variant->id)->firstOrFail();
+        $initialReserved = $inventory->quantity_reserved;
+
+        $cart = app(CartService::class)->forUser($user);
+        app(CartService::class)->add($cart, $product->load('translations'), $variant->load(['inventory', 'product']), 1);
+        $order = app(CheckoutService::class)->create(
+            $user,
+            $cart,
+            $address,
+            ShippingMethod::where('code', 'standard-af')->firstOrFail(),
+        );
+        app(PaymentService::class)->initiate($order);
+        $order->update(['reservation_expires_at' => now()->subMinute()]);
+
+        $this->artisan('commerce:expire-checkouts')->assertSuccessful();
+
+        $this->assertSame('cancelled', $order->fresh()->status);
+        $this->assertSame($initialReserved, $inventory->fresh()->quantity_reserved);
+    }
 }
