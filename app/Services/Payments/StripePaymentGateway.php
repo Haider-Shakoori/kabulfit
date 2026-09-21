@@ -13,30 +13,51 @@ class StripePaymentGateway implements PaymentGateway
 
     private function stripe(): StripeClient
     {
-        $key = (string) config('services.stripe.secret');
         if ($this->client) {
             return $this->client;
-        }if ($key === '') {
+        }
+
+        $key = (string) config('services.stripe.secret');
+
+        if ($key === '') {
             throw new RuntimeException('Stripe secret key is not configured.');
         }
 
-return new StripeClient($key);
+        return new StripeClient($key);
     }
 
     public function createIntent(Payment $payment): array
     {
-        $intent = $this->stripe()->paymentIntents->create(['amount' => $payment->amount_minor, 'currency' => strtolower($payment->currency), 'automatic_payment_methods' => ['enabled' => true], 'metadata' => ['order_uuid' => $payment->order->uuid, 'payment_uuid' => $payment->uuid]], ['idempotency_key' => $payment->idempotency_key]);
+        $intent = $this->stripe()->paymentIntents->create([
+            'amount' => $payment->amount_minor,
+            'currency' => strtolower($payment->currency),
+            'automatic_payment_methods' => ['enabled' => true],
+            'metadata' => [
+                'order_uuid' => $payment->order->uuid,
+                'payment_uuid' => $payment->uuid,
+            ],
+        ], ['idempotency_key' => $payment->idempotency_key]);
 
-        return ['id' => $intent->id, 'client_secret' => $intent->client_secret, 'status' => $intent->status];
+        return [
+            'id' => $intent->id,
+            'client_secret' => $intent->client_secret,
+            'status' => $intent->status,
+        ];
     }
 
     public function refund(Payment $payment, ?int $amountMinor = null): array
     {
         $params = ['payment_intent' => $payment->provider_payment_id];
+
         if ($amountMinor !== null) {
             $params['amount'] = $amountMinor;
-        }$r = $this->stripe()->refunds->create($params, ['idempotency_key' => 'refund-'.$payment->uuid.'-'.($amountMinor ?? 'full')]);
+        }
 
-        return ['id' => $r->id, 'status' => $r->status];
+        $refund = $this->stripe()->refunds->create(
+            $params,
+            ['idempotency_key' => 'refund-'.$payment->uuid.'-'.($amountMinor ?? 'full')],
+        );
+
+        return ['id' => $refund->id, 'status' => $refund->status];
     }
 }
