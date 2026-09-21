@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@php($translation = $category->translation())
+@php($translation = $collection->translation())
 <section class="page-hero">
     <div class="container">
         <nav class="breadcrumbs" aria-label="{{ __('site.breadcrumbs') }}">
@@ -17,9 +17,9 @@
 <section class="section catalog-layout">
     <div class="container">
         <x-catalog-filters
-            :action="route('categories.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug])"
+            :action="route('collections.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug])"
             :facets="$facets"
-            :hide-category="true"
+            :hide-collection="true"
         />
         <div class="catalog-results-header"><p>{{ trans_choice('site.products_found', $products->total(), ['count' => $products->total()]) }}</p></div>
         <div class="product-grid">

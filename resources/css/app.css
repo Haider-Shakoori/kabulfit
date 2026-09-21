@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss";\n@import "./catalog.css";
 
 :root {
     --brand-primary: #173b2d;

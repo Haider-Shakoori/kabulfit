@@ -19,5 +19,6 @@ Route::prefix('{locale}')
         Route::get('/', HomeController::class)->name('home');
         Route::get('/shop', [CatalogController::class, 'index'])->name('shop');
         Route::get('/categories/{slug}', [CatalogController::class, 'category'])->name('categories.show');
+        Route::get('/collections/{slug}', [CatalogController::class, 'collection'])->name('collections.show');
         Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
     });

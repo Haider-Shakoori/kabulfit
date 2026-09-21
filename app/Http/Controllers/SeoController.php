@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CollectionTranslation;
 use App\Models\CategoryTranslation;
 use App\Models\ProductTranslation;
 use Illuminate\Http\Response;
@@ -16,6 +17,7 @@ class SeoController extends Controller
             'Disallow: /admin',
             'Disallow: /login',
             'Disallow: /register',
+            'Disallow: /api/',
         ];
 
         foreach (config('kabulfit.supported_locales') as $locale) {
@@ -40,6 +42,10 @@ class SeoController extends Controller
 
         CategoryTranslation::query()->orderBy('category_id')->each(function (CategoryTranslation $translation) use (&$urls): void {
             $urls[] = route('categories.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
+        });
+
+        CollectionTranslation::query()->orderBy('collection_id')->each(function (CollectionTranslation $translation) use (&$urls): void {
+            $urls[] = route('collections.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
         });
 
         ProductTranslation::query()->orderBy('product_id')->each(function (ProductTranslation $translation) use (&$urls): void {

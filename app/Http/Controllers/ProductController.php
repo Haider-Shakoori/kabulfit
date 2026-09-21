@@ -3,21 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\Catalog\CatalogProductQuery;
+use App\Support\Seo\CatalogSchema;
 use App\Support\Seo\SeoData;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function show(string $locale, string $slug): View
-    {
-        $product = Product::query()
-            ->where('is_active', true)
-            ->whereHas('translations', fn ($query) => $query->where('locale', $locale)->where('slug', $slug))
-            ->with(['translations', 'category.translations'])
+    public function show(
+        string $locale,
+        string $slug,
+        CatalogProductQuery $catalog,
+        CatalogSchema $schema,
+    ): View {
+        $product = $catalog
+            ->build($locale)
+            ->whereHas('translations', fn (Builder $query) => $query
+                ->where('locale', $locale)
+                ->where('slug', $slug))
             ->firstOrFail();
 
         $translation = $product->translation($locale);
-        $availability = $product->stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+
+        $related = $catalog
+            ->build($locale)
+            ->where('id', '!=', $product->id)
+            ->where('category_id', $product->category_id)
+            ->limit(4)
+            ->get();
+
+        $recentIds = collect(session()->get('recently_viewed_products', []))
+            ->reject(fn ($id) => (int) $id === $product->id)
+            ->take(4)
+            ->values();
+
+        $recentlyViewed = $this->recentlyViewed($catalog, $locale, $recentIds);
+
+        session()->put(
+            'recently_viewed_products',
+            collect([$product->id])
+                ->merge(session()->get('recently_viewed_products', []))
+                ->unique()
+                ->take(8)
+                ->values()
+                ->all(),
+        );
 
         $seo = new SeoData(
             title: $translation?->seo_title ?: ($translation?->name.' | KabulFit'),
@@ -26,24 +58,22 @@ class ProductController extends Controller
             alternates: $product->translations->mapWithKeys(fn ($item) => [
                 $item->locale => route('products.show', ['locale' => $item->locale, 'slug' => $item->slug]),
             ])->all(),
-            jsonLd: [
-                '@context' => 'https://schema.org',
-                '@type' => 'Product',
-                'name' => $translation?->name,
-                'description' => $translation?->short_description,
-                'sku' => $product->sku,
-                'brand' => ['@type' => 'Brand', 'name' => 'KabulFit'],
-                'offers' => [
-                    '@type' => 'Offer',
-                    'priceCurrency' => $product->currency,
-                    'price' => $product->decimalPrice(),
-                    'availability' => $availability,
-                    'itemCondition' => 'https://schema.org/NewCondition',
-                    'url' => route('products.show', ['locale' => $locale, 'slug' => $translation?->slug]),
-                ],
-            ],
+            jsonLd: $schema->product($product, $locale),
         );
 
-        return view('catalog.product', compact('product', 'seo'));
+        return view('catalog.product', compact('product', 'related', 'recentlyViewed', 'seo'));
+    }
+
+    private function recentlyViewed(CatalogProductQuery $catalog, string $locale, Collection $recentIds): Collection
+    {
+        if ($recentIds->isEmpty()) {
+            return collect();
+        }
+
+        $products = $catalog->build($locale)->whereIn('id', $recentIds)->get();
+
+        return $products
+            ->sortBy(fn (Product $product) => $recentIds->search($product->id))
+            ->values();
     }
 }

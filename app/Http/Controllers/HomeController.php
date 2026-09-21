@@ -20,7 +20,14 @@ class HomeController extends Controller
         $featuredProducts = Product::query()
             ->where('is_active', true)
             ->where('is_featured', true)
-            ->with(['translations', 'category.translations'])
+            ->with([
+                'translations',
+                'category.translations',
+                'media.translations',
+                'variants' => fn ($query) => $query
+                    ->where('is_active', true)
+                    ->with(['inventory', 'optionValues.translations', 'optionValues.option.translations']),
+            ])
             ->orderBy('sort_order')
             ->limit(8)
             ->get();
