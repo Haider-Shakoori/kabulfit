@@ -117,6 +117,7 @@ Validation evidence from GitHub Actions run `35633550158`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35645610102`: **quality + MySQL smoke both green**.
 - PR-triggered CI run `35639706516`: **quality + MySQL smoke both green before merge**.
 - PR-triggered CI run `35636598809`: **quality + MySQL smoke both green**.
 - PR-triggered CI run `35633833786`: **quality + MySQL smoke both green**.
@@ -188,7 +189,7 @@ Validation evidence from GitHub Actions run `35639422198`:
 
 ## Batch 6 — Measurements & custom tailoring + mobile measurement API
 
-Status: **implementation validated green on `feat/batch-06-measurements-tailoring`; final PR gate pending**.
+Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #9**.
 
 Implemented:
 
@@ -233,4 +234,4 @@ Validation evidence from GitHub Actions run `35645248956`:
 
 ## Release gate
 
-Batch 6 implementation CI is green. The documentation-only head and PR-triggered CI must remain green before merge.
+Batch 6 has met its implementation and CI gates. PR #9 may merge while this final documentation-only head remains green.
