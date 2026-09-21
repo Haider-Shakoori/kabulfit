@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Contracts\Payments\PaymentGateway;
+use App\Services\Payments\StripePaymentGateway;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -11,8 +13,6 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use App\Contracts\Payments\PaymentGateway;
-use App\Services\Payments\StripePaymentGateway;
 
 class AppServiceProvider extends ServiceProvider
 {
