@@ -121,7 +121,7 @@ Validation evidence from GitHub Actions run `35633550158`:
 
 ## Batch 4 — Authentication, customer account + mobile API authentication
 
-Status: **implemented on `feat/batch-04-auth-account`; CI validation pending**.
+Status: **implementation validated green on `feat/batch-04-auth-account`; final PR gate pending**.
 
 Implemented:
 
@@ -139,6 +139,15 @@ Implemented:
 - Automated browser auth, verification, reset, address authorization and mobile token/API tests.
 - Authentication/API contract documentation.
 
+Validation evidence from GitHub Actions run `35636248691`:
+
+- PHPUnit: **44 tests, 248 assertions, zero warnings**.
+- Laravel Pint: **113 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
 - Cart, wishlist, checkout and Stripe platform implementation.
@@ -155,4 +164,4 @@ Implemented:
 
 ## Release gate
 
-Batch 4 must not merge until feature-branch and PR CI are green.
+Batch 4 implementation CI is green. The final documentation commit and PR-triggered CI must also remain green before merge.
