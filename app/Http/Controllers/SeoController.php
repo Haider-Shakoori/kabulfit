@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CollectionTranslation;
 use App\Models\CategoryTranslation;
+use App\Models\CollectionTranslation;
 use App\Models\ProductTranslation;
 use Illuminate\Http\Response;
 
