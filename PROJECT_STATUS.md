@@ -44,7 +44,7 @@ Validation evidence:
 
 ## Batch 2 — Reference visual fidelity and responsive component system
 
-Status: **implementation validated green on `feat/batch-02-visual-fidelity`; final docs/PR gate pending**.
+Status: **complete; branch and PR CI validated green; ready to merge via PR #2**.
 
 Implemented:
 
@@ -69,6 +69,7 @@ Validation evidence from GitHub Actions run `35629128744`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35629434907`: **quality + MySQL smoke both green**.
 
 Known Batch 2 limitation:
 
@@ -92,4 +93,4 @@ The available crawler exposes content and page inventory but not the original CS
 
 ## Release gate
 
-Batch 2 implementation CI is green. The documentation-only validation commit and PR-triggered CI must also remain green before merge.
+Batch 2 has met its implementation and CI gates. PR #2 may merge while the final documentation-only head remains green.
