@@ -44,7 +44,7 @@ Validation evidence:
 
 ## Batch 2 — Reference visual fidelity and responsive component system
 
-Status: **complete; branch and PR CI validated green; ready to merge via PR #2**.
+Status: **complete and merged to `main` via PR #2**.
 
 Implemented:
 
@@ -61,36 +61,49 @@ Implemented:
 - Media strategy documented without inventing stock photography or fake production assets.
 - Automated visual-structure/token/accessibility markup tests added.
 
-Validation evidence from GitHub Actions run `35629128744`:
+Validation evidence:
 
 - PHPUnit: **16 tests, 92 assertions, zero warnings**.
 - Laravel Pint: **49 files passed**.
 - Composer dependency audit: **no security vulnerability advisories found**.
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
-- PHP syntax checks and Composer validation: **passed**.
-- PR-triggered CI run `35629434907`: **quality + MySQL smoke both green**.
+- PR-triggered quality + MySQL CI: **green before merge**.
 
 Known Batch 2 limitation:
 
 The available crawler exposes content and page inventory but not the original CSS bundle, reliable raw image asset URLs or browser pixel screenshots. The design tokens are therefore centralized for efficient correction, but **pixel-perfect parity is not yet claimed**. Browser visual-regression comparison remains required before final acceptance.
 
+## Mobile application decision
+
+KabulFit now explicitly includes a dedicated Flutter mobile application for Android and iOS. The roadmap has been expanded from 13 to **16 batches**.
+
+Key architectural decisions:
+
+- Laravel remains the shared server-authoritative commerce backend for web and mobile.
+- Batches 3–8 must provide stable versioned APIs for the mobile capabilities they own.
+- Stripe is implemented server-first in Batch 5 and surfaced through the official mobile payment flow in Batch 14; webhook-confirmed server state remains authoritative.
+- Mobile-specific implementation begins with Batch 12 after shared domain/API hardening.
+- The planned mobile repository is `kabulfit-mobile`.
+- Mobile supports English, Dari and Pashto with RTL, the same KabulFit visual identity, customer account, shopping, wishlist/cart, reusable measurements, custom tailoring, Stripe checkout, orders/tracking and notifications.
+- Detailed architecture is documented in `docs/MOBILE_ARCHITECTURE.md`.
+
 ## Not yet complete
 
-- Full product media/variants/inventory domain.
+- Full product media/variants/inventory domain and mobile catalog API.
 - Search/filter/sort and collections.
-- Authentication/customer account.
-- Cart, wishlist and checkout.
-- Payment providers.
+- Authentication/customer account and mobile API authentication.
+- Cart, wishlist, checkout and Stripe platform implementation.
 - Measurement profiles and tailoring workflow.
 - Orders/shipping/notifications.
 - Admin/tailor dashboards and authorization matrix.
 - Blog/content CMS.
+- Flutter application implementation.
 - Real legacy-ID mapping crawl.
-- Browser visual-regression evidence.
-- Lighthouse/Core Web Vitals final evidence.
-- Composer/npm lockfiles for final production reproducibility.
+- Browser/mobile visual-regression evidence.
+- Lighthouse/Core Web Vitals and mobile performance evidence.
+- Composer/npm/mobile lockfile and release reproducibility gates.
 
 ## Release gate
 
-Batch 2 has met its implementation and CI gates. PR #2 may merge while the final documentation-only head remains green.
+The mobile-roadmap documentation change must pass CI before merging. Product batches continue to require green feature-branch and PR CI before merge.
