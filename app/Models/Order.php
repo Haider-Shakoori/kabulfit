@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    protected $fillable = ['uuid', 'number', 'user_id', 'status', 'payment_status', 'currency', 'subtotal_minor', 'discount_minor', 'shipping_minor', 'total_minor', 'coupon_code', 'shipping_method_code', 'shipping_address', 'paid_at'];
+    protected $fillable = ['uuid', 'number', 'user_id', 'status', 'payment_status', 'currency', 'subtotal_minor', 'discount_minor', 'shipping_minor', 'total_minor', 'coupon_code', 'shipping_method_code', 'shipping_address', 'reservation_expires_at', 'paid_at'];
 
     protected function casts(): array
     {
