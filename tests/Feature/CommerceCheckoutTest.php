@@ -57,6 +57,8 @@ class CommerceCheckoutTest extends TestCase
         ]);
 
         $response->assertCreated()
+            ->assertJsonStructure(['data' => ['items' => [['uuid']]]])
+            ->assertJsonMissingPath('data.items.0.id')
             ->assertJsonPath('data.items.0.quantity', 2)
             ->assertJsonPath('data.items.0.sku', 'KF-M-PT-001-M-BLACK')
             ->assertJsonPath('data.subtotal_minor', 1300000);
