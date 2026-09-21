@@ -2,7 +2,6 @@
 
 namespace App\Services\Measurements;
 
-use App\Models\Cart;
 use App\Models\MeasurementProfile;
 use App\Models\Product;
 use App\Models\ProductVariant;

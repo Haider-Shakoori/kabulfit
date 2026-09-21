@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use App\Models\InventoryItem;
 use App\Models\Order;
 use App\Models\ShippingMethod;
+use App\Models\TailoringRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -133,7 +134,7 @@ class CheckoutService
         DB::transaction(function () use ($order) {
             foreach ($order->items()->get() as $item) {
                 if ($item->tailoring_request_uuid) {
-                    \App\Models\TailoringRequest::query()
+                    TailoringRequest::query()
                         ->where('uuid', $item->tailoring_request_uuid)
                         ->where('status', 'ordered')
                         ->update(['status' => 'cancelled']);

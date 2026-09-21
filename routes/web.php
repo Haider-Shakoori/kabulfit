@@ -12,9 +12,9 @@ use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
-use App\Http\Controllers\TailoringController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
+use App\Http\Controllers\TailoringController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect('/'.config('kabulfit.default_locale')));
