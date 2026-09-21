@@ -122,7 +122,7 @@ Validation evidence from GitHub Actions run `35633550158`:
 
 ## Batch 4 — Authentication, customer account + mobile API authentication
 
-Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #6**.
+Status: **complete and merged to `main` via PR #6**.
 
 Implemented:
 
@@ -148,10 +148,11 @@ Validation evidence from GitHub Actions run `35636248691`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI: **green before merge**.
+- Post-merge `main` CI run `35636887850`: **quality + MySQL smoke both green**.
 
 ## Not yet complete
 
-- Cart, wishlist, checkout and Stripe platform implementation.
 - Cart, wishlist, checkout and Stripe platform implementation.
 - Measurement profiles and tailoring workflow.
 - Orders/shipping/notifications.
@@ -165,4 +166,4 @@ Validation evidence from GitHub Actions run `35636248691`:
 
 ## Release gate
 
-Batch 4 has met its implementation and CI gates. PR #6 may merge while this final documentation-only head remains green.
+Batch 4 is merged and post-merge CI is green. The next implementation gate is Batch 5 — cart, wishlist, checkout and Stripe platform payments.
