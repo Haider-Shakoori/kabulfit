@@ -76,3 +76,8 @@ UI strings live in `lang/en`, `lang/fa` and `lang/ps`. Product/category localize
 The live KabulFit site is the visual/content source of truth. The current reference audit, implementation notes, responsive/accessibility decisions and media constraints are documented in `docs/VISUAL_REFERENCE.md`.
 
 See `PROJECT_STATUS.md` and `ROADMAP.md` for implementation status and batch sequencing.
+
+
+## Catalog API
+
+The first mobile-facing API contract is documented in `docs/API_CONTRACT.md`. Public catalog routes are versioned under `/api/v1/{locale}` and expose localized categories, collections, products, variants, media, stock and integer-minor-unit money without exposing database primary keys.

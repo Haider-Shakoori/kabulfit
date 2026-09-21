@@ -3,47 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\Catalog\CatalogQuery;
+use App\Services\Catalog\RecentlyViewedProducts;
+use App\Support\Seo\CatalogSchema;
 use App\Support\Seo\SeoData;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function show(string $locale, string $slug): View
-    {
+    public function show(
+        string $locale,
+        string $slug,
+        RecentlyViewedProducts $recentlyViewedProducts,
+    ): View {
         $product = Product::query()
             ->where('is_active', true)
-            ->whereHas('translations', fn ($query) => $query->where('locale', $locale)->where('slug', $slug))
-            ->with(['translations', 'category.translations'])
+            ->whereHas('translations', fn ($query) => $query
+                ->where('locale', $locale)
+                ->where('slug', $slug))
+            ->with(CatalogQuery::detailEagerLoads())
             ->firstOrFail();
 
         $translation = $product->translation($locale);
-        $availability = $product->stock_quantity > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+        $categoryTranslation = $product->category->translation($locale);
+        $canonical = route('products.show', ['locale' => $locale, 'slug' => $translation?->slug]);
+
+        $relatedProducts = $product->relatedProducts()
+            ->where('is_active', true)
+            ->with(CatalogQuery::cardEagerLoads())
+            ->limit(4)
+            ->get();
+
+        $recentlyViewed = $recentlyViewedProducts->excluding($product);
+        $recentlyViewedProducts->remember($product);
 
         $seo = new SeoData(
             title: $translation?->seo_title ?: ($translation?->name.' | KabulFit'),
             description: $translation?->seo_description ?: ($translation?->short_description ?? ''),
-            canonical: route('products.show', ['locale' => $locale, 'slug' => $translation?->slug]),
+            canonical: $canonical,
             alternates: $product->translations->mapWithKeys(fn ($item) => [
                 $item->locale => route('products.show', ['locale' => $item->locale, 'slug' => $item->slug]),
             ])->all(),
-            jsonLd: [
-                '@context' => 'https://schema.org',
-                '@type' => 'Product',
-                'name' => $translation?->name,
-                'description' => $translation?->short_description,
-                'sku' => $product->sku,
-                'brand' => ['@type' => 'Brand', 'name' => 'KabulFit'],
-                'offers' => [
-                    '@type' => 'Offer',
-                    'priceCurrency' => $product->currency,
-                    'price' => $product->decimalPrice(),
-                    'availability' => $availability,
-                    'itemCondition' => 'https://schema.org/NewCondition',
-                    'url' => route('products.show', ['locale' => $locale, 'slug' => $translation?->slug]),
+            jsonLd: CatalogSchema::product(
+                $product,
+                $locale,
+                $canonical,
+                [
+                    ['name' => __('site.home'), 'url' => route('home', ['locale' => $locale])],
+                    ['name' => __('site.shop'), 'url' => route('shop', ['locale' => $locale])],
+                    [
+                        'name' => $categoryTranslation?->name ?? __('site.shop'),
+                        'url' => route('categories.show', [
+                            'locale' => $locale,
+                            'slug' => $categoryTranslation?->slug,
+                        ]),
+                    ],
+                    ['name' => $translation?->name ?? $product->sku, 'url' => $canonical],
                 ],
-            ],
+            ),
         );
 
-        return view('catalog.product', compact('product', 'seo'));
+        return view('catalog.product', compact('product', 'relatedProducts', 'recentlyViewed', 'seo'));
     }
 }

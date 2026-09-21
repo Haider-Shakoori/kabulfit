@@ -1308,3 +1308,212 @@ button, a { -webkit-tap-highlight-color: transparent; }
         animation-iteration-count: 1 !important;
     }
 }
+
+
+/* Batch 3 — catalog controls and product-domain presentation */
+.catalog-filters {
+    display: grid;
+    grid-template-columns: minmax(15rem, 2fr) repeat(3, minmax(8rem, 1fr));
+    gap: .85rem;
+    align-items: end;
+    margin-bottom: 2rem;
+    padding: 1.1rem;
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-lg);
+    background: var(--brand-surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.catalog-filters > div,
+.catalog-search {
+    min-width: 0;
+}
+
+.catalog-filters label:not(.catalog-checkbox) {
+    display: block;
+    margin-bottom: .35rem;
+    color: var(--brand-muted);
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.catalog-filters input[type="search"],
+.catalog-filters input[inputmode="decimal"],
+.catalog-filters select {
+    width: 100%;
+    min-height: 2.8rem;
+    padding: .65rem .75rem;
+    border: 1px solid var(--brand-border);
+    border-radius: .7rem;
+    background: var(--brand-background);
+    color: var(--brand-text);
+}
+
+.catalog-filters input:focus,
+.catalog-filters select:focus {
+    border-color: var(--brand-accent);
+}
+
+.catalog-checkbox {
+    min-height: 2.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .65rem .75rem;
+    border: 1px solid var(--brand-border);
+    border-radius: .7rem;
+    background: var(--brand-background);
+    font-size: .84rem;
+    font-weight: 700;
+}
+
+.catalog-filter-actions {
+    display: flex;
+    gap: .55rem;
+}
+
+.catalog-filter-actions .button {
+    min-height: 2.8rem;
+    padding: .65rem 1rem;
+}
+
+.catalog-results-heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    color: var(--brand-muted);
+    font-size: .88rem;
+}
+
+.product-media > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .8rem;
+}
+
+.product-gallery-item {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-md);
+    background: var(--brand-soft);
+}
+
+.product-gallery-item.is-primary {
+    grid-column: 1 / -1;
+}
+
+.product-gallery-item img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+}
+
+.product-collections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+    margin: 1rem 0;
+}
+
+.product-collections a {
+    padding: .32rem .65rem;
+    border-radius: 999px;
+    background: var(--brand-accent-soft);
+    color: var(--brand-secondary-deep);
+    font-size: .75rem;
+    font-weight: 800;
+}
+
+.variant-table-wrap {
+    margin: 1.5rem 0;
+}
+
+.variant-table-wrap h2 {
+    margin: 0 0 .7rem;
+    font-size: 1rem;
+}
+
+.variant-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .55rem;
+}
+
+.variant-card {
+    display: flex;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .75rem;
+    border: 1px solid var(--brand-border);
+    border-radius: .75rem;
+    background: var(--brand-surface);
+}
+
+.variant-card > div:last-child {
+    text-align: end;
+}
+
+.variant-card strong,
+.variant-card span {
+    display: block;
+}
+
+.variant-card span {
+    margin-top: .15rem;
+    color: var(--brand-muted);
+    font-size: .74rem;
+}
+
+@media (max-width: 1024px) {
+    .catalog-filters {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .catalog-search {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .catalog-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .catalog-search {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 430px) {
+    .catalog-filters,
+    .variant-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .catalog-search {
+        grid-column: auto;
+    }
+
+    .catalog-filter-actions {
+        flex-direction: column;
+    }
+
+    .catalog-filter-actions .button {
+        width: 100%;
+    }
+
+    .product-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .product-gallery-item.is-primary {
+        grid-column: auto;
+    }
+}

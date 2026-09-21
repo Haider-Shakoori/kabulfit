@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -37,6 +39,40 @@ class Product extends Model
         return $this->hasMany(ProductTranslation::class);
     }
 
+    public function collections(): BelongsToMany
+    {
+        return $this->belongsToMany(Collection::class)
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order');
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class)->orderBy('sort_order');
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(ProductMedia::class)->orderBy('sort_order');
+    }
+
+    public function primaryMedia(): HasOne
+    {
+        return $this->hasOne(ProductMedia::class)
+            ->where('is_primary', true)
+            ->orderBy('sort_order');
+    }
+
+    public function relatedProducts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Product::class,
+            'related_products',
+            'product_id',
+            'related_product_id',
+        )->withPivot('sort_order')->orderByPivot('sort_order');
+    }
+
     public function translation(?string $locale = null): ?ProductTranslation
     {
         $locale ??= app()->getLocale();
@@ -45,18 +81,51 @@ class Product extends Model
             ?? $this->translations->firstWhere('locale', config('kabulfit.default_locale'));
     }
 
-    public function decimalPrice(): string
+    public function currentPriceMinor(): int
     {
-        $major = intdiv($this->price_minor, 100);
-        $minor = $this->price_minor % 100;
+        return $this->sale_price_minor ?? $this->price_minor;
+    }
+
+    public function decimalPrice(?int $minorUnits = null): string
+    {
+        $minorUnits ??= $this->currentPriceMinor();
+        $major = intdiv($minorUnits, 100);
+        $minor = $minorUnits % 100;
 
         return $major.'.'.str_pad((string) $minor, 2, '0', STR_PAD_LEFT);
     }
 
-    public function formattedPrice(): string
+    public function formattedPrice(?int $minorUnits = null): string
     {
-        [$major, $minor] = explode('.', $this->decimalPrice(), 2);
+        [$major, $minor] = explode('.', $this->decimalPrice($minorUnits), 2);
 
         return number_format((int) $major).'.'.$minor.' '.$this->currency;
+    }
+
+    public function availableStock(): int
+    {
+        if ($this->relationLoaded('variants')) {
+            return (int) $this->variants
+                ->where('is_active', true)
+                ->sum(fn (ProductVariant $variant): int => $variant->availableQuantity());
+        }
+
+        $variantCount = $this->variants()->where('is_active', true)->count();
+
+        if ($variantCount === 0) {
+            return $this->stock_quantity;
+        }
+
+        return (int) InventoryItem::query()
+            ->whereHas('variant', fn ($query) => $query
+                ->where('product_id', $this->id)
+                ->where('is_active', true))
+            ->get()
+            ->sum(fn (InventoryItem $inventory): int => $inventory->availableQuantity());
+    }
+
+    public function isInStock(): bool
+    {
+        return $this->availableStock() > 0;
     }
 }

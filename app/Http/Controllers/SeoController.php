@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryTranslation;
+use App\Models\CollectionTranslation;
 use App\Models\ProductTranslation;
 use Illuminate\Http\Response;
 
@@ -16,6 +17,7 @@ class SeoController extends Controller
             'Disallow: /admin',
             'Disallow: /login',
             'Disallow: /register',
+            'Disallow: /api/',
         ];
 
         foreach (config('kabulfit.supported_locales') as $locale) {
@@ -38,13 +40,26 @@ class SeoController extends Controller
             $urls[] = route('shop', ['locale' => $locale]);
         }
 
-        CategoryTranslation::query()->orderBy('category_id')->each(function (CategoryTranslation $translation) use (&$urls): void {
-            $urls[] = route('categories.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
-        });
+        CategoryTranslation::query()
+            ->whereHas('category', fn ($query) => $query->where('is_active', true))
+            ->orderBy('category_id')
+            ->each(function (CategoryTranslation $translation) use (&$urls): void {
+                $urls[] = route('categories.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
+            });
 
-        ProductTranslation::query()->orderBy('product_id')->each(function (ProductTranslation $translation) use (&$urls): void {
-            $urls[] = route('products.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
-        });
+        CollectionTranslation::query()
+            ->whereHas('collection', fn ($query) => $query->where('is_active', true))
+            ->orderBy('collection_id')
+            ->each(function (CollectionTranslation $translation) use (&$urls): void {
+                $urls[] = route('collections.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
+            });
+
+        ProductTranslation::query()
+            ->whereHas('product', fn ($query) => $query->where('is_active', true))
+            ->orderBy('product_id')
+            ->each(function (ProductTranslation $translation) use (&$urls): void {
+                $urls[] = route('products.show', ['locale' => $translation->locale, 'slug' => $translation->slug]);
+            });
 
         $xml = view('seo.sitemap', ['urls' => array_values(array_unique($urls))])->render();
 
