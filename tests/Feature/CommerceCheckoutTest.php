@@ -3,8 +3,15 @@
 namespace Tests\Feature;
 
 use App\Contracts\Payments\PaymentGateway;
-use App\Models\{Address,InventoryItem,Order,Payment,Product,ProductVariant,ShippingMethod,User};
-use App\Services\Commerce\{CartService,CheckoutService};
+use App\Models\InventoryItem;
+use App\Models\Payment;
+use App\Models\PaymentEvent;
+use App\Models\Product;
+use App\Models\ProductVariant;
+use App\Models\ShippingMethod;
+use App\Models\User;
+use App\Services\Commerce\CartService;
+use App\Services\Commerce\CheckoutService;
 use App\Services\Payments\PaymentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -93,7 +100,7 @@ class CommerceCheckoutTest extends TestCase
         $product = Product::where('sku', 'KF-M-PT-001')->firstOrFail();
         $variant = ProductVariant::where('sku', 'KF-M-PT-001-M-BLACK')->firstOrFail();
         $cart = app(CartService::class)->forUser($user);
-        app(CartService::class)->add($cart, $product->load('translations'), $variant->load(['inventory','product']), 1);
+        app(CartService::class)->add($cart, $product->load('translations'), $variant->load(['inventory', 'product']), 1);
         $order = app(CheckoutService::class)->create($user, $cart, $address, ShippingMethod::where('code', 'standard-af')->firstOrFail());
         $result = app(PaymentService::class)->initiate($order);
         $payment = $result['payment'];
@@ -106,6 +113,6 @@ class CommerceCheckoutTest extends TestCase
 
         $this->assertSame('paid', $order->fresh()->status);
         $this->assertSame($onHand - 1, $inventory->fresh()->quantity_on_hand);
-        $this->assertSame(1, \App\Models\PaymentEvent::where('provider_event_id', 'evt_success_1')->count());
+        $this->assertSame(1, PaymentEvent::where('provider_event_id', 'evt_success_1')->count());
     }
 }
