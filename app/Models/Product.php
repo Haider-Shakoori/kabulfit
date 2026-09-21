@@ -63,6 +63,11 @@ class Product extends Model
             ->orderBy('sort_order');
     }
 
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
     public function relatedProducts(): BelongsToMany
     {
         return $this->belongsToMany(

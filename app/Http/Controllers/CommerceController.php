@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingMethod;
+use App\Models\Wishlist;
 use App\Services\Commerce\CartService;
 use App\Services\Commerce\CheckoutService;
 use App\Services\Payments\PaymentService;
@@ -83,7 +84,7 @@ class CommerceController extends Controller
             fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $data['product_slug']),
         )->firstOrFail();
 
-        \App\Models\Wishlist::firstOrCreate(['user_id' => $request->user()->id, 'product_id' => $product->id]);
+        Wishlist::firstOrCreate(['user_id' => $request->user()->id, 'product_id' => $product->id]);
 
         return back();
     }
@@ -95,7 +96,7 @@ class CommerceController extends Controller
             fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $slug),
         )->firstOrFail();
 
-        \App\Models\Wishlist::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->delete();
+        Wishlist::where(['user_id' => $request->user()->id, 'product_id' => $product->id])->delete();
 
         return back();
     }
