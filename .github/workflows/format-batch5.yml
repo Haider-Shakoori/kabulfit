@@ -1,6 +1,8 @@
 name: Format Batch 5
 
 on:
+  push:
+    branches: [feat/batch-05-commerce-stripe]
   workflow_dispatch:
 
 permissions:
