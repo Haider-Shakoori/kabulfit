@@ -6,6 +6,10 @@ use App\Http\Controllers\Api\V1\MobileAuthController;
 use App\Http\Controllers\Api\V1\MobilePasswordController;
 use App\Http\Controllers\Api\V1\MobileVerificationController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\CommerceController;
+use App\Http\Controllers\StripeWebhookController;
+
+Route::post('/stripe/webhook', StripeWebhookController::class)->middleware('throttle:120,1')->name('stripe.webhook');
 
 Route::prefix('v1/{locale}')
     ->where(['locale' => 'en|fa|ps'])
@@ -41,5 +45,15 @@ Route::prefix('v1/{locale}')
             Route::post('/account/addresses', [MobileAddressController::class, 'store'])->name('api.v1.addresses.store');
             Route::put('/account/addresses/{address:uuid}', [MobileAddressController::class, 'update'])->name('api.v1.addresses.update');
             Route::delete('/account/addresses/{address:uuid}', [MobileAddressController::class, 'destroy'])->name('api.v1.addresses.destroy');
+
+            Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
+            Route::post('/cart/items', [CommerceController::class, 'add'])->name('api.v1.cart.items.store');
+            Route::put('/cart/items/{item}', [CommerceController::class, 'update'])->name('api.v1.cart.items.update');
+            Route::delete('/cart/items/{item}', [CommerceController::class, 'remove'])->name('api.v1.cart.items.destroy');
+            Route::get('/wishlist', [CommerceController::class, 'wishlist'])->name('api.v1.wishlist');
+            Route::post('/wishlist', [CommerceController::class, 'wishlistStore'])->name('api.v1.wishlist.store');
+            Route::delete('/wishlist/{slug}', [CommerceController::class, 'wishlistDestroy'])->name('api.v1.wishlist.destroy');
+            Route::post('/checkout', [CommerceController::class, 'checkout'])->middleware('throttle:20,1')->name('api.v1.checkout');
+            Route::get('/orders/{order:uuid}', [CommerceController::class, 'order'])->name('api.v1.orders.show');
         });
     });

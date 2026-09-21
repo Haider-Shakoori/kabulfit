@@ -11,12 +11,14 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use App\Contracts\Payments\PaymentGateway;
+use App\Services\Payments\StripePaymentGateway;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentGateway::class, StripePaymentGateway::class);
     }
 
     public function boot(): void

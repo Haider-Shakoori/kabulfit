@@ -3,13 +3,19 @@
   "name": "kabulfit/kabulfit",
   "type": "project",
   "description": "Production rebuild of the KabulFit multilingual Afghan fashion e-commerce platform.",
-  "keywords": ["laravel", "ecommerce", "afghan-fashion", "multilingual"],
+  "keywords": [
+    "laravel",
+    "ecommerce",
+    "afghan-fashion",
+    "multilingual"
+  ],
   "license": "proprietary",
   "require": {
-    "php": "^8.3",
     "laravel/framework": "^12.0",
     "laravel/sanctum": "^4.3",
-    "laravel/tinker": "^2.10.1"
+    "laravel/tinker": "^2.10.1",
+    "php": "^8.3",
+    "stripe/stripe-php": "^21.1"
   },
   "require-dev": {
     "fakerphp/faker": "^1.23",
@@ -25,18 +31,40 @@
       "Database\\Seeders\\": "database/seeders/"
     }
   },
-  "autoload-dev": {"psr-4": {"Tests\\": "tests/"}},
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "scripts": {
-    "setup": ["composer install","@php -r \"file_exists('.env') || copy('.env.example', '.env');\"","@php artisan key:generate","@php artisan migrate --seed --force","npm install","npm run build"],
-    "test": ["@php artisan config:clear --ansi","@php artisan test"],
-    "post-autoload-dump": ["Illuminate\\Foundation\\ComposerScripts::postAutoloadDump","@php artisan package:discover --ansi"],
-    "post-root-package-install": ["@php -r \"file_exists('.env') || copy('.env.example', '.env');\""]
+    "setup": [
+      "composer install",
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+      "@php artisan key:generate",
+      "@php artisan migrate --seed --force",
+      "npm install",
+      "npm run build"
+    ],
+    "test": [
+      "@php artisan config:clear --ansi",
+      "@php artisan test"
+    ],
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover --ansi"
+    ],
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ]
   },
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
     "sort-packages": true,
-    "allow-plugins": {"pestphp/pest-plugin": true,"php-http/discovery": true}
+    "allow-plugins": {
+      "pestphp/pest-plugin": true,
+      "php-http/discovery": true
+    }
   },
   "minimum-stability": "stable",
   "prefer-stable": true
