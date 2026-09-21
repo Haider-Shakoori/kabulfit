@@ -16,6 +16,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'sku', 'price_minor', 'sale_price_minor', 'currency',
         'stock_quantity', 'is_active', 'is_featured', 'sort_order',
+        'tailoring_enabled', 'measurement_garment_type',
     ];
 
     protected function casts(): array
@@ -26,6 +27,7 @@ class Product extends Model
             'stock_quantity' => 'integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'tailoring_enabled' => 'boolean',
         ];
     }
 

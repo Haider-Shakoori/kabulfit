@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartItem extends Model
 {
-    protected $fillable = ['uuid', 'cart_id', 'product_id', 'product_variant_id', 'quantity'];
+    protected $fillable = [
+        'uuid', 'line_key', 'cart_id', 'product_id', 'product_variant_id',
+        'tailoring_request_id', 'quantity',
+    ];
 
     protected function casts(): array
     {
@@ -27,6 +30,11 @@ class CartItem extends Model
     public function variant(): BelongsTo
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
+
+    public function tailoringRequest(): BelongsTo
+    {
+        return $this->belongsTo(TailoringRequest::class);
     }
 
     public function unitPriceMinor(): int

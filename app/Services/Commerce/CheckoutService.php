@@ -28,27 +28,43 @@ class CheckoutService
                 $coupon = Coupon::query()->whereKey($coupon->id)->lockForUpdate()->firstOrFail();
             }
 
-            $cart->load(['items.product.translations', 'items.variant.inventory', 'items.variant.size', 'items.variant.color.translations']);
+            $cart->load([
+                'items.product.translations',
+                'items.variant.inventory',
+                'items.variant.size',
+                'items.variant.color.translations',
+                'items.tailoringRequest.measurementProfile.values.definition.translations',
+            ]);
+
             if ($cart->items->isEmpty()) {
                 throw ValidationException::withMessages(['cart' => __('commerce.empty_cart')]);
             }
+
             $subtotal = 0;
             foreach ($cart->items as $item) {
                 if ($item->variant) {
-                    $inventory = InventoryItem::query()->where('product_variant_id', $item->variant->id)->lockForUpdate()->firstOrFail();
+                    $inventory = InventoryItem::query()
+                        ->where('product_variant_id', $item->variant->id)
+                        ->lockForUpdate()
+                        ->firstOrFail();
+
                     if ($inventory->availableQuantity() < $item->quantity) {
                         throw ValidationException::withMessages(['cart' => __('commerce.insufficient_stock')]);
                     }
+
                     $inventory->increment('quantity_reserved', $item->quantity);
                 } elseif ($item->product->stock_quantity < $item->quantity) {
                     throw ValidationException::withMessages(['cart' => __('commerce.insufficient_stock')]);
                 }
+
                 $subtotal += $item->lineTotalMinor();
             }
+
             $discount = $coupon?->discountFor($subtotal) ?? 0;
             if ($coupon && $discount === 0) {
                 throw ValidationException::withMessages(['coupon' => __('commerce.invalid_coupon')]);
             }
+
             $order = Order::create([
                 'uuid' => (string) Str::uuid(),
                 'number' => 'KF-'.now()->format('ymd').'-'.Str::upper(Str::random(8)),
@@ -68,17 +84,45 @@ class CheckoutService
                     'address_line1', 'address_line2', 'postal_code',
                 ]),
             ]);
+
             foreach ($cart->items as $item) {
-                $v = $item->variant;
-                $order->items()->create(['product_id' => $item->product_id, 'product_variant_id' => $v?->id, 'sku' => $v?->sku ?? $item->product->sku, 'name' => $item->product->translation()?->name ?? $item->product->sku, 'variant_label' => $v?->option_key, 'unit_price_minor' => $item->unitPriceMinor(), 'quantity' => $item->quantity, 'line_total_minor' => $item->lineTotalMinor()]);
+                $variant = $item->variant;
+                $tailoring = $item->tailoringRequest;
+
+                $orderItem = $order->items()->create([
+                    'product_id' => $item->product_id,
+                    'product_variant_id' => $variant?->id,
+                    'tailoring_request_uuid' => $tailoring?->uuid,
+                    'is_custom_tailored' => $tailoring !== null,
+                    'sku' => $variant?->sku ?? $item->product->sku,
+                    'name' => $item->product->translation()?->name ?? $item->product->sku,
+                    'variant_label' => $variant?->option_key,
+                    'unit_price_minor' => $item->unitPriceMinor(),
+                    'quantity' => $item->quantity,
+                    'line_total_minor' => $item->lineTotalMinor(),
+                ]);
+
+                if ($tailoring?->measurementProfile) {
+                    foreach ($tailoring->measurementProfile->values as $value) {
+                        $definition = $value->definition;
+                        $orderItem->measurements()->create([
+                            'definition_code' => $definition->code,
+                            'definition_name' => $definition->translation($user->preferredLocale())?->name ?? $definition->code,
+                            'value_cm' => $value->value_cm,
+                        ]);
+                    }
+
+                    $tailoring->update(['status' => 'ordered']);
+                }
             }
+
             if ($coupon) {
                 $coupon->increment('times_used');
             }
 
             $cart->items()->delete();
 
-            return $order->load('items');
+            return $order->load('items.measurements');
         }, 3);
     }
 
@@ -88,9 +132,16 @@ class CheckoutService
             foreach ($order->items()->get() as $item) {
                 if (! $item->product_variant_id) {
                     continue;
-                }$inv = InventoryItem::where('product_variant_id', $item->product_variant_id)->lockForUpdate()->first();
-                if ($inv) {
-                    $inv->update(['quantity_reserved' => max(0, $inv->quantity_reserved - $item->quantity)]);
+                }
+
+                $inventory = InventoryItem::where('product_variant_id', $item->product_variant_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if ($inventory) {
+                    $inventory->update([
+                        'quantity_reserved' => max(0, $inventory->quantity_reserved - $item->quantity),
+                    ]);
                 }
             }
         });
@@ -102,8 +153,16 @@ class CheckoutService
             foreach ($order->items as $item) {
                 if (! $item->product_variant_id) {
                     continue;
-                }$inv = InventoryItem::where('product_variant_id', $item->product_variant_id)->lockForUpdate()->firstOrFail();
-                $inv->update(['quantity_reserved' => max(0, $inv->quantity_reserved - $item->quantity), 'quantity_on_hand' => max(0, $inv->quantity_on_hand - $item->quantity)]);
+                }
+
+                $inventory = InventoryItem::where('product_variant_id', $item->product_variant_id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $inventory->update([
+                    'quantity_reserved' => max(0, $inventory->quantity_reserved - $item->quantity),
+                    'quantity_on_hand' => max(0, $inventory->quantity_on_hand - $item->quantity),
+                ]);
             }
         });
     }

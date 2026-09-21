@@ -2,16 +2,22 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
+        Schema::table('products', function (Blueprint $table): void {
+            $table->boolean('tailoring_enabled')->default(false)->index();
+            $table->string('measurement_garment_type')->nullable()->index();
+        });
+
         Schema::create('measurement_definitions', function (Blueprint $table): void {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('code')->unique();
+            $table->string('code');
             $table->string('garment_type')->index();
             $table->decimal('min_cm', 7, 2);
             $table->decimal('max_cm', 7, 2);
@@ -20,6 +26,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true)->index();
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();
+            $table->unique(['garment_type', 'code'], 'measurement_definition_type_code_unique');
         });
 
         Schema::create('measurement_definition_translations', function (Blueprint $table): void {
@@ -71,6 +78,23 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::table('cart_items', function (Blueprint $table): void {
+            $table->dropUnique(['cart_id', 'product_id', 'product_variant_id']);
+            $table->foreignId('tailoring_request_id')->nullable()->after('product_variant_id')->constrained()->nullOnDelete();
+            $table->string('line_key', 120)->nullable()->after('uuid');
+        });
+
+        DB::statement("UPDATE cart_items SET line_key = CONCAT('std:', product_id, ':', COALESCE(product_variant_id, 0)) WHERE line_key IS NULL");
+
+        Schema::table('cart_items', function (Blueprint $table): void {
+            $table->unique(['cart_id', 'line_key'], 'cart_items_cart_line_key_unique');
+        });
+
+        Schema::table('order_items', function (Blueprint $table): void {
+            $table->uuid('tailoring_request_uuid')->nullable()->after('product_variant_id')->index();
+            $table->boolean('is_custom_tailored')->default(false)->after('tailoring_request_uuid');
+        });
+
         Schema::create('order_item_measurements', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('order_item_id')->constrained()->cascadeOnDelete();
@@ -85,10 +109,26 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('order_item_measurements');
+
+        Schema::table('order_items', function (Blueprint $table): void {
+            $table->dropColumn(['tailoring_request_uuid', 'is_custom_tailored']);
+        });
+
+        Schema::table('cart_items', function (Blueprint $table): void {
+            $table->dropUnique('cart_items_cart_line_key_unique');
+            $table->dropConstrainedForeignId('tailoring_request_id');
+            $table->dropColumn('line_key');
+            $table->unique(['cart_id', 'product_id', 'product_variant_id']);
+        });
+
         Schema::dropIfExists('tailoring_requests');
         Schema::dropIfExists('measurement_values');
         Schema::dropIfExists('measurement_profiles');
         Schema::dropIfExists('measurement_definition_translations');
         Schema::dropIfExists('measurement_definitions');
+
+        Schema::table('products', function (Blueprint $table): void {
+            $table->dropColumn(['tailoring_enabled', 'measurement_garment_type']);
+        });
     }
 };
