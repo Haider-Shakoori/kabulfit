@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\Catalog\CatalogQuery;
 use App\Support\Seo\SeoData;
 use Illuminate\View\View;
 
@@ -20,7 +21,7 @@ class HomeController extends Controller
         $featuredProducts = Product::query()
             ->where('is_active', true)
             ->where('is_featured', true)
-            ->with(['translations', 'category.translations'])
+            ->with(CatalogQuery::cardEagerLoads())
             ->orderBy('sort_order')
             ->limit(8)
             ->get();

@@ -30,6 +30,12 @@ class CatalogSeeder extends Seeder
                 'ps' => ['ماشومان', 'ماشومان', 'د ماشومانو لپاره دودیزې افغان جامې.'],
             ]);
 
+            $accessories = $this->category(40, [
+                'en' => ['Accessories', 'accessories', 'Afghan-inspired shawls and finishing pieces for traditional outfits.'],
+                'fa' => ['اکسسوری', 'اکسسوری', 'شال‌ها و تکمیل‌کننده‌های الهام‌گرفته از پوشاک افغانی.'],
+                'ps' => ['اکسسوري', 'اکسسوري', 'افغان الهام لرونکي شالونه او د دودیز لباس بشپړوونکي توکي.'],
+            ]);
+
             $this->product($men->id, 'KF-M-PT-001', 650000, true, 10, [
                 'en' => ['Classic Afghan Perahan Tunban', 'classic-afghan-perahan-tunban', 'A refined made-to-measure Perahan Tunban inspired by Afghan tailoring traditions.'],
                 'fa' => ['پیرهن تنبان کلاسیک افغانی', 'پیرهن-تنبان-کلاسیک-افغانی', 'پیرهن تنبان شیک با دوخت سفارشی و الهام‌گرفته از خیاطی اصیل افغانی.'],
@@ -37,15 +43,27 @@ class CatalogSeeder extends Seeder
             ]);
 
             $this->product($women->id, 'KF-W-DR-001', 980000, true, 20, [
-                'en' => ['Hand-Embroidered Afghan Dress', 'hand-embroidered-afghan-dress', 'A formal Afghan dress featuring traditional-inspired embroidery and tailored finishing.'],
-                'fa' => ['لباس افغانی خامک‌دوزی‌شده', 'لباس-افغانی-خامک-دوزی', 'لباس مجلسی افغانی با خامک‌دوزی الهام‌گرفته از هنر سنتی و دوخت حرفه‌ای.'],
-                'ps' => ['لاس ګنډل شوی افغان لباس', 'لاس-ګنډل-شوی-افغان-لباس', 'رسمي افغان لباس له دودیز الهام اخیستل شوي ګنډلو او مسلکي جوړښت سره.'],
+                'en' => ['Herat Embroidered Afghan Dress', 'herat-embroidered-afghan-dress', 'A formal Afghan dress featuring Herat-inspired embroidery and tailored finishing.'],
+                'fa' => ['لباس افغانی خامک‌دوزی هرات', 'لباس-افغانی-خامک-دوزی-هرات', 'لباس مجلسی افغانی با خامک‌دوزی الهام‌گرفته از هنر هرات و دوخت حرفه‌ای.'],
+                'ps' => ['د هرات ګنډل شوی افغان لباس', 'د-هرات-ګنډل-شوی-افغان-لباس', 'رسمي افغان لباس د هرات له هنر الهام اخیستل شوي ګنډلو او مسلکي جوړښت سره.'],
             ]);
 
             $this->product($kids->id, 'KF-K-VS-001', 420000, false, 30, [
                 'en' => ['Kids Afghan Waistcoat Set', 'kids-afghan-waistcoat-set', 'A comfortable Afghan-inspired waistcoat set prepared for celebrations and family occasions.'],
                 'fa' => ['ست واسکت افغانی اطفال', 'ست-واسکت-افغانی-اطفال', 'ست راحت واسکت افغانی برای جشن‌ها و محافل خانوادگی کودکان.'],
                 'ps' => ['د ماشومانو افغان واسکټ سیټ', 'د-ماشومانو-افغان-واسکټ-سیټ', 'د ماشومانو د مېلو او کورنیو مراسمو لپاره ارام افغان واسکټ سیټ.'],
+            ]);
+
+            $this->product($men->id, 'KF-M-WC-001', 790000, true, 40, [
+                'en' => ['Traditional Afghan Waistcoat', 'traditional-afghan-waistcoat', 'A structured Afghan waistcoat with geometric embroidery for formal and everyday layering.'],
+                'fa' => ['واسکت سنتی افغانی', 'واسکت-سنتی-افغانی', 'واسکت ساختارمند افغانی با نقش‌های هندسی برای محافل رسمی و استفاده روزمره.'],
+                'ps' => ['دودیز افغان واسکټ', 'دودیز-افغان-واسکټ', 'د رسمي او ورځني اغوستلو لپاره هندسي ګنډل شوی افغان واسکټ.'],
+            ]);
+
+            $this->product($accessories->id, 'KF-A-KS-001', 480000, true, 50, [
+                'en' => ['Kuchi-Inspired Afghan Shawl', 'kuchi-inspired-afghan-shawl', 'A versatile shawl inspired by Kuchi color, textile and decorative traditions.'],
+                'fa' => ['شال افغانی الهام‌گرفته از کوچی', 'شال-افغانی-الهام-گرفته-از-کوچی', 'شال چندمنظوره با الهام از رنگ، پارچه و تزئینات سنت کوچی.'],
+                'ps' => ['له کوچي دود الهام اخیستی افغان شال', 'له-کوچي-دود-الهام-اخیستی-افغان-شال', 'د کوچي رنګونو، ټوکر او سینګار له دود څخه الهام اخیستی شال.'],
             ]);
         });
     }
@@ -82,7 +100,7 @@ class CatalogSeeder extends Seeder
                 'price_minor' => $priceMinor,
                 'sale_price_minor' => null,
                 'currency' => 'AFN',
-                'stock_quantity' => 10,
+                'stock_quantity' => 0,
                 'is_active' => true,
                 'is_featured' => $featured,
                 'sort_order' => $sortOrder,

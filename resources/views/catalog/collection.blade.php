@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@php($translation = $category->translation())
+@php($translation = $collection->translation())
 <section class="page-hero">
     <div class="container">
         <nav class="breadcrumbs" aria-label="{{ __('site.breadcrumbs') }}">
@@ -9,6 +9,7 @@
             <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop') }}</a><span>/</span>
             <span aria-current="page">{{ $translation?->name }}</span>
         </nav>
+        <p class="eyebrow">{{ __('site.collection') }}</p>
         <h1>{{ $translation?->name }}</h1>
         <p>{{ $translation?->description }}</p>
     </div>
@@ -17,9 +18,9 @@
 <section class="section">
     <div class="container">
         @include('catalog._filters', [
-            'action' => route('categories.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]),
-            'lockedCategory' => $translation?->slug,
-            'lockedCollection' => null,
+            'action' => route('collections.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]),
+            'lockedCategory' => null,
+            'lockedCollection' => $translation?->slug,
         ])
 
         <div class="product-grid">

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" role="img" aria-labelledby="title desc">
+<title id="title">KabulFit product visual</title>
+<desc id="desc">An original abstract garment silhouette with Afghan textile-inspired geometric decoration.</desc>
+<rect width="900" height="1100" fill="#efe6d9"/>
+<circle cx="450" cy="210" r="92" fill="#d7c2a6"/>
+<path d="M275 350c55-55 115-82 175-82s120 27 175 82l85 520-125 48-50-307v389H365V611l-50 307-125-48 85-520Z" fill="#173b2d"/>
+<path d="M365 305h170l-34 155H399l-34-155Z" fill="#7c2f28"/>
+<g fill="none" stroke="#c99a4a" stroke-width="8" opacity=".95">
+  <path d="m450 325 38 38-38 38-38-38 38-38Z"/>
+  <path d="m450 410 28 28-28 28-28-28 28-28Z"/>
+  <path d="M392 505h116M382 550h136"/>
+  <path d="m270 520 45 45-45 45-45-45 45-45Zm360 0 45 45-45 45-45-45 45-45Z"/>
+</g>
+<g stroke="#7c2f28" stroke-width="3" opacity=".18">
+  <path d="M90 160 810 880M20 310 690 980M210 40 880 710"/>
+  <path d="M810 160 90 880M880 310 210 980M690 40 20 710"/>
+</g>
+</svg>

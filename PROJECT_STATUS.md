@@ -88,10 +88,39 @@ Key architectural decisions:
 - Mobile supports English, Dari and Pashto with RTL, the same KabulFit visual identity, customer account, shopping, wishlist/cart, reusable measurements, custom tailoring, Stripe checkout, orders/tracking and notifications.
 - Detailed architecture is documented in `docs/MOBILE_ARCHITECTURE.md`.
 
+## Batch 3 — Catalog domain + mobile catalog API
+
+Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #5**.
+
+Implemented:
+
+- Relational localized collections and collection-product ordering.
+- Sizes, localized colors, product variants and variant-level inventory with reserved-stock accounting.
+- Product media records with localized alt text and intrinsic dimensions.
+- Deterministic demo media and expanded Afghan-fashion seed catalog including Accessories.
+- Server-rendered search, category, collection, size, color, price, stock and sort filters.
+- Clean localized collection URLs.
+- Related products and session-based recently viewed products.
+- Product pages with media gallery, collection tags, variant/stock options and related/recent sections.
+- Product/Offer/BreadcrumbList and listing ItemList/BreadcrumbList structured-data expansion.
+- Versioned `/api/v1/{locale}` catalog, product, category and collection endpoints for the future Flutter app.
+- Public API identifiers use slugs/SKUs instead of database primary keys.
+- API money uses integer minor units plus ISO currency.
+- Public catalog API rate limiting and contract documentation.
+- Automated catalog domain, filter, API, recently-viewed and SEO tests.
+
+Validation evidence from GitHub Actions run `35633550158`:
+
+- PHPUnit: **30 tests, 168 assertions, zero warnings**.
+- Laravel Pint: **76 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35633833786`: **quality + MySQL smoke both green**.
+
 ## Not yet complete
 
-- Full product media/variants/inventory domain and mobile catalog API.
-- Search/filter/sort and collections.
 - Authentication/customer account and mobile API authentication.
 - Cart, wishlist, checkout and Stripe platform implementation.
 - Measurement profiles and tailoring workflow.
@@ -106,4 +135,4 @@ Key architectural decisions:
 
 ## Release gate
 
-The mobile-roadmap documentation change must pass CI before merging. Product batches continue to require green feature-branch and PR CI before merge.
+Batch 3 has met its implementation and CI gates. PR #5 may merge while this final documentation-only head remains green.
