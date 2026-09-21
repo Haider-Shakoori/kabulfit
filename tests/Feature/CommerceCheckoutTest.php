@@ -33,6 +33,11 @@ class CommerceCheckoutTest extends TestCase
                 return ['id' => 'pi_test_'.$payment->uuid, 'client_secret' => 'pi_secret_test', 'status' => 'requires_payment_method'];
             }
 
+            public function cancel(Payment $payment): array
+            {
+                return ['id' => $payment->provider_payment_id, 'status' => 'canceled'];
+            }
+
             public function refund(Payment $payment, ?int $amountMinor = null): array
             {
                 return ['id' => 're_test', 'status' => 'succeeded'];
