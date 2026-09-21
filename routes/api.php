@@ -48,8 +48,8 @@ Route::prefix('v1/{locale}')
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('api.v1.cart.items.store');
-            Route::put('/cart/items/{item}', [CommerceController::class, 'update'])->name('api.v1.cart.items.update');
-            Route::delete('/cart/items/{item}', [CommerceController::class, 'remove'])->name('api.v1.cart.items.destroy');
+            Route::put('/cart/items/{item:uuid}', [CommerceController::class, 'update'])->name('api.v1.cart.items.update');
+            Route::delete('/cart/items/{item:uuid}', [CommerceController::class, 'remove'])->name('api.v1.cart.items.destroy');
             Route::get('/wishlist', [CommerceController::class, 'wishlist'])->name('api.v1.wishlist');
             Route::post('/wishlist', [CommerceController::class, 'wishlistStore'])->name('api.v1.wishlist.store');
             Route::delete('/wishlist/{slug}', [CommerceController::class, 'wishlistDestroy'])->name('api.v1.wishlist.destroy');

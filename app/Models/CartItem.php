@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CartItem extends Model
 {
-    protected $fillable = ['cart_id', 'product_id', 'product_variant_id', 'quantity'];
+    protected $fillable = ['uuid', 'cart_id', 'product_id', 'product_variant_id', 'quantity'];
 
     protected function casts(): array
     {
@@ -32,6 +32,11 @@ class CartItem extends Model
     public function unitPriceMinor(): int
     {
         return $this->variant?->currentPriceMinor() ?? $this->product->currentPriceMinor();
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
     }
 
     public function lineTotalMinor(): int

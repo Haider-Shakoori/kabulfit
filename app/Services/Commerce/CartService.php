@@ -24,6 +24,10 @@ class CartService
         }
         $available = $variant?->availableQuantity() ?? $product->availableStock();
         $item = $cart->items()->firstOrNew(['product_id' => $product->id, 'product_variant_id' => $variant?->id]);
+
+        if (! $item->exists) {
+            $item->uuid = (string) Str::uuid();
+        }
         $wanted = ($item->exists ? $item->quantity : 0) + $quantity;
         if ($wanted > $available) {
             throw ValidationException::withMessages(['quantity' => __('commerce.insufficient_stock')]);
