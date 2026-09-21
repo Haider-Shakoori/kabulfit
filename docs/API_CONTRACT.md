@@ -75,3 +75,28 @@ The public catalog API is limited to 120 requests per minute per source IP. Late
 ## Compatibility
 
 Breaking response changes require a new API version or a coordinated mobile release. Additive fields may be introduced within v1 when they do not change existing semantics.
+
+
+## Customer authentication and account
+
+Mobile authentication uses Laravel Sanctum bearer tokens. The client stores the returned plain-text token only in platform-secure storage; Laravel stores only its hash.
+
+Public auth endpoints:
+
+- `POST /api/v1/{locale}/auth/register`
+- `POST /api/v1/{locale}/auth/login`
+- `POST /api/v1/{locale}/auth/forgot-password`
+- `POST /api/v1/{locale}/auth/reset-password`
+
+Registration/login accept `device_uuid`, `device_name`, `platform=android|ios`, and optional `app_version`. Reauthenticating the same device replaces its previous token.
+
+Authenticated bearer-token endpoints:
+
+- `GET /api/v1/{locale}/account`
+- `POST /api/v1/{locale}/auth/logout`
+- `POST /api/v1/{locale}/auth/email/verification-notification`
+- `DELETE /api/v1/{locale}/auth/devices/{device_uuid}`
+- `GET|POST /api/v1/{locale}/account/addresses`
+- `PUT|DELETE /api/v1/{locale}/account/addresses/{address_uuid}`
+
+Account/address responses intentionally use public UUIDs and do not expose database primary keys. Password reset revokes existing API tokens. Email verification links are locale-aware signed web URLs.

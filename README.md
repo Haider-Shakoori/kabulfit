@@ -81,3 +81,10 @@ See `PROJECT_STATUS.md` and `ROADMAP.md` for implementation status and batch seq
 ## Catalog API
 
 The first mobile-facing API contract is documented in `docs/API_CONTRACT.md`. Public catalog routes are versioned under `/api/v1/{locale}` and expose localized categories, collections, products, variants, media, stock and integer-minor-unit money without exposing database primary keys.
+
+
+## Customer authentication
+
+Web customer authentication is localized under `/{locale}` and includes registration, login/logout, password reset, email verification, account pages and saved addresses. Mobile clients use Laravel Sanctum bearer tokens under `/api/v1/{locale}/auth/*`; mobile tokens are device-bound, revocable and expire according to `KABULFIT_MOBILE_TOKEN_DAYS`.
+
+See `docs/AUTHENTICATION.md` and `docs/API_CONTRACT.md` for the security and client contract.

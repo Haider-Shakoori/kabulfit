@@ -9,4 +9,7 @@ return [
         'per_page' => (int) env('KABULFIT_CATALOG_PER_PAGE', 12),
         'max_per_page' => 48,
     ],
+    'auth' => [
+        'mobile_token_days' => (int) env('KABULFIT_MOBILE_TOKEN_DAYS', 90),
+    ],
 ];

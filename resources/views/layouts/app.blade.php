@@ -55,6 +55,12 @@
         </nav>
 
         <div class="nav-actions">
+            @auth
+                <a class="nav-account-link" href="{{ route('account', ['locale' => app()->getLocale()]) }}">{{ __('auth.account') }}</a>
+            @else
+                <a class="nav-account-link" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('auth.login') }}</a>
+            @endauth
+
             <div class="locale-switcher" aria-label="{{ __('site.language') }}">
                 @foreach (($seo->alternates ?? []) as $locale => $href)
                     <a href="{{ $href }}" hreflang="{{ $locale }}" lang="{{ $locale }}" @class(['active' => app()->getLocale() === $locale]) aria-current="{{ app()->getLocale() === $locale ? 'page' : 'false' }}">{{ strtoupper($locale) }}</a>

@@ -117,11 +117,41 @@ Validation evidence from GitHub Actions run `35633550158`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35636598809`: **quality + MySQL smoke both green**.
 - PR-triggered CI run `35633833786`: **quality + MySQL smoke both green**.
+
+## Batch 4 — Authentication, customer account + mobile API authentication
+
+Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #6**.
+
+Implemented:
+
+- Laravel Sanctum 4.x mobile bearer-token authentication.
+- Localized web registration, login/logout, password reset and signed email verification.
+- Active-account enforcement and login/API throttling.
+- Preferred account locale used by verification and password-reset links.
+- Customer account page with noindex/nofollow metadata.
+- Relational saved addresses with public UUIDs, ownership checks and exactly-one-default behavior.
+- Device-aware mobile sessions with device UUID/name/platform/app-version tracking and per-device revocation.
+- Mobile token expiration and same-device token replacement.
+- Password reset revokes existing mobile tokens.
+- Versioned account/auth/address API endpoints for the future Flutter application.
+- Localized English, Dari and Pashto account/auth UI with RTL-compatible responsive forms.
+- Automated browser auth, verification, reset, address authorization and mobile token/API tests.
+- Authentication/API contract documentation.
+
+Validation evidence from GitHub Actions run `35636248691`:
+
+- PHPUnit: **44 tests, 248 assertions, zero warnings**.
+- Laravel Pint: **113 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
 
 ## Not yet complete
 
-- Authentication/customer account and mobile API authentication.
+- Cart, wishlist, checkout and Stripe platform implementation.
 - Cart, wishlist, checkout and Stripe platform implementation.
 - Measurement profiles and tailoring workflow.
 - Orders/shipping/notifications.
@@ -135,4 +165,4 @@ Validation evidence from GitHub Actions run `35633550158`:
 
 ## Release gate
 
-Batch 3 is complete and merged. Batch 4 must follow the same feature-branch, test, PR and green-CI gate.
+Batch 4 has met its implementation and CI gates. PR #6 may merge while this final documentation-only head remains green.
