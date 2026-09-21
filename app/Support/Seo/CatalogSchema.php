@@ -24,7 +24,7 @@ final class CatalogSchema
                     'url' => $url,
                     'itemListElement' => collect($products->items())
                         ->values()
-                        ->map(function (Product $product, int $index) use ($locale): array {
+                        ->map(function (Product $product, int $index) use ($locale, $products): array {
                             $translation = $product->translation($locale);
 
                             return [
