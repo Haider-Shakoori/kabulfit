@@ -88,3 +88,7 @@ The first mobile-facing API contract is documented in `docs/API_CONTRACT.md`. Pu
 Web customer authentication is localized under `/{locale}` and includes registration, login/logout, password reset, email verification, account pages and saved addresses. Mobile clients use Laravel Sanctum bearer tokens under `/api/v1/{locale}/auth/*`; mobile tokens are device-bound, revocable and expire according to `KABULFIT_MOBILE_TOKEN_DAYS`.
 
 See `docs/AUTHENTICATION.md` and `docs/API_CONTRACT.md` for the security and client contract.
+
+## Stripe checkout
+
+Set `STRIPE_KEY`, `STRIPE_SECRET` and `STRIPE_WEBHOOK_SECRET`. Configure Stripe to deliver PaymentIntent success/failure/cancellation events to `/api/stripe/webhook`. Keep the Laravel scheduler running so abandoned checkout reservations are released. See `docs/PAYMENTS.md`.
