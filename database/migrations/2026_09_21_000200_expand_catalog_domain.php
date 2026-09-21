@@ -93,7 +93,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('locale', 5);
             $table->string('name');
-            $table->unique(['product_option_value_id', 'locale']);
+            $table->unique(['product_option_value_id', 'locale'], 'pov_translation_locale_unique');
         });
 
         Schema::create('product_variants', function (Blueprint $table): void {
@@ -110,8 +110,16 @@ return new class extends Migration
         });
 
         Schema::create('product_variant_option_values', function (Blueprint $table): void {
-            $table->foreignId('product_variant_id')->constrained('product_variants')->cascadeOnDelete();
-            $table->foreignId('product_option_value_id')->constrained('product_option_values')->restrictOnDelete();
+            $table->foreignId('product_variant_id');
+            $table->foreign('product_variant_id', 'variant_option_variant_fk')
+                ->references('id')
+                ->on('product_variants')
+                ->cascadeOnDelete();
+            $table->foreignId('product_option_value_id');
+            $table->foreign('product_option_value_id', 'variant_option_value_fk')
+                ->references('id')
+                ->on('product_option_values')
+                ->restrictOnDelete();
             $table->primary(['product_variant_id', 'product_option_value_id'], 'variant_option_value_primary');
             $table->index('product_option_value_id');
         });
