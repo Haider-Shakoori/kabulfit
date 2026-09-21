@@ -1,5 +1,23 @@
 <?php
 
 return [
-    'cart' => 'Cart', 'checkout' => 'Checkout', 'payment' => 'Payment', 'empty_cart' => 'Your cart is empty.', 'invalid_item' => 'This product option is unavailable.', 'insufficient_stock' => 'The requested quantity is not available.', 'invalid_coupon' => 'This coupon is invalid or unavailable.', 'subtotal' => 'Subtotal', 'quantity' => 'Quantity', 'remove' => 'Remove', 'continue_checkout' => 'Continue to checkout', 'shipping_address' => 'Shipping address', 'shipping_method' => 'Shipping method', 'coupon' => 'Coupon', 'place_order' => 'Continue to payment', 'order' => 'Order', 'payment_pending' => 'Payment confirmation is pending. Your order updates only after Stripe confirms the payment.', 'secure_payment' => 'Secure payment', 'total' => 'Total',
+    'cart' => 'د پېرلو ټوکرۍ',
+    'checkout' => 'د فرمایش بشپړول',
+    'payment' => 'تادیه',
+    'empty_cart' => 'ستاسو د پېرلو ټوکرۍ تشه ده.',
+    'invalid_item' => 'د محصول دا انتخاب شتون نه لري.',
+    'insufficient_stock' => 'غوښتل شوی شمېر په ذخیره کې نشته.',
+    'invalid_coupon' => 'دا کوپن معتبر یا د کارولو وړ نه دی.',
+    'subtotal' => 'فرعي مجموعه',
+    'quantity' => 'شمېر',
+    'remove' => 'لرې کول',
+    'continue_checkout' => 'د فرمایش بشپړولو ته دوام',
+    'shipping_address' => 'د لېږد پته',
+    'shipping_method' => 'د لېږد طریقه',
+    'coupon' => 'کوپن',
+    'place_order' => 'تادیې ته دوام',
+    'order' => 'فرمایش',
+    'payment_pending' => 'د تادیې تایید ته انتظار دی. فرمایش یوازې د Stripe له تایید وروسته تازه کېږي.',
+    'secure_payment' => 'خوندي تادیه',
+    'total' => 'ټول',
 ];
