@@ -14,7 +14,7 @@ Reference homepage structure confirmed: Authentic Afghan Elegance hero; custom s
 
 ## Batch 1 — Foundation
 
-Status: **implemented on feature branch; CI validation required before completion**.
+Status: **complete on feature branch; validated green in CI**.
 
 Implemented:
 
@@ -33,6 +33,15 @@ Implemented:
 - Automated localization, SEO, redirect and security-header tests.
 - GitHub Actions quality/frontend/security checks plus MySQL 8.4 migration/seed smoke test.
 
+Validation evidence from GitHub Actions run `35627120129`:
+
+- PHPUnit: **12 tests, 52 assertions, zero warnings** using `--fail-on-warning`.
+- Laravel Pint: **48 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks: **passed**.
+
 Not claimed complete in Batch 1:
 
 - Authentication/customer account.
@@ -50,4 +59,4 @@ Not claimed complete in Batch 1:
 
 ## Release gate
 
-Batch 1 is not complete until GitHub Actions is green. Nothing should merge into `main` while CI is failing.
+Batch 1 has met its implementation and CI gate. It may merge only after this final documentation commit also completes CI successfully.
