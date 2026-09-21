@@ -28,7 +28,7 @@ Known limitation retained for final QA: pixel-level browser comparison with the 
 
 ## Batch 3 — Catalog domain + mobile catalog API
 
-Status: **implementation validated green on `feat/batch-03-catalog-domain`; PR gate pending**.
+Status: **complete; branch and PR CI validated green; ready to merge via PR #4**.
 
 Implemented:
 
@@ -60,6 +60,7 @@ Validation evidence from GitHub Actions run `35633531419`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic catalog seed successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35633802925`: **quality + MySQL smoke both green**.
 
 ## Mobile application decision
 
@@ -82,4 +83,4 @@ KabulFit includes a dedicated Flutter mobile application for Android and iOS. La
 
 ## Release gate
 
-Batch 3 feature-branch CI is green. PR-triggered CI must also remain green before merge.
+Batch 3 has met its implementation and CI gates. PR #4 may merge while this final documentation-only head remains green.
