@@ -92,3 +92,7 @@ See `docs/AUTHENTICATION.md` and `docs/API_CONTRACT.md` for the security and cli
 ## Stripe checkout
 
 Set `STRIPE_KEY`, `STRIPE_SECRET` and `STRIPE_WEBHOOK_SECRET`. Configure Stripe to deliver PaymentIntent success/failure/cancellation events to `/api/stripe/webhook`. Keep the Laravel scheduler running so abandoned checkout reservations are released. See `docs/PAYMENTS.md`.
+
+## Measurements and custom tailoring
+
+Reusable measurement profiles support centimetres/inches while Laravel stores canonical centimetre values. Tailored product configurations are attached to cart lines and snapshotted into order items at checkout. See `docs/MEASUREMENTS.md` and `docs/API_CONTRACT.md`.

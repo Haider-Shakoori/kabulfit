@@ -119,3 +119,22 @@ The checkout response contains an order UUID/number and Stripe PaymentIntent cli
 
 Stock is reserved while payment is pending. Abandoned checkout reservations expire on the configured schedule and are released.
 
+
+## Measurements and custom tailoring
+
+Measurement definitions are public read-only reference data because product screens and the Flutter measurement guide need them before profile editing. Customer profiles and tailoring actions require authenticated active-user access.
+
+- `GET /api/v1/{locale}/measurements/definitions?garment_type={type}&unit={cm|in}`
+- `GET /api/v1/{locale}/measurement-profiles`
+- `POST /api/v1/{locale}/measurement-profiles`
+- `PUT /api/v1/{locale}/measurement-profiles/{profile_uuid}`
+- `DELETE /api/v1/{locale}/measurement-profiles/{profile_uuid}`
+- `POST /api/v1/{locale}/tailoring`
+
+Supported garment types currently are `perahan_tunban`, `dress`, and `waistcoat`.
+
+Measurement values are stored canonically in centimetres. API clients may submit and display centimetres or inches; validation ranges are converted server-side. Flutter must not persist a separate authoritative conversion model.
+
+A tailoring request requires a product that explicitly supports tailoring and a saved profile whose garment type matches the product. Creating a tailoring request also creates the custom cart line. Each tailored cart line has quantity one.
+
+At checkout, Laravel snapshots measurement codes/names/centimetre values, profile name and tailoring notes into the order item. Later profile changes or deletion cannot change historical order measurements.

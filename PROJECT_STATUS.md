@@ -186,9 +186,42 @@ Validation evidence from GitHub Actions run `35639422198`:
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
 
+## Batch 6 — Measurements & custom tailoring + mobile measurement API
+
+Status: **implementation validated green on `feat/batch-06-measurements-tailoring`; final PR gate pending**.
+
+Implemented:
+
+- Configurable relational measurement definitions for Perahan Tunban, dresses and waistcoats.
+- Localized English/Dari/Pashto definition names, instructions and lightweight visual measurement guides.
+- Canonical centimetre storage with centimetre/inch input and display conversion.
+- Server-side required/range/unknown-code validation shared by web and mobile workflows.
+- Reusable customer measurement profiles with public UUIDs and exactly-one-default behavior.
+- Protected profile lifecycle while a profile is attached to an active tailored cart item.
+- Product-level tailoring eligibility and garment measurement type.
+- Web customer measurement-profile management with noindex metadata.
+- Product-detail “Tailor This Outfit” workflow with compatible profile, variant and customer notes.
+- Shared tailored cart lines for Blade and Flutter/API flows.
+- Tailored cart-line cancellation propagation and quantity protection.
+- Immutable order-item snapshots for measurement values, profile name, tailoring notes and tailoring request UUID.
+- Checkout changes tailoring request state to ordered; failed/expired checkout cancellation propagates back to tailoring.
+- Versioned mobile endpoints for measurement definitions, profile CRUD and tailored-cart creation.
+- Product API exposes tailoring availability and garment type.
+- Cart API exposes tailoring request/profile metadata without internal database IDs.
+- Deterministic measurement seed data and production-safe guide assets.
+- Dedicated conversion, validation, ownership, lifecycle, API, noindex and snapshot regression tests.
+
+Validation evidence from GitHub Actions run `35645248956`:
+
+- PHPUnit: **60 tests, 329 assertions, zero warnings**.
+- Laravel Pint: **159 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
-- Measurement profiles and tailoring workflow.
 - Orders/shipping/notifications.
 - Admin/tailor dashboards and authorization matrix.
 - Blog/content CMS.
@@ -200,4 +233,4 @@ Validation evidence from GitHub Actions run `35639422198`:
 
 ## Release gate
 
-Batch 5 is merged after green feature-branch and PR CI. The next implementation gate is Batch 6 — measurements and custom tailoring + mobile measurement API.
+Batch 6 implementation CI is green. The documentation-only head and PR-triggered CI must remain green before merge.
