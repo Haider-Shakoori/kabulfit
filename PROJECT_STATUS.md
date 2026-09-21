@@ -16,94 +16,61 @@ Reference homepage structure confirmed: Authentic Afghan Elegance hero; custom s
 
 Status: **complete and merged to `main` via PR #1**.
 
-Implemented:
-
-- Laravel 12 / PHP 8.3+ scaffold and MySQL-first environment defaults.
-- Blade + Tailwind CSS + Alpine.js + Vite foundation.
-- Central KabulFit CSS design tokens using the required `--brand-*` variables.
-- Responsive public shell, accessible skip link/focus behavior/mobile navigation/reduced-motion handling.
-- `en`, `fa`, `ps` locale prefixes and automatic RTL for Dari/Pashto.
-- Relational categories/products plus translation tables and integer minor-unit monetary storage.
-- Deterministic Afghan-fashion catalog seed data.
-- Localized homepage, shop, category and server-rendered product foundation.
-- Canonical, hreflang/x-default, Open Graph, Twitter metadata and JSON-LD foundation.
-- Dynamic `robots.txt` and public sitemap.
-- Explicit legacy-product redirect table and 301 controller; unknown mappings return 404.
-- Baseline security headers and custom 404 response.
-- Automated localization, SEO, redirect and security-header tests.
-- GitHub Actions quality/frontend/security checks plus MySQL 8.4 migration/seed smoke test.
-
-Validation evidence:
-
-- PHPUnit: **12 tests, 52 assertions, zero warnings** using `--fail-on-warning`.
-- Laravel Pint: **48 files passed**.
-- Composer dependency audit: **no security vulnerability advisories found**.
-- Vite production build: **successful**.
-- MySQL 8.4: **fresh migration + deterministic seeding successful**.
-- PR-triggered CI: **green before merge**.
+Validation baseline: Laravel 12/PHP 8.3+, multilingual SSR/SEO foundation, deterministic seed, security headers and green CI.
 
 ## Batch 2 — Reference visual fidelity and responsive component system
 
 Status: **complete and merged to `main` via PR #2**.
 
+Validation baseline: 16 tests / 92 assertions / zero warnings, Pint clean, Composer audit clean, Vite production build green and MySQL 8.4 migration/seed green.
+
+Known limitation retained for final QA: pixel-level browser comparison with the public reference remains required.
+
+## Batch 3 — Catalog domain + mobile catalog API
+
+Status: **implemented on `feat/batch-03-catalog-domain`; CI validation pending**.
+
 Implemented:
 
-- Live homepage content/section inventory documented in `docs/VISUAL_REFERENCE.md`.
-- Refined reusable KabulFit design system using centralized green, burgundy, gold and warm-neutral tokens.
-- Branded SVG mark plus original lightweight textile/craftsmanship SVG assets.
-- Responsive sticky header, locale switcher and keyboard-friendly mobile navigation.
-- Live-site homepage hierarchy preserved: hero, three assurances, categories, featured catalog, culture story, measurement CTA, editorial content, testimonials and contact positioning.
-- Live reference copy restored for shipping, story, measurement and customer-proof sections.
-- Customer-facing developer placeholder language removed from the homepage.
-- Reusable icon, brand and product-card components.
-- Fluid layout rules for desktop, tablet and required small mobile widths, plus logical RTL properties.
-- Accessibility refinements: skip link, landmarks, focus states, minimum targets, semantic figures/quotes, explicit image dimensions and reduced-motion behavior.
-- Media strategy documented without inventing stock photography or fake production assets.
-- Automated visual-structure/token/accessibility markup tests added.
-
-Validation evidence:
-
-- PHPUnit: **16 tests, 92 assertions, zero warnings**.
-- Laravel Pint: **49 files passed**.
-- Composer dependency audit: **no security vulnerability advisories found**.
-- Vite production build: **successful**.
-- MySQL 8.4: **fresh migration + deterministic seeding successful**.
-- PR-triggered quality + MySQL CI: **green before merge**.
-
-Known Batch 2 limitation:
-
-The available crawler exposes content and page inventory but not the original CSS bundle, reliable raw image asset URLs or browser pixel screenshots. The design tokens are therefore centralized for efficient correction, but **pixel-perfect parity is not yet claimed**. Browser visual-regression comparison remains required before final acceptance.
+- Normalized collections and localized collection metadata/slugs.
+- Relational product media with dimensions, primary ordering and localized alt text.
+- Generic filterable product options and localized values for size, color and embroidery.
+- Product variants with SKU-level pricing and option combinations.
+- Variant inventory records with on-hand, reserved and calculated available stock.
+- Deterministic categories for Men, Women, Kids and Accessories.
+- Deterministic New Arrivals, Wedding Edit and Heritage Essentials collections.
+- Search, category, collection, size, color, embroidery, price-range, stock-only and sorting filters.
+- Server-rendered shop/category/collection filters using the same query service as the API.
+- Clean localized collection URLs.
+- Related products and session-based recently viewed products.
+- Product media/variant/inventory presentation on product pages.
+- Product/Offer/BreadcrumbList/ItemList JSON-LD and collection sitemap entries.
+- Faceted/search pages marked `noindex,follow` to prevent index bloat.
+- `/api/v1/{locale}/catalog/products`, product detail and catalog facets endpoints.
+- Mobile API exposes localized slugs/SKUs, integer minor-unit money, calculated availability, media dimensions/alt text and stable option/value codes without public database IDs.
+- Public API crawl blocking in `robots.txt`.
+- API contract documented in `docs/API_CONTRACT.md`.
+- Batch-specific catalog/API regression tests added.
 
 ## Mobile application decision
 
-KabulFit now explicitly includes a dedicated Flutter mobile application for Android and iOS. The roadmap has been expanded from 13 to **16 batches**.
-
-Key architectural decisions:
-
-- Laravel remains the shared server-authoritative commerce backend for web and mobile.
-- Batches 3–8 must provide stable versioned APIs for the mobile capabilities they own.
-- Stripe is implemented server-first in Batch 5 and surfaced through the official mobile payment flow in Batch 14; webhook-confirmed server state remains authoritative.
-- Mobile-specific implementation begins with Batch 12 after shared domain/API hardening.
-- The planned mobile repository is `kabulfit-mobile`.
-- Mobile supports English, Dari and Pashto with RTL, the same KabulFit visual identity, customer account, shopping, wishlist/cart, reusable measurements, custom tailoring, Stripe checkout, orders/tracking and notifications.
-- Detailed architecture is documented in `docs/MOBILE_ARCHITECTURE.md`.
+KabulFit includes a dedicated Flutter mobile application for Android and iOS. Laravel remains the shared server-authoritative commerce backend. Batches 3–8 provide stable versioned API contracts; Stripe is server-first in Batch 5 and surfaced through the official mobile payment flow in Batch 14. Detailed architecture is documented in `docs/MOBILE_ARCHITECTURE.md`.
 
 ## Not yet complete
 
-- Full product media/variants/inventory domain and mobile catalog API.
-- Search/filter/sort and collections.
 - Authentication/customer account and mobile API authentication.
-- Cart, wishlist, checkout and Stripe platform implementation.
+- Wishlist/cart/checkout and Stripe platform payments.
 - Measurement profiles and tailoring workflow.
 - Orders/shipping/notifications.
 - Admin/tailor dashboards and authorization matrix.
 - Blog/content CMS.
 - Flutter application implementation.
-- Real legacy-ID mapping crawl.
+- Real legacy-ID migration inventory.
+- Production catalog photography and responsive AVIF/WebP derivatives.
 - Browser/mobile visual-regression evidence.
 - Lighthouse/Core Web Vitals and mobile performance evidence.
-- Composer/npm/mobile lockfile and release reproducibility gates.
+- Final lockfile/release reproducibility gates.
 
 ## Release gate
 
-The mobile-roadmap documentation change must pass CI before merging. Product batches continue to require green feature-branch and PR CI before merge.
+Batch 3 must not merge until feature-branch CI and PR-triggered CI are green.

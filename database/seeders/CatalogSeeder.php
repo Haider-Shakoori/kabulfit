@@ -114,19 +114,19 @@ class CatalogSeeder extends Seeder
                 'ps' => 'د کوشي ګنډل شوي شال هنري جزیات',
             ]);
 
-            $this->variant($perahan, 'S-BLK-H', 650000, 5, $options, ['size' => 's', 'color' => 'black', 'embroidery' => 'hand']);
-            $this->variant($perahan, 'M-BLK-H', 650000, 4, $options, ['size' => 'm', 'color' => 'black', 'embroidery' => 'hand']);
-            $this->variant($perahan, 'L-GRN-P', 620000, 3, $options, ['size' => 'l', 'color' => 'green', 'embroidery' => 'plain']);
+            $this->variant($perahan, 'S-BLK-H', 650000, 5, 10, $options, ['size' => 's', 'color' => 'black', 'embroidery' => 'hand']);
+            $this->variant($perahan, 'M-BLK-H', 650000, 4, 20, $options, ['size' => 'm', 'color' => 'black', 'embroidery' => 'hand']);
+            $this->variant($perahan, 'L-GRN-P', 620000, 3, 30, $options, ['size' => 'l', 'color' => 'green', 'embroidery' => 'plain']);
 
-            $this->variant($dress, 'S-MAR-H', 980000, 4, $options, ['size' => 's', 'color' => 'maroon', 'embroidery' => 'hand']);
-            $this->variant($dress, 'M-MAR-H', 980000, 5, $options, ['size' => 'm', 'color' => 'maroon', 'embroidery' => 'hand']);
-            $this->variant($dress, 'L-CRM-H', 1020000, 2, $options, ['size' => 'l', 'color' => 'cream', 'embroidery' => 'hand']);
+            $this->variant($dress, 'S-MAR-H', 980000, 4, 10, $options, ['size' => 's', 'color' => 'maroon', 'embroidery' => 'hand']);
+            $this->variant($dress, 'M-MAR-H', 980000, 5, 20, $options, ['size' => 'm', 'color' => 'maroon', 'embroidery' => 'hand']);
+            $this->variant($dress, 'L-CRM-H', 1020000, 2, 30, $options, ['size' => 'l', 'color' => 'cream', 'embroidery' => 'hand']);
 
-            $this->variant($kidsSet, 'S-BLK-P', 420000, 5, $options, ['size' => 's', 'color' => 'black', 'embroidery' => 'plain']);
-            $this->variant($kidsSet, 'M-GRN-H', 450000, 4, $options, ['size' => 'm', 'color' => 'green', 'embroidery' => 'hand']);
+            $this->variant($kidsSet, 'S-BLK-P', 420000, 5, 10, $options, ['size' => 's', 'color' => 'black', 'embroidery' => 'plain']);
+            $this->variant($kidsSet, 'M-GRN-H', 450000, 4, 20, $options, ['size' => 'm', 'color' => 'green', 'embroidery' => 'hand']);
 
-            $this->variant($shawl, 'ONE-CRM-H', 510000, 6, $options, ['size' => 'one-size', 'color' => 'cream', 'embroidery' => 'hand']);
-            $this->variant($shawl, 'ONE-MAR-H', 530000, 3, $options, ['size' => 'one-size', 'color' => 'maroon', 'embroidery' => 'hand']);
+            $this->variant($shawl, 'ONE-CRM-H', 510000, 6, 10, $options, ['size' => 'one-size', 'color' => 'cream', 'embroidery' => 'hand']);
+            $this->variant($shawl, 'ONE-MAR-H', 530000, 3, 20, $options, ['size' => 'one-size', 'color' => 'maroon', 'embroidery' => 'hand']);
 
             $perahan->update(['stock_quantity' => 12]);
             $dress->update(['stock_quantity' => 11]);
@@ -300,6 +300,7 @@ class CatalogSeeder extends Seeder
         string $suffix,
         int $priceMinor,
         int $stock,
+        int $sortOrder,
         array $options,
         array $values,
     ): void {
@@ -310,7 +311,7 @@ class CatalogSeeder extends Seeder
                 'sale_price_minor' => null,
                 'currency' => 'AFN',
                 'is_active' => true,
-                'sort_order' => $product->variants()->count() * 10 + 10,
+                'sort_order' => $sortOrder,
             ],
         );
 

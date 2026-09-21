@@ -1,6 +1,6 @@
 # KabulFit
 
-Production rebuild of **KabulFit**, a multilingual Afghan fashion e-commerce and made-to-measure platform.
+Production rebuild of **KabulFit**, a multilingual Afghan fashion e-commerce and made-to-measure platform with a shared Laravel backend for the web storefront and planned Flutter mobile application.
 
 ## Stack
 
@@ -11,6 +11,7 @@ Production rebuild of **KabulFit**, a multilingual Afghan fashion e-commerce and
 - Vite
 - Database/Redis-ready cache and queues
 - English (`en`), Dari (`fa`) and Pashto (`ps`), including RTL for Dari/Pashto
+- Versioned JSON API for first-party mobile clients
 
 ## Local setup
 
@@ -34,6 +35,18 @@ vendor/bin/pint --test
 composer audit
 npm run build
 ```
+
+## Catalog API
+
+The Flutter-ready catalog API uses the base pattern:
+
+```text
+/api/v1/{locale}/catalog/...
+```
+
+Catalog list/detail/facet payloads use localized slugs and SKUs rather than public database IDs. Monetary values are transmitted in integer minor units, and Laravel remains authoritative for price and inventory state.
+
+See `docs/API_CONTRACT.md` for the current v1 contract and `docs/MOBILE_ARCHITECTURE.md` for mobile platform rules.
 
 ## Queues and scheduler
 
@@ -65,11 +78,11 @@ A production lockfile gate remains on the roadmap; until lockfiles are committed
 
 ## SEO architecture
 
-Indexable URLs are localized and slug-based (`/{locale}/products/{slug}`, `/{locale}/categories/{slug}`). Canonical, hreflang, Open Graph, Twitter and JSON-LD are rendered server-side. `/robots.txt` blocks private/transactional areas while `/sitemap.xml` includes public foundation URLs. Legacy `/ProductDetail?id=...` mappings use explicit 301 records and unknown IDs return 404.
+Indexable URLs are localized and slug-based (`/{locale}/products/{slug}`, `/{locale}/categories/{slug}`, `/{locale}/collections/{slug}`). Canonical, hreflang, Open Graph, Twitter and JSON-LD are rendered server-side. `/robots.txt` blocks private/transactional/API areas while `/sitemap.xml` includes public catalog URLs. Legacy `/ProductDetail?id=...` mappings use explicit 301 records and unknown IDs return 404.
 
 ## Translation workflow
 
-UI strings live in `lang/en`, `lang/fa` and `lang/ps`. Product/category localized content is relational database data. Do not hard-code translated interface strings in Blade when a translation key is appropriate.
+UI strings live in `lang/en`, `lang/fa` and `lang/ps`. Product/category/collection/media-alt localized content is relational database data. Do not hard-code translated interface strings in Blade when a translation key is appropriate.
 
 ## Visual reference and media
 
