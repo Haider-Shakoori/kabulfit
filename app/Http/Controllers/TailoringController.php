@@ -12,7 +12,7 @@ use Illuminate\View\View;
 
 class TailoringController extends Controller
 {
-    public function create(Request $request, string $slug): View
+    public function create(Request $request, string $locale, string $slug): View
     {
         $product = $this->product($slug);
         $profiles = $request->user()
@@ -33,7 +33,7 @@ class TailoringController extends Controller
         ]);
     }
 
-    public function store(Request $request, string $slug, TailoringService $service): RedirectResponse
+    public function store(Request $request, string $locale, string $slug, TailoringService $service): RedirectResponse
     {
         $data = $request->validate([
             'variant_sku' => 'nullable|string',

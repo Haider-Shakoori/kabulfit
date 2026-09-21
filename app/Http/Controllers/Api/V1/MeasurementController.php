@@ -65,6 +65,7 @@ class MeasurementController extends Controller
 
     public function update(
         MeasurementProfileRequest $request,
+        string $locale,
         MeasurementProfile $profile,
         MeasurementProfileService $service,
     ): JsonResponse {
@@ -75,6 +76,7 @@ class MeasurementController extends Controller
 
     public function destroy(
         Request $request,
+        string $locale,
         MeasurementProfile $profile,
         MeasurementProfileService $service,
     ): JsonResponse {

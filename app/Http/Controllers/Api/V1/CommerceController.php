@@ -34,14 +34,14 @@ class CommerceController extends Controller
         return response()->json($this->payload($this->carts->add($this->carts->forUser($r->user()), $p, $v, $d['quantity'])), 201);
     }
 
-    public function update(Request $r, CartItem $item): JsonResponse
+    public function update(Request $r, string $locale, CartItem $item): JsonResponse
     {
         $d = $r->validate(['quantity' => 'required|integer|min:0|max:99']);
 
         return response()->json($this->payload($this->carts->update($this->carts->forUser($r->user()), $item, $d['quantity'])));
     }
 
-    public function remove(Request $r, CartItem $item): JsonResponse
+    public function remove(Request $r, string $locale, CartItem $item): JsonResponse
     {
         return response()->json($this->payload($this->carts->remove($this->carts->forUser($r->user()), $item)));
     }
@@ -62,7 +62,7 @@ class CommerceController extends Controller
         return response()->json(['success' => true], 201);
     }
 
-    public function wishlistDestroy(Request $r, string $slug): JsonResponse
+    public function wishlistDestroy(Request $r, string $locale, string $slug): JsonResponse
     {
         $p = Product::whereHas('translations', fn ($q) => $q->where('locale', app()->getLocale())->where('slug', $slug))->firstOrFail();
         Wishlist::where(['user_id' => $r->user()->id, 'product_id' => $p->id])->delete();
@@ -82,7 +82,7 @@ class CommerceController extends Controller
         return response()->json(['data' => ['order_uuid' => $order->uuid, 'order_number' => $order->number, 'status' => $order->status, 'payment_status' => $order->payment_status, 'total_minor' => $order->total_minor, 'currency' => $order->currency, 'stripe' => ['payment_intent_id' => $payment['payment']->provider_payment_id, 'client_secret' => $payment['client_secret']]]], 201);
     }
 
-    public function order(Request $r, Order $order): JsonResponse
+    public function order(Request $r, string $locale, Order $order): JsonResponse
     {
         abort_unless($order->user_id === $r->user()->id, 404);
 

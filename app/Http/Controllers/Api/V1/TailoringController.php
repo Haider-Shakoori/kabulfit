@@ -12,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class TailoringController extends Controller
 {
-    public function store(Request $request, TailoringService $service): JsonResponse
+    public function store(Request $request, string $locale, TailoringService $service): JsonResponse
     {
         $data = $request->validate([
             'product_slug' => 'required|string',

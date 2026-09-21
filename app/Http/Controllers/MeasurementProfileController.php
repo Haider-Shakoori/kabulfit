@@ -52,7 +52,7 @@ class MeasurementProfileController extends Controller
             ->with('status', __('measurements.saved'));
     }
 
-    public function edit(Request $request, MeasurementProfile $profile): View
+    public function edit(Request $request, string $locale, MeasurementProfile $profile): View
     {
         abort_unless($profile->user_id === $request->user()->id, 404);
         $profile->load('values.definition.translations');
@@ -65,6 +65,7 @@ class MeasurementProfileController extends Controller
 
     public function update(
         MeasurementProfileRequest $request,
+        string $locale,
         MeasurementProfile $profile,
         MeasurementProfileService $service,
     ): RedirectResponse {
@@ -77,6 +78,7 @@ class MeasurementProfileController extends Controller
 
     public function destroy(
         Request $request,
+        string $locale,
         MeasurementProfile $profile,
         MeasurementProfileService $service,
     ): RedirectResponse {
