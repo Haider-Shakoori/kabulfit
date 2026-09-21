@@ -90,7 +90,7 @@ Key architectural decisions:
 
 ## Batch 3 — Catalog domain + mobile catalog API
 
-Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #5**.
+Status: **complete and merged to `main` via PR #5**.
 
 Implemented:
 
@@ -135,4 +135,4 @@ Validation evidence from GitHub Actions run `35633550158`:
 
 ## Release gate
 
-Batch 3 has met its implementation and CI gates. PR #5 may merge while this final documentation-only head remains green.
+Batch 3 is complete and merged. Batch 4 must follow the same feature-branch, test, PR and green-CI gate.
