@@ -77,7 +77,7 @@ class CheckoutService
     public function releaseReservations(Order $order): void
     {
         DB::transaction(function () use ($order) {
-            foreach ($order->items()->with('product')->get() as $item) {
+            foreach ($order->items()->get() as $item) {
                 if (! $item->product_variant_id) {
                     continue;
                 }$inv = InventoryItem::where('product_variant_id', $item->product_variant_id)->lockForUpdate()->first();
