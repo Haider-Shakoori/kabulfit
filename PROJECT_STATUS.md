@@ -117,11 +117,12 @@ Validation evidence from GitHub Actions run `35633550158`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35636598809`: **quality + MySQL smoke both green**.
 - PR-triggered CI run `35633833786`: **quality + MySQL smoke both green**.
 
 ## Batch 4 — Authentication, customer account + mobile API authentication
 
-Status: **implementation validated green on `feat/batch-04-auth-account`; final PR gate pending**.
+Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #6**.
 
 Implemented:
 
@@ -164,4 +165,4 @@ Validation evidence from GitHub Actions run `35636248691`:
 
 ## Release gate
 
-Batch 4 implementation CI is green. The final documentation commit and PR-triggered CI must also remain green before merge.
+Batch 4 has met its implementation and CI gates. PR #6 may merge while this final documentation-only head remains green.
