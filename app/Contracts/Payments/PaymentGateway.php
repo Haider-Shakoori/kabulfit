@@ -8,5 +8,7 @@ interface PaymentGateway
 {
     public function createIntent(Payment $payment): array;
 
+    public function cancel(Payment $payment): array;
+
     public function refund(Payment $payment, ?int $amountMinor = null): array;
 }

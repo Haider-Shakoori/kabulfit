@@ -13,7 +13,7 @@ class Order extends Model
 
     protected function casts(): array
     {
-        return ['subtotal_minor' => 'integer', 'discount_minor' => 'integer', 'shipping_minor' => 'integer', 'total_minor' => 'integer', 'shipping_address' => 'array', 'paid_at' => 'datetime'];
+        return ['subtotal_minor' => 'integer', 'discount_minor' => 'integer', 'shipping_minor' => 'integer', 'total_minor' => 'integer', 'shipping_address' => 'array', 'reservation_expires_at' => 'datetime', 'paid_at' => 'datetime'];
     }
 
     public function user(): BelongsTo

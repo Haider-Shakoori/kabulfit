@@ -50,6 +50,8 @@ class CheckoutService
                 $coupon->increment('times_used');
             }
 
+            $cart->items()->delete();
+
             return $order->load('items');
         }, 3);
     }

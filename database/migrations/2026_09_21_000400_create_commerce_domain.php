@@ -72,6 +72,7 @@ return new class extends Migration
             $table->string('coupon_code')->nullable();
             $table->string('shipping_method_code');
             $table->json('shipping_address');
+            $table->timestamp('reservation_expires_at')->nullable()->index();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });

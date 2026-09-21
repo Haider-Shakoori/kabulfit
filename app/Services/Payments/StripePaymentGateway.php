@@ -45,6 +45,17 @@ class StripePaymentGateway implements PaymentGateway
         ];
     }
 
+    public function cancel(Payment $payment): array
+    {
+        $intent = $this->stripe()->paymentIntents->cancel(
+            $payment->provider_payment_id,
+            [],
+            ['idempotency_key' => 'cancel-'.$payment->uuid],
+        );
+
+        return ['id' => $intent->id, 'status' => $intent->status];
+    }
+
     public function refund(Payment $payment, ?int $amountMinor = null): array
     {
         $params = ['payment_intent' => $payment->provider_payment_id];
