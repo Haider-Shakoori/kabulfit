@@ -11,6 +11,5 @@ final readonly class SeoData
         public array $alternates = [],
         public string $robots = 'index,follow',
         public ?array $jsonLd = null,
-    ) {
-    }
+    ) {}
 }
