@@ -35,7 +35,7 @@ jobs:
         run: vendor/bin/pint --test
 
       - name: Run test suite
-        run: php artisan test
+        run: vendor/bin/phpunit --display-warnings --fail-on-warning
 
       - name: Dependency security audit
         run: composer audit
