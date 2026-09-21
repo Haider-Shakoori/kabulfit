@@ -79,6 +79,7 @@ return new class extends Migration
         });
 
         Schema::table('cart_items', function (Blueprint $table): void {
+            $table->index('cart_id', 'cart_items_cart_id_idx');
             $table->dropUnique(['cart_id', 'product_id', 'product_variant_id']);
             $table->foreignId('tailoring_request_id')->nullable()->after('product_variant_id')->constrained()->nullOnDelete();
             $table->string('line_key', 120)->nullable()->after('uuid');
@@ -125,6 +126,7 @@ return new class extends Migration
             $table->dropUnique('cart_items_cart_line_key_unique');
             $table->dropConstrainedForeignId('tailoring_request_id');
             $table->dropColumn('line_key');
+            $table->dropIndex('cart_items_cart_id_idx');
             $table->unique(['cart_id', 'product_id', 'product_variant_id']);
         });
 
