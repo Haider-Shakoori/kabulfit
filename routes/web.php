@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\ProductController;
@@ -60,5 +61,13 @@ Route::prefix('{locale}')
             Route::post('/account/addresses', [AddressController::class, 'store'])->name('addresses.store');
             Route::put('/account/addresses/{address:uuid}', [AddressController::class, 'update'])->name('addresses.update');
             Route::delete('/account/addresses/{address:uuid}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+
+            Route::get('/cart', [CommerceController::class, 'cart'])->name('cart');
+            Route::post('/cart/items', [CommerceController::class, 'add'])->name('cart.items.store');
+            Route::put('/cart/items/{item}', [CommerceController::class, 'update'])->name('cart.items.update');
+            Route::delete('/cart/items/{item}', [CommerceController::class, 'remove'])->name('cart.items.destroy');
+            Route::get('/checkout', [CommerceController::class, 'checkout'])->name('checkout');
+            Route::post('/checkout', [CommerceController::class, 'place'])->middleware('throttle:20,1')->name('checkout.place');
+            Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
         });
     });
