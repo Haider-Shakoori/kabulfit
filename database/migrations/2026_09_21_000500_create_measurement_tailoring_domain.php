@@ -24,13 +24,18 @@ return new class extends Migration
 
         Schema::create('measurement_definition_translations', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('measurement_definition_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('measurement_definition_id');
             $table->string('locale', 5);
             $table->string('name');
             $table->text('instructions')->nullable();
             $table->string('guide_image_path')->nullable();
             $table->timestamps();
-            $table->unique(['measurement_definition_id', 'locale']);
+
+            $table->foreign('measurement_definition_id', 'mdt_definition_fk')
+                ->references('id')
+                ->on('measurement_definitions')
+                ->cascadeOnDelete();
+            $table->unique(['measurement_definition_id', 'locale'], 'mdt_definition_locale_unique');
         });
 
         Schema::create('measurement_profiles', function (Blueprint $table): void {
@@ -51,7 +56,7 @@ return new class extends Migration
             $table->foreignId('measurement_definition_id')->constrained()->restrictOnDelete();
             $table->decimal('value_cm', 7, 2);
             $table->timestamps();
-            $table->unique(['measurement_profile_id', 'measurement_definition_id']);
+            $table->unique(['measurement_profile_id', 'measurement_definition_id'], 'measurement_value_unique');
         });
 
         Schema::create('tailoring_requests', function (Blueprint $table): void {
@@ -73,7 +78,7 @@ return new class extends Migration
             $table->string('definition_name');
             $table->decimal('value_cm', 7, 2);
             $table->timestamps();
-            $table->index(['order_item_id', 'definition_code']);
+            $table->index(['order_item_id', 'definition_code'], 'order_item_measurement_lookup');
         });
     }
 
