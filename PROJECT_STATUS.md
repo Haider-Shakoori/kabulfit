@@ -44,9 +44,9 @@ Validation evidence:
 
 ## Batch 2 — Reference visual fidelity and responsive component system
 
-Status: **implemented on `feat/batch-02-visual-fidelity`; CI validation pending**.
+Status: **implementation validated green on `feat/batch-02-visual-fidelity`; final docs/PR gate pending**.
 
-Implemented in this batch:
+Implemented:
 
 - Live homepage content/section inventory documented in `docs/VISUAL_REFERENCE.md`.
 - Refined reusable KabulFit design system using centralized green, burgundy, gold and warm-neutral tokens.
@@ -60,6 +60,15 @@ Implemented in this batch:
 - Accessibility refinements: skip link, landmarks, focus states, minimum targets, semantic figures/quotes, explicit image dimensions and reduced-motion behavior.
 - Media strategy documented without inventing stock photography or fake production assets.
 - Automated visual-structure/token/accessibility markup tests added.
+
+Validation evidence from GitHub Actions run `35629128744`:
+
+- PHPUnit: **16 tests, 92 assertions, zero warnings**.
+- Laravel Pint: **49 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
 
 Known Batch 2 limitation:
 
@@ -83,4 +92,4 @@ The available crawler exposes content and page inventory but not the original CS
 
 ## Release gate
 
-Batch 2 must not merge until its feature-branch and PR CI checks are green.
+Batch 2 implementation CI is green. The documentation-only validation commit and PR-triggered CI must also remain green before merge.
