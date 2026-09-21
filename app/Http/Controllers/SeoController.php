@@ -21,7 +21,7 @@ class SeoController extends Controller
         ];
 
         foreach (config('kabulfit.supported_locales') as $locale) {
-            foreach (['account', 'cart', 'checkout', 'wishlist', 'orders', 'measurements', 'search'] as $path) {
+            foreach (['account', 'login', 'register', 'forgot-password', 'reset-password', 'verify-email', 'cart', 'checkout', 'wishlist', 'orders', 'measurements', 'search'] as $path) {
                 $lines[] = "Disallow: /{$locale}/{$path}";
             }
         }
