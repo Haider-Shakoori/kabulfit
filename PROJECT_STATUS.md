@@ -28,7 +28,7 @@ Known limitation retained for final QA: pixel-level browser comparison with the 
 
 ## Batch 3 — Catalog domain + mobile catalog API
 
-Status: **implemented on `feat/batch-03-catalog-domain`; CI validation pending**.
+Status: **implementation validated green on `feat/batch-03-catalog-domain`; PR gate pending**.
 
 Implemented:
 
@@ -52,6 +52,15 @@ Implemented:
 - API contract documented in `docs/API_CONTRACT.md`.
 - Batch-specific catalog/API regression tests added.
 
+Validation evidence from GitHub Actions run `35633531419`:
+
+- PHPUnit: **25 tests, 147 assertions, zero warnings**.
+- Laravel Pint: **68 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic catalog seed successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Mobile application decision
 
 KabulFit includes a dedicated Flutter mobile application for Android and iOS. Laravel remains the shared server-authoritative commerce backend. Batches 3–8 provide stable versioned API contracts; Stripe is server-first in Batch 5 and surfaced through the official mobile payment flow in Batch 14. Detailed architecture is documented in `docs/MOBILE_ARCHITECTURE.md`.
@@ -73,4 +82,4 @@ KabulFit includes a dedicated Flutter mobile application for Android and iOS. La
 
 ## Release gate
 
-Batch 3 must not merge until feature-branch CI and PR-triggered CI are green.
+Batch 3 feature-branch CI is green. PR-triggered CI must also remain green before merge.
