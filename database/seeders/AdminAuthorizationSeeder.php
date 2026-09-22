@@ -26,6 +26,8 @@ class AdminAuthorizationSeeder extends Seeder
             'audit.view' => 'View immutable audit logs',
             'roles.manage' => 'Manage user roles and role permissions',
             'tailoring.work' => 'Use tailor workspace',
+            'content.manage' => 'Manage public pages and journal content',
+            'redirects.manage' => 'Manage legacy URL migration mappings',
         ];
 
         foreach ($permissions as $slug => $name) {
@@ -41,6 +43,7 @@ class AdminAuthorizationSeeder extends Seeder
             ],
             'catalog-manager' => [
                 'admin.access', 'dashboard.view', 'products.manage', 'measurements.manage',
+                'content.manage',
             ],
             'support' => [
                 'admin.access', 'dashboard.view', 'orders.manage', 'customers.manage',

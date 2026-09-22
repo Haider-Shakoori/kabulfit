@@ -3,8 +3,10 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
+use App\Http\Controllers\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LegacyUrlController as AdminLegacyUrlController;
 use App\Http\Controllers\Admin\MeasurementController as AdminMeasurementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
@@ -19,7 +21,9 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LegacyPageRedirectController;
 use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
 use App\Http\Controllers\OrderController;
@@ -31,7 +35,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect('/'.config('kabulfit.default_locale')));
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
-Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitemap');
+Route::get('/sitemaps/catalog.xml', [SeoController::class, 'catalogSitemap'])->name('sitemaps.catalog');
+Route::get('/sitemaps/content.xml', [SeoController::class, 'contentSitemap'])->name('sitemaps.content');
 Route::get('/ProductDetail', [LegacyRedirectController::class, 'product'])->name('legacy.product');
 
 Route::prefix('{locale}')
@@ -43,6 +49,8 @@ Route::prefix('{locale}')
         Route::get('/categories/{slug}', [CatalogController::class, 'category'])->name('categories.show');
         Route::get('/collections/{slug}', [CatalogController::class, 'collection'])->name('collections.show');
         Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/blog', [ContentController::class, 'blog'])->name('blog.index');
+        Route::get('/blog/{slug}', [ContentController::class, 'post'])->name('blog.show');
 
         Route::middleware('guest')->group(function (): void {
             Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -145,6 +153,15 @@ Route::prefix('{locale}')
                     Route::get('/payments/{payment:uuid}', [AdminPaymentController::class, 'show'])->name('payments.show');
                     Route::post('/payments/{payment:uuid}/refund', [AdminPaymentController::class, 'refund'])->name('payments.refund');
 
+                    Route::get('/content', [AdminContentController::class, 'index'])->name('content.index');
+                    Route::put('/content/pages/{page:uuid}', [AdminContentController::class, 'updatePage'])->name('content.pages.update');
+                    Route::post('/content/posts', [AdminContentController::class, 'storePost'])->name('content.posts.store');
+                    Route::put('/content/posts/{post:uuid}', [AdminContentController::class, 'updatePost'])->name('content.posts.update');
+                    Route::delete('/content/posts/{post:uuid}', [AdminContentController::class, 'destroyPost'])->name('content.posts.destroy');
+
+                    Route::get('/legacy-urls', [AdminLegacyUrlController::class, 'index'])->name('legacy.index');
+                    Route::put('/legacy-urls/{legacyUrl:uuid}', [AdminLegacyUrlController::class, 'update'])->name('legacy.update');
+
                     Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
                     Route::put('/settings', [AdminSettingsController::class, 'update'])->name('settings.update');
 
@@ -154,4 +171,12 @@ Route::prefix('{locale}')
                     Route::get('/audit', AdminAuditController::class)->name('audit.index');
                 });
         });
+
+        Route::get('/{slug}', [ContentController::class, 'page'])
+            ->where('slug', '[^/]+')
+            ->name('content.page');
     });
+
+Route::get('/{legacy}', LegacyPageRedirectController::class)
+    ->where('legacy', 'About|Contact|FAQ|MeasurementGuide|PrivacyPolicy|ReturnPolicy|ShippingPolicy|Shop|TermsConditions|Account|Cart|Checkout|Orders|Wishlist|MyMeasurements|TailorDashboard')
+    ->name('legacy.page');

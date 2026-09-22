@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Contracts\Payments\PaymentGateway;
 use App\Models\AuditLog;
+use App\Models\BlogPost;
+use App\Models\ContentPage;
+use App\Models\LegacyUrl;
 use App\Models\MeasurementDefinition;
 use App\Models\Order;
 use App\Models\Payment;
@@ -14,6 +17,9 @@ use App\Models\TailorAssignment;
 use App\Models\TailoringRequest;
 use App\Models\User;
 use App\Policies\AuditLogPolicy;
+use App\Policies\BlogPostPolicy;
+use App\Policies\ContentPagePolicy;
+use App\Policies\LegacyUrlPolicy;
 use App\Policies\MeasurementDefinitionPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\PaymentPolicy;
@@ -47,6 +53,9 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict(! app()->isProduction());
 
         Gate::before(fn (User $user) => $user->hasRole('super-admin') ? true : null);
+        Gate::policy(BlogPost::class, BlogPostPolicy::class);
+        Gate::policy(ContentPage::class, ContentPagePolicy::class);
+        Gate::policy(LegacyUrl::class, LegacyUrlPolicy::class);
         Gate::policy(Product::class, ProductPolicy::class);
         Gate::policy(Order::class, OrderPolicy::class);
         Gate::policy(Payment::class, PaymentPolicy::class);

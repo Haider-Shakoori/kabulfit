@@ -330,16 +330,42 @@ Feature-branch validation from GitHub Actions run `35701204501`:
 - PR-triggered CI run `35701511405`: **quality + MySQL smoke both green**.
 - Post-merge `main` CI run `35701632174`: **quality + MySQL smoke both green**.
 
+## Batch 10 — Content/SEO CMS and legacy migration
+
+Status: **implementation complete on `feat/batch-10-content-seo-legacy`; feature-branch CI is green and PR/merge are pending.**
+
+Implemented:
+
+- Localized public pages and journal/blog content in English, Dari and Pashto.
+- Server-rendered canonical/hreflang metadata plus WebPage, Blog and BlogPosting JSON-LD.
+- Editorial links integrated into the shared public navigation/footer and related-article flow.
+- Sitemap index with separate catalog and content sitemap children.
+- CMS administration using existing first-party RBAC and immutable audit logging.
+- Reserved-route and duplicate-slug protection so CMS editors cannot collide with application routes.
+- Verified live legacy URL inventory for public, customer/staff and legacy administration routes.
+- Explicit 301 mappings for verified redirectable legacy routes.
+- Legacy administration routes recorded as private inventory-only surfaces with no redirect target.
+- Legacy ProductDetail IDs remain explicit mapping-only; unknown IDs remain 404 rather than being guessed.
+- Deterministic content/legacy seed timestamps.
+- Dedicated migration documentation and regression tests.
+
+Feature-branch validation from GitHub Actions run `35715200931`:
+
+- PHPUnit: **102 tests, 571 assertions, zero warnings**.
+- Laravel Pint: **237 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
-- Blog/content CMS.
-- Blog/content CMS.
 - Flutter application implementation.
-- Real legacy-ID mapping crawl.
+- Historical ProductDetail IDs that are not externally enumerable still require authoritative source/export evidence before additional mappings can be created.
 - Browser/mobile visual-regression evidence.
 - Lighthouse/Core Web Vitals and mobile performance evidence.
 - Composer/npm/mobile lockfile and release reproducibility gates.
 
 ## Release gate
 
-Batch 9 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 10 — Content/SEO CMS and legacy migration.
+Batch 9 is fully closed. Batch 10 implementation has green feature-branch CI and is awaiting PR CI before merge.

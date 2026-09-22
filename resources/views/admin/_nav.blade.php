@@ -8,6 +8,8 @@
         @if(auth()->user()->hasPermission('measurements.manage'))<a href="{{ route('admin.measurements.index', ['locale' => app()->getLocale()]) }}">Measurements</a>@endif
         @if(auth()->user()->hasPermission('tailoring.manage'))<a href="{{ route('admin.tailoring.index', ['locale' => app()->getLocale()]) }}">Tailoring</a>@endif
         @if(auth()->user()->hasPermission('payments.view'))<a href="{{ route('admin.payments.index', ['locale' => app()->getLocale()]) }}">Payments</a>@endif
+        @if(auth()->user()->hasPermission('content.manage'))<a href="{{ route('admin.content.index', ['locale' => app()->getLocale()]) }}">Content & Journal</a>@endif
+        @if(auth()->user()->hasPermission('redirects.manage'))<a href="{{ route('admin.legacy.index', ['locale' => app()->getLocale()]) }}">Legacy URLs</a>@endif
         @if(auth()->user()->hasPermission('settings.manage'))<a href="{{ route('admin.settings.index', ['locale' => app()->getLocale()]) }}">Settings & SEO</a>@endif
         @if(auth()->user()->hasPermission('roles.manage'))<a href="{{ route('admin.roles.index', ['locale' => app()->getLocale()]) }}">Roles</a>@endif
         @if(auth()->user()->hasPermission('audit.view'))<a href="{{ route('admin.audit.index', ['locale' => app()->getLocale()]) }}">Audit log</a>@endif

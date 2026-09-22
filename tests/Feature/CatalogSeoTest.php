@@ -31,6 +31,10 @@ class CatalogSeoTest extends TestCase
     {
         $this->get('/sitemap.xml')
             ->assertOk()
+            ->assertSee('/sitemaps/catalog.xml', false);
+
+        $this->get('/sitemaps/catalog.xml')
+            ->assertOk()
             ->assertSee('/en/collections/wedding-edit', false)
             ->assertSee('/fa/collections/', false);
 

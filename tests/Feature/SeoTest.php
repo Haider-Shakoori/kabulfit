@@ -59,9 +59,15 @@ class SeoTest extends TestCase
         $this->assertStringContainsString('Sitemap: http://localhost/sitemap.xml', $robots);
     }
 
-    public function test_sitemap_contains_only_public_foundation_urls(): void
+    public function test_sitemap_index_and_catalog_child_contain_only_public_catalog_urls(): void
     {
-        $xml = $this->get('/sitemap.xml')->assertOk()->getContent();
+        $index = $this->get('/sitemap.xml')->assertOk()->getContent();
+
+        $this->assertStringContainsString('<sitemapindex', $index);
+        $this->assertStringContainsString('http://localhost/sitemaps/catalog.xml', $index);
+        $this->assertStringContainsString('http://localhost/sitemaps/content.xml', $index);
+
+        $xml = $this->get('/sitemaps/catalog.xml')->assertOk()->getContent();
 
         $this->assertStringContainsString('http://localhost/en/shop', $xml);
         $this->assertStringContainsString('http://localhost/fa/categories/', $xml);
