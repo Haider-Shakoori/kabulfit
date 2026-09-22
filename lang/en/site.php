@@ -14,7 +14,7 @@ return [
     'kabulfit_home' => 'KabulFit home',
     'shop' => 'Shop',
     'categories' => 'Categories',
-    'custom_tailoring' => 'Custom Tailoring',
+    'about' => 'About',\n    'support' => 'Support',\n    'company' => 'Company',\n    'custom_tailoring' => 'Custom Tailoring',
     'language' => 'Language',
 
     'footer_intro' => 'Authentic Afghan fashion shaped by heritage, craftsmanship and a modern made-to-measure experience.',
