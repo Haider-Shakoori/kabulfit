@@ -22,6 +22,42 @@
             <path d="M7 5.5h10l-1.2 13h-7.6L7 5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
             <path d="M8 9h8m-7.4 4h6.8M9 3h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             @break
+        @case('search')
+            <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+            <path d="m16 16 4.3 4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            @break
+        @case('heart')
+            <path d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 6l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.3 1-1a5.5 5.5 0 0 0 0-7.8Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            @break
+        @case('cart')
+            <path d="M3 4h2l1.5 9.2a2 2 0 0 0 2 1.7h7.9a2 2 0 0 0 1.9-1.4L20 7H6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="19" r="1.4" fill="currentColor"/>
+            <circle cx="17" cy="19" r="1.4" fill="currentColor"/>
+            @break
+        @case('user')
+            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M4.5 21c.7-4.1 3.1-6.2 7.5-6.2s6.8 2.1 7.5 6.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('mail')
+            <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/>
+            <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            @break
+        @case('map-pin')
+            <path d="M20 10c0 5.3-8 11-8 11S4 15.3 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.7"/>
+            @break
+        @case('facebook')
+            <path d="M14 8h3V4.5c-.6-.1-1.9-.3-3.4-.3-3.3 0-5.6 2-5.6 5.8v3H4.5v4H8v7h4.3v-7h3.5l.6-4h-4.1v-2.6c0-1.2.4-2.4 1.7-2.4Z" fill="currentColor"/>
+            @break
+        @case('instagram')
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="currentColor" stroke-width="1.7"/>
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/>
+            <circle cx="17.5" cy="6.8" r="1" fill="currentColor"/>
+            @break
+        @case('youtube')
+            <path d="M21 8.1a3 3 0 0 0-2.1-2.2C17 5.4 12 5.4 12 5.4s-5 0-6.9.5A3 3 0 0 0 3 8.1 31 31 0 0 0 2.5 12 31 31 0 0 0 3 15.9a3 3 0 0 0 2.1 2.2c1.9.5 6.9.5 6.9.5s5 0 6.9-.5a3 3 0 0 0 2.1-2.2 31 31 0 0 0 .5-3.9 31 31 0 0 0-.5-3.9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="m10 9 5 3-5 3V9Z" fill="currentColor"/>
+            @break
         @default
             <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/>
     @endswitch
