@@ -189,7 +189,7 @@ Validation evidence from GitHub Actions run `35639422198`:
 
 ## Batch 6 — Measurements & custom tailoring + mobile measurement API
 
-Status: **complete; final Batch 6 history/immutability hardening is implemented on the feature branch and remains subject to the standard feature, PR and post-merge CI gates.**
+Status: **complete and merged to `main`; core implementation via PR #9 and audited closure via PR #12. Post-merge `main` CI is green.**
 
 Implemented:
 
@@ -222,9 +222,44 @@ Validation evidence from GitHub Actions run `35645248956`:
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
 
+## Batch 7 — Orders, shipping, notifications + mobile event contract
+
+Status: **implementation complete on `feat/batch-07-orders-shipping-notifications`; feature-branch CI is green and the batch is ready for PR validation**.
+
+Implemented:
+
+- Server-authoritative order lifecycle with explicit allowed transitions rather than arbitrary status strings.
+- Expanded fulfilment states for processing, ready, shipped, delivered and returned orders.
+- Immutable order status history with UUID identifiers, source, notes and timestamps.
+- Shipment creation, carrier/service/tracking metadata and validated shipment-state transitions.
+- Immutable shipment tracking events with shipped/delivered timestamps.
+- Shipment milestones synchronize the customer-facing order lifecycle.
+- Queueable order and shipment notifications dispatched after commit.
+- English/Dari/Pashto notification copy using each customer's preferred locale.
+- Mail plus Laravel database notification channels for customer updates.
+- Customer web order history/detail pages with private noindex metadata and RTL-safe localization.
+- Versioned mobile order list, detail and dedicated tracking endpoints.
+- Mobile order detail includes item snapshots, tailoring snapshots, status history and shipment timelines.
+- Ownership enforcement for all web/mobile order and tracking views.
+- Resumable mobile customer-event feed intended for future Flutter push integration.
+- Public event UUID cursors replace internal database-ID cursors.
+- Cross-account event cursors are rejected.
+- Stable event types for order creation/status changes and shipment creation/status changes.
+- Checkout emits an initial `order.created` customer event.
+- Public APIs expose UUIDs/SKUs rather than database primary keys.
+- Batch 7 operations documented in `docs/ORDERS_SHIPPING.md` and `docs/API_CONTRACT.md`.
+
+Feature-branch validation from GitHub Actions run `35692548969`:
+
+- PHPUnit: **74 tests, 424 assertions, zero warnings**.
+- Laravel Pint: **174 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
-- Orders/shipping/notifications.
 - Admin/tailor dashboards and authorization matrix.
 - Blog/content CMS.
 - Flutter application implementation.
@@ -235,4 +270,4 @@ Validation evidence from GitHub Actions run `35645248956`:
 
 ## Release gate
 
-Batch 6 acceptance requires green feature-branch CI, green PR CI and green post-merge `main` CI. No Batch 6 failure is bypassed.
+Batch 7 has passed feature-branch CI. It must still pass pull-request CI before merge and post-merge `main` CI before the batch is considered fully closed.
