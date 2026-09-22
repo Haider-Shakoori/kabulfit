@@ -1,0 +1,72 @@
+name: Verify KabulFit visual parity
+
+on:
+  push:
+    branches:
+      - fix/live-site-pixel-parity
+    paths:
+      - .github/workflows/verify-live-parity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, sqlite3, pdo_sqlite
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build Laravel storefront
+        run: |
+          composer install --no-interaction --prefer-dist
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+          DB_CONNECTION=sqlite DB_DATABASE="$GITHUB_WORKSPACE/database/database.sqlite" php artisan migrate:fresh --seed --force
+          npm install --no-audit --no-fund
+          npm run build
+
+      - name: Install browser
+        run: |
+          npm install playwright@1.55.0 --no-audit --no-fund
+          npx playwright install chromium
+
+      - name: Start Laravel
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
+        run: |
+          php artisan serve --host=127.0.0.1 --port=8000 > /tmp/kabulfit-server.log 2>&1 &
+          echo $! > /tmp/kabulfit-server.pid
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:8000/en >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/kabulfit-server.log
+          exit 1
+
+      - name: Capture live and Laravel at matching viewports
+        run: |
+          mkdir -p parity-output
+          npx playwright screenshot --browser=chromium --viewport-size="1440,1200" --full-page https://kabulfit.com/ parity-output/live-desktop.png
+          npx playwright screenshot --browser=chromium --viewport-size="1440,1200" --full-page http://127.0.0.1:8000/en parity-output/laravel-desktop.png
+          npx playwright screenshot --browser=chromium --viewport-size="390,844" --full-page https://kabulfit.com/ parity-output/live-mobile.png
+          npx playwright screenshot --browser=chromium --viewport-size="390,844" --full-page http://127.0.0.1:8000/en parity-output/laravel-mobile.png
+          cp /tmp/kabulfit-server.log parity-output/server.log
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kabulfit-parity-comparison
+          path: parity-output
+          retention-days: 1
