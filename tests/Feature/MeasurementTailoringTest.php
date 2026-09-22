@@ -11,7 +11,7 @@ class MeasurementTailoringTest extends TestCase {
  public function test_mobile_customer_can_create_reusable_measurement_profile(): void{
   $u=User::factory()->create();Sanctum::actingAs($u);
   $r=$this->postJson('/api/v1/en/measurements/profiles',['name'=>'My Perahan','garment_type'=>'perahan_tunban','display_unit'=>'in','is_default'=>true,'measurements'=>[
-   ['code'=>'perahan_tunban_chest','value'=>40],['code'=>'perahan_tunban_shoulder','value'=>18],['code'=>'perahan_tunban_sleeve','value'=>24],['code'=>'perahan_tunban_shirt_length','value'=>42],['code'=>'perahan_tunban_waist','value'=>36],['code'=>'perahan_tunban_trouser_length','value'=>40],
+   ['code'=>'chest','value'=>40],['code'=>'shoulder','value'=>18],['code'=>'sleeve','value'=>24],['code'=>'shirt_length','value'=>42],['code'=>'waist','value'=>36],['code'=>'trouser_length','value'=>40],
   ]]);
   $r->assertCreated()->assertJsonPath('data.display_unit','in')->assertJsonPath('data.is_default',true)->assertJsonPath('data.measurements.0.unit','in');
   $this->assertDatabaseHas('measurement_profiles',['user_id'=>$u->id,'name'=>'My Perahan']);
@@ -19,7 +19,7 @@ class MeasurementTailoringTest extends TestCase {
  public function test_measurement_validation_uses_definition_ranges(): void{
   $u=User::factory()->create();Sanctum::actingAs($u);
   $this->postJson('/api/v1/en/measurements/profiles',['name'=>'Bad','garment_type'=>'perahan_tunban','display_unit'=>'cm','measurements'=>[
-   ['code'=>'perahan_tunban_chest','value'=>20],['code'=>'perahan_tunban_shoulder','value'=>45],['code'=>'perahan_tunban_sleeve','value'=>60],['code'=>'perahan_tunban_shirt_length','value'=>100],['code'=>'perahan_tunban_waist','value'=>90],['code'=>'perahan_tunban_trouser_length','value'=>100],
+   ['code'=>'chest','value'=>20],['code'=>'shoulder','value'=>45],['code'=>'sleeve','value'=>60],['code'=>'shirt_length','value'=>100],['code'=>'waist','value'=>90],['code'=>'trouser_length','value'=>100],
   ]])->assertUnprocessable();
  }
  public function test_customer_cannot_update_another_users_profile(): void{
