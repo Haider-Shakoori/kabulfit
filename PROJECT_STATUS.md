@@ -189,7 +189,7 @@ Validation evidence from GitHub Actions run `35639422198`:
 
 ## Batch 6 — Measurements & custom tailoring + mobile measurement API
 
-Status: **complete; feature-branch and PR CI validated green; ready to merge via PR #9**.
+Status: **complete and merged to `main` via PR #9**.
 
 Implemented:
 
@@ -234,4 +234,4 @@ Validation evidence from GitHub Actions run `35645248956`:
 
 ## Release gate
 
-Batch 6 has met its implementation and CI gates. PR #9 may merge while this final documentation-only head remains green.
+Batch 6 is merged after green feature-branch and PR CI. The next implementation gate is Batch 7 — orders, shipping, notifications + mobile event contract.
