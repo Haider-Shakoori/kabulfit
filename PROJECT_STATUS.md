@@ -189,7 +189,7 @@ Validation evidence from GitHub Actions run `35639422198`:
 
 ## Batch 6 — Measurements & custom tailoring + mobile measurement API
 
-Status: **complete and merged to `main` via PR #9**.
+Status: **complete; final Batch 6 history/immutability hardening is implemented on the feature branch and remains subject to the standard feature, PR and post-merge CI gates.**
 
 Implemented:
 
@@ -201,16 +201,17 @@ Implemented:
 - Protected profile lifecycle while a profile is attached to an active tailored cart item.
 - Product-level tailoring eligibility and garment measurement type.
 - Web customer measurement-profile management with noindex metadata.
+- Customer-owned tailoring history/detail views on web and versioned mobile APIs.
 - Product-detail “Tailor This Outfit” workflow with compatible profile, variant and customer notes.
 - Shared tailored cart lines for Blade and Flutter/API flows.
 - Tailored cart-line cancellation propagation and quantity protection.
-- Immutable order-item snapshots for measurement values, profile name, tailoring notes and tailoring request UUID.
+- Immutable order-item snapshots for measurement values, profile name, tailoring notes and tailoring request UUID; direct model update/delete operations are rejected.
 - Checkout changes tailoring request state to ordered; failed/expired checkout cancellation propagates back to tailoring.
 - Versioned mobile endpoints for measurement definitions, profile CRUD and tailored-cart creation.
 - Product API exposes tailoring availability and garment type.
 - Cart API exposes tailoring request/profile metadata without internal database IDs.
 - Deterministic measurement seed data and production-safe guide assets.
-- Dedicated conversion, validation, ownership, lifecycle, API, noindex and snapshot regression tests.
+- Dedicated conversion, validation, ownership, lifecycle, API CRUD/history, noindex, localization and snapshot immutability regression tests.
 
 Validation evidence from GitHub Actions run `35645248956`:
 
@@ -234,4 +235,4 @@ Validation evidence from GitHub Actions run `35645248956`:
 
 ## Release gate
 
-Batch 6 is merged after green feature-branch and PR CI. The next implementation gate is Batch 7 — orders, shipping, notifications + mobile event contract.
+Batch 6 acceptance requires green feature-branch CI, green PR CI and green post-merge `main` CI. No Batch 6 failure is bypassed.

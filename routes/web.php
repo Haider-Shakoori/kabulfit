@@ -72,6 +72,10 @@ Route::prefix('{locale}')
             Route::put('/measurements/{profile:uuid}', [MeasurementProfileController::class, 'update'])->name('measurements.update');
             Route::delete('/measurements/{profile:uuid}', [MeasurementProfileController::class, 'destroy'])->name('measurements.destroy');
 
+            Route::get('/tailoring', [TailoringController::class, 'index'])->name('tailoring.index');
+            Route::get('/tailoring/{tailoring}', [TailoringController::class, 'show'])
+                ->whereUuid('tailoring')
+                ->name('tailoring.show');
             Route::get('/products/{slug}/tailor', [TailoringController::class, 'create'])->name('tailoring.create');
             Route::post('/products/{slug}/tailor', [TailoringController::class, 'store'])->name('tailoring.store');
 

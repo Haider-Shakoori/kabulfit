@@ -84,6 +84,38 @@ class MeasurementProfileApiTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_customer_can_list_update_and_delete_own_profile_without_internal_ids(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $created = $this->postJson(
+            '/api/v1/en/measurement-profiles',
+            $this->profilePayload('waistcoat', 'cm'),
+        )->assertCreated()
+            ->assertJsonMissingPath('data.id');
+
+        $uuid = $created->json('data.uuid');
+
+        $this->getJson('/api/v1/en/measurement-profiles')
+            ->assertOk()
+            ->assertJsonPath('data.0.uuid', $uuid)
+            ->assertJsonMissingPath('data.0.id');
+
+        $payload = $this->profilePayload('waistcoat', 'cm');
+        $payload['name'] = 'Updated waistcoat fit';
+
+        $this->putJson('/api/v1/en/measurement-profiles/'.$uuid, $payload)
+            ->assertOk()
+            ->assertJsonPath('data.name', 'Updated waistcoat fit')
+            ->assertJsonMissingPath('data.id');
+
+        $this->deleteJson('/api/v1/en/measurement-profiles/'.$uuid)
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('measurement_profiles', ['uuid' => $uuid]);
+    }
+
     public function test_measurement_pages_are_private_noindex_pages(): void
     {
         $user = User::factory()->create();

@@ -129,6 +129,8 @@ Measurement definitions are public read-only reference data because product scre
 - `POST /api/v1/{locale}/measurement-profiles`
 - `PUT /api/v1/{locale}/measurement-profiles/{profile_uuid}`
 - `DELETE /api/v1/{locale}/measurement-profiles/{profile_uuid}`
+- `GET /api/v1/{locale}/tailoring`
+- `GET /api/v1/{locale}/tailoring/{tailoring_uuid}`
 - `POST /api/v1/{locale}/tailoring`
 
 Supported garment types currently are `perahan_tunban`, `dress`, and `waistcoat`.
@@ -137,4 +139,6 @@ Measurement values are stored canonically in centimetres. API clients may submit
 
 A tailoring request requires a product that explicitly supports tailoring and a saved profile whose garment type matches the product. Creating a tailoring request also creates the custom cart line. Each tailored cart line has quantity one.
 
-At checkout, Laravel snapshots measurement codes/names/centimetre values, profile name and tailoring notes into the order item. Later profile changes or deletion cannot change historical order measurements.
+At checkout, Laravel snapshots measurement codes/names/centimetre values, profile name and tailoring notes into the order item. Later profile changes or deletion cannot change historical order measurements. Snapshot models reject direct update/delete operations so order-time measurements remain application-layer immutable.
+
+Tailoring history endpoints are ownership-scoped to the authenticated customer and expose UUIDs/SKUs/slugs rather than internal database IDs. Detail responses return the immutable order-time snapshot once an order exists; before checkout they reflect the customer's current saved profile.

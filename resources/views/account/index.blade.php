@@ -36,7 +36,10 @@
             <section class="account-panel">
                 <div class="panel-heading">
                     <div><p class="eyebrow">{{ __('measurements.custom_tailoring') }}</p><h2>{{ __('measurements.profiles') }}</h2></div>
-                    <a class="button button-secondary" href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}">{{ __('measurements.manage_profiles') }}</a>
+                    <div class="button-row">
+                        <a class="button button-secondary" href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}">{{ __('measurements.manage_profiles') }}</a>
+                        <a class="button button-secondary" href="{{ route('tailoring.index', ['locale' => app()->getLocale()]) }}">{{ __('measurements.tailoring_history') }}</a>
+                    </div>
                 </div>
                 <p>{{ __('measurements.profiles_intro') }}</p>
             </section>
