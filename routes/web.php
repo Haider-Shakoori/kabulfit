@@ -74,7 +74,6 @@ Route::prefix('{locale}')
             Route::get('/products/{slug}/tailor', [TailoringController::class, 'create'])->name('tailoring.create');
             Route::post('/products/{slug}/tailor', [TailoringController::class, 'store'])->name('tailoring.store');
 
-
             Route::get('/cart', [CommerceController::class, 'cart'])->name('cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('cart.items.store');
             Route::put('/cart/items/{item:uuid}', [CommerceController::class, 'update'])->name('cart.items.update');
