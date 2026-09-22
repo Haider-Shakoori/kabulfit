@@ -13,7 +13,7 @@ use Illuminate\View\View;
 
 class SettingsController extends Controller
 {
-    public function index(SiteSettings $settings): View
+    public function index(string $locale, SiteSettings $settings): View
     {
         $this->authorize('viewAny', Setting::class);
 
@@ -27,7 +27,7 @@ class SettingsController extends Controller
         ]);
     }
 
-    public function update(Request $request, SiteSettings $settings, AuditService $audit): RedirectResponse
+    public function update(Request $request, string $locale, SiteSettings $settings, AuditService $audit): RedirectResponse
     {
         $this->authorize('viewAny', Setting::class);
         $data = $request->validate([
