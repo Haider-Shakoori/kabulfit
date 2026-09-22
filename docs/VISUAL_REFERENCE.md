@@ -1,72 +1,68 @@
 # KabulFit Visual Reference Audit
 
-Last audited: 2026-09-21  
-Primary reference: https://kabulfit.com/
+Last audited: 2026-09-22  
+Primary visual source of truth: https://kabulfit.com/
 
-## Confirmed live-site structure
+## Live-site alignment
 
-The live homepage currently presents the following recognizable KabulFit sequence:
+The Laravel storefront now preserves the recognizable live KabulFit presentation while keeping the production Laravel architecture, localization, commerce, accessibility and SEO foundations.
 
-1. "Authentic Afghan Elegance" hero with Shop Now and Measurement Guide actions.
-2. Three service assurances: Custom Sizing, Global Shipping, Quality Assured.
-3. Shop by Category.
-4. Featured products.
-5. "Our Story / Afghan Culture" craftsmanship section with a 100+ Years of Tradition proof point.
-6. "Perfect Fit Technology / Get Your Perfect Measurements" call-to-action.
-7. Long-form "Authentic Afghan Clothes & Custom Tailoring" editorial content covering Gand e Afghani / Perahan Tunban, Afghan embroidery and custom tailoring.
-8. "What Our Customers Say" with three customer quotes.
-9. Contact positioning for Kabul, Afghanistan and Dubai, United Arab Emirates.
+The aligned homepage includes:
 
-Batch 2 deliberately preserves that information hierarchy while replacing weak implementation details with semantic HTML, localized strings, accessible controls and responsive components.
+1. Full-height photographic hero with the live KabulFit red-to-teal brand treatment.
+2. Four service assurances: Custom Sizing, Global Shipping, Quality Assured and Handcrafted.
+3. Four image-led category cards.
+4. Featured product cards using locally stored KabulFit catalog photography.
+5. Dark photographic Afghan Culture / craftsmanship section with the 100+ Years of Tradition proof point.
+6. Split red-to-teal measurement call-to-action with the KabulFit measurement imagery.
+7. Long-form Afghan clothing and custom-tailoring editorial content.
+8. Three customer testimonials.
+9. Dark footer with the original white KabulFit logo, contact details and company/support/shop navigation.
 
-## Design-system implementation
+The primary navigation follows the live-site order: Home, Shop, Measurement Guide, About, Contact.
 
-All primary colors remain centralized in `resources/css/app.css`:
+## Brand and media assets
 
-- `--brand-primary`
-- `--brand-secondary`
-- `--brand-accent`
-- `--brand-background`
-- `--brand-surface`
-- `--brand-text`
-- `--brand-muted`
-- `--brand-border`
+The live KabulFit logo, white footer logo, favicon, hero, craftsmanship, measurement and catalog photography have been captured into the repository under:
 
-Spacing, radii, shadows, container widths and display typography are also tokenized. Components use logical CSS properties so English LTR and Dari/Pashto RTL share one implementation.
+- `public/images/kabulfit-live/`
+- `public/images/kabulfit-live/catalog/`
 
-## Media strategy
+Runtime templates and seed data reference only these local paths. The storefront does not depend on Supabase, Base44 or another remote image host at render time.
 
-The repository does not yet contain the current production product photography. Batch 2 therefore uses two small original SVG visual assets for the hero/story composition and a neutral branded product-media treatment for deterministic demo products.
+`docs/live-reference/asset-manifest.json` records the source provenance used during the alignment audit. It is documentation only and is not loaded by the application.
 
-Batch 3 will introduce the catalog media domain and responsive image records. Production media should then:
+## Seeded catalog media
 
-- retain an original master;
-- generate correctly sized WebP/AVIF derivatives;
-- store intrinsic width/height and localized alt text;
-- render `srcset`/`sizes` with explicit dimensions;
-- lazy-load below-the-fold media;
-- prioritize only the true LCP image;
-- remain CDN-ready.
+Each of the five deterministic demo products receives a distinct locally stored KabulFit WebP image with English, Dari and Pashto alt text. The former shared SVG catalog placeholder is no longer used.
 
-No third-party stock image was added merely to make the demo look populated.
+The current deterministic catalog continues to provide stable fixtures for automated tests and commerce flows; live photography is used to make those fixtures representative of KabulFit rather than to change their business identities.
 
-## Accessibility and responsive notes
+## Design system
 
-Batch 2 adds/refines:
+The live-site visual layer is defined in `resources/css/live-site.css` and loaded through the main Vite CSS entry. It uses the live KabulFit burgundy/red and teal treatment while retaining the existing reusable base components and responsive behavior.
 
-- skip navigation;
-- semantic landmarks/headings;
-- keyboard-operable mobile navigation with Escape close;
+Key alignment colors:
+
+- burgundy/red: `#881C27`
+- teal: `#2A6867`
+- warm page background: `#FDFBF7`
+- dark footer/story surfaces: near-black/charcoal
+
+Layouts use logical properties and responsive breakpoints so English LTR and Dari/Pashto RTL share the same implementation.
+
+## Accessibility, performance and SEO
+
+The rebuilt Laravel implementation retains:
+
+- skip navigation and semantic landmarks;
+- keyboard-operable mobile navigation;
 - visible focus states;
-- reduced-motion handling;
-- logical RTL layout properties;
-- explicit image dimensions;
-- minimum touch-target sizing;
-- no intentionally horizontal-scrolling page sections;
-- responsive breakpoints covering the required 320px–1920px range structurally.
+- localized EN/FA/PS content and RTL support;
+- explicit image dimensions and lazy loading below the fold;
+- local canonical/alternate SEO behavior;
+- structured data and localized metadata;
+- responsive product-image support;
+- no remote runtime image URLs.
 
-## Fidelity limitation
-
-The available crawler can inspect the live page content and public page inventory, but it does not expose a browser screenshot, the original CSS bundle, or reliable source URLs for the live photography. Therefore the current token values are centralized and visually aligned to the recognizable KabulFit green / burgundy / gold / warm-neutral identity, but **pixel-level color and spacing parity is not claimed yet**.
-
-Before final acceptance, browser-based visual regression screenshots must compare the rebuilt site against the live reference at the required target widths. Any measured token differences can then be corrected centrally without rewriting templates.
+Automated visual-alignment regression coverage prevents the old hero/story SVGs and catalog placeholder from being reintroduced into rendered customer pages.
