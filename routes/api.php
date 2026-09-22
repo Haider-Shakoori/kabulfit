@@ -68,8 +68,10 @@ Route::prefix('v1/{locale}')
             Route::post('/wishlist', [CommerceController::class, 'wishlistStore'])->name('api.v1.wishlist.store');
             Route::delete('/wishlist/{slug}', [CommerceController::class, 'wishlistDestroy'])->name('api.v1.wishlist.destroy');
             Route::post('/checkout', [CommerceController::class, 'checkout'])->middleware('throttle:20,1')->name('api.v1.checkout');
+
             Route::get('/orders', [OrderController::class, 'index'])->name('api.v1.orders.index');
             Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('api.v1.orders.show');
+            Route::get('/orders/{order:uuid}/tracking', [OrderController::class, 'tracking'])->name('api.v1.orders.tracking');
             Route::get('/events', [OrderController::class, 'events'])->name('api.v1.events.index');
         });
     });

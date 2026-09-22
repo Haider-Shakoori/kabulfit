@@ -2,17 +2,22 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
+        Schema::table('orders', function (Blueprint $table): void {
+            $table->string('status', 40)->default('pending_payment')->change();
+        });
+
         Schema::create('order_status_histories', function (Blueprint $table): void {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->string('status')->index();
+            $table->string('status', 40)->index();
             $table->string('source')->default('system');
             $table->text('note')->nullable();
             $table->timestamp('occurred_at')->index();
@@ -27,7 +32,16 @@ return new class extends Migration
             $table->string('service')->nullable();
             $table->string('tracking_number')->nullable()->unique();
             $table->string('tracking_url')->nullable();
-            $table->enum('status', ['pending', 'ready', 'shipped', 'in_transit', 'out_for_delivery', 'delivered', 'exception', 'returned'])->default('pending')->index();
+            $table->enum('status', [
+                'pending',
+                'ready',
+                'shipped',
+                'in_transit',
+                'out_for_delivery',
+                'delivered',
+                'exception',
+                'returned',
+            ])->default('pending')->index();
             $table->timestamp('shipped_at')->nullable();
             $table->timestamp('delivered_at')->nullable();
             $table->timestamps();
@@ -63,5 +77,19 @@ return new class extends Migration
         Schema::dropIfExists('shipment_events');
         Schema::dropIfExists('shipments');
         Schema::dropIfExists('order_status_histories');
+
+        DB::table('orders')
+            ->whereIn('status', ['processing', 'ready', 'shipped', 'delivered', 'returned'])
+            ->update(['status' => 'paid']);
+
+        Schema::table('orders', function (Blueprint $table): void {
+            $table->enum('status', [
+                'pending_payment',
+                'paid',
+                'payment_failed',
+                'cancelled',
+                'refunded',
+            ])->default('pending_payment')->change();
+        });
     }
 };
