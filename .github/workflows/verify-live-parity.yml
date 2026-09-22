@@ -92,7 +92,7 @@ jobs:
           await capture('http://127.0.0.1:8000/en', 'parity-output/laravel-mobile.png', 390, 844);
 
           await browser.close();
-NODE
+          NODE
           node /tmp/capture-parity.mjs
           cp /tmp/kabulfit-server.log parity-output/server.log
 
