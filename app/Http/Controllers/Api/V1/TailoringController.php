@@ -125,8 +125,8 @@ class TailoringController extends Controller
             if ($orderItem) {
                 $measurements = $orderItem->measurements
                     ->map(fn ($measurement) => [
-                        'code' => $measurement->code,
-                        'name' => $measurement->name,
+                        'code' => $measurement->definition_code,
+                        'name' => $measurement->definition_name,
                         'value_cm' => (float) $measurement->value_cm,
                     ])
                     ->values();
