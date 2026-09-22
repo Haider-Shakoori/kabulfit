@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\Admin\ContentController as AdminContentController;
-use App\Http\Controllers\Admin\LegacyUrlController as AdminLegacyUrlController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
+use App\Http\Controllers\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LegacyUrlController as AdminLegacyUrlController;
 use App\Http\Controllers\Admin\MeasurementController as AdminMeasurementController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
