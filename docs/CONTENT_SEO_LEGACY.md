@@ -39,8 +39,11 @@ A public crawl performed on 2026-09-22 directly exposed legacy KabulFit routes i
 - `/Shop`
 - `/TermsConditions`
 - account/cart/checkout/orders/wishlist/measurements/tailor routes
+- old administration routes such as `/AdminDashboard`, `/AdminProducts`, `/AdminOrders`, `/AdminSettings` and the other administration links exposed by the live legacy route inventory
 
-The database inventory records verification time, disposition, target and notes. Public old routes receive explicit permanent redirects to the clean localized URLs.
+The database inventory records verification time, disposition, target and notes. Public old routes receive explicit permanent redirects to the clean localized URLs. Legacy administration routes are retained as verified inventory entries with a private disposition and no redirect target, so the migration layer does not expose staff navigation.
+
+This inventory is complete for the routes exposed by the live legacy site's public route index on 2026-09-22. Historical URLs or ProductDetail IDs that are not externally enumerable must come from authoritative source data or an export before they can be mapped safely.
 
 ## ProductDetail rule
 
