@@ -3,13 +3,11 @@
 use App\Http\Controllers\Api\V1\CatalogController;
 use App\Http\Controllers\Api\V1\CommerceController;
 use App\Http\Controllers\Api\V1\MeasurementController;
-use App\Http\Controllers\Api\V1\MeasurementController;
 use App\Http\Controllers\Api\V1\TailoringController;
 use App\Http\Controllers\Api\V1\MobileAddressController;
 use App\Http\Controllers\Api\V1\MobileAuthController;
 use App\Http\Controllers\Api\V1\MobilePasswordController;
 use App\Http\Controllers\Api\V1\MobileVerificationController;
-use App\Http\Controllers\Api\V1\TailoringController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,13 +49,6 @@ Route::prefix('v1/{locale}')
             Route::put('/account/addresses/{address:uuid}', [MobileAddressController::class, 'update'])->name('api.v1.addresses.update');
             Route::delete('/account/addresses/{address:uuid}', [MobileAddressController::class, 'destroy'])->name('api.v1.addresses.destroy');
 
-            Route::get('/measurement-profiles', [MeasurementController::class, 'index'])->name('api.v1.measurement-profiles.index');
-            Route::post('/measurement-profiles', [MeasurementController::class, 'store'])->name('api.v1.measurement-profiles.store');
-            Route::put('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'update'])->name('api.v1.measurement-profiles.update');
-            Route::delete('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('api.v1.measurement-profiles.destroy');
-            Route::post('/tailoring', [TailoringController::class, 'store'])->name('api.v1.tailoring.store');
-
-            Route::get('/measurements/definitions', [MeasurementController::class, 'definitions'])->name('api.v1.measurements.definitions');
             Route::get('/measurements/profiles', [MeasurementController::class, 'index'])->name('api.v1.measurements.index');
             Route::post('/measurements/profiles', [MeasurementController::class, 'store'])->name('api.v1.measurements.store');
             Route::put('/measurements/profiles/{profile:uuid}', [MeasurementController::class, 'update'])->name('api.v1.measurements.update');
