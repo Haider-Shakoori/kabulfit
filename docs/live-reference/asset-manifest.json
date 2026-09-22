@@ -1,0 +1,111 @@
+{
+  "source": "https://kabulfit.com/",
+  "captured_at": "2026-09-22",
+  "note": "Source provenance only. Runtime templates and seeders use local repository paths.",
+  "verified_assets": [
+    {
+      "file": "public/images/kabulfit-live/craftsmanship.jpg",
+      "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg",
+      "bytes": 116928
+    },
+    {
+      "file": "public/images/kabulfit-live/favicon.png",
+      "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/d653e6253_Favicon.png",
+      "bytes": 109930
+    },
+    {
+      "file": "public/images/kabulfit-live/hero-heritage.png",
+      "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png",
+      "bytes": 1350956
+    },
+    {
+      "file": "public/images/kabulfit-live/logo-footer.png",
+      "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/b6d3c7505_KabulFit_logo_white.png",
+      "bytes": 73682
+    },
+    {
+      "file": "public/images/kabulfit-live/logo-header.png",
+      "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/4ce74c49d_KabulFit_logo_shopify_header.png",
+      "bytes": 192694
+    },
+    {
+      "file": "public/images/kabulfit-live/measurement-guide.png",
+      "url": "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/58f1df170_2.png",
+      "bytes": 1350956
+    }
+  ],
+  "selected_catalog_images": [
+    {
+      "entity": "Product",
+      "record_id": "6a435559a5c043377ad8862d",
+      "record_name": "Plum Olive Afghan Traditional Embroidered Women's Set",
+      "field": "images.0",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7be4b873d_15.webp",
+      "local_path": "images/kabulfit-live/catalog/product-07194d890503.webp",
+      "bytes": 90104
+    },
+    {
+      "entity": "Product",
+      "record_id": "6a389925991daf8e6139622c",
+      "record_name": "Black Gold Afghan Traditional Embroidered Men's Set",
+      "field": "images.0",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7a1cfa249_15.webp",
+      "local_path": "images/kabulfit-live/catalog/product-3a42c0121c9b.webp",
+      "bytes": 48270
+    },
+    {
+      "entity": "Product",
+      "record_id": "6a389289d3aa87b74b1d3ad0",
+      "record_name": "White Gold Afghan Traditional Embroidered Men's Set",
+      "field": "images.0",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/e426f8f7f_15.webp",
+      "local_path": "images/kabulfit-live/catalog/product-ffc752e95c3e.webp",
+      "bytes": 72830
+    },
+    {
+      "entity": "Product",
+      "record_id": "6a29f3e117966c1ed0ae2bb3",
+      "record_name": "4-Piece Afghan Traditional Embroidered Boys Set (Kameez, Tunban, Vest & Hat)",
+      "field": "images.0",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/571b16f00_15.webp",
+      "local_path": "images/kabulfit-live/catalog/product-6cba1993081b.webp",
+      "bytes": 183312
+    },
+    {
+      "entity": "Product",
+      "record_id": "699fb758d3f884809e59f024",
+      "record_name": "3-Piece Elite Embroidered Set (Kameez, Tunban & Shawl) — Royal Cobalt",
+      "field": "images.0",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/0dc40f06a_1.webp",
+      "local_path": "images/kabulfit-live/catalog/product-e3216ebea370.webp",
+      "bytes": 89356
+    },
+    {
+      "entity": "Category",
+      "record_id": "69477bc8405f92df484cb238",
+      "record_name": "Boys",
+      "field": "image_url",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/9a8998f13_5.png",
+      "local_path": "images/kabulfit-live/catalog/category-15e0668e6ecf.png",
+      "bytes": 628626
+    },
+    {
+      "entity": "Category",
+      "record_id": "69477bc8405f92df484cb236",
+      "record_name": "Men",
+      "field": "image_url",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/2b37f3480_1.webp",
+      "local_path": "images/kabulfit-live/catalog/category-3ed66ce35408.webp",
+      "bytes": 141356
+    },
+    {
+      "entity": "Category",
+      "record_id": "69477bc8405f92df484cb237",
+      "record_name": "Women",
+      "field": "image_url",
+      "source_url": "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/0d9b271e2_1.webp",
+      "local_path": "images/kabulfit-live/catalog/category-861c19f93a16.webp",
+      "bytes": 240338
+    }
+  ]
+}

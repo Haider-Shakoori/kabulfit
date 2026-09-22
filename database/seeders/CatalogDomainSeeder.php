@@ -228,23 +228,72 @@ class CatalogDomainSeeder extends Seeder
 
     private function seedMedia($products): void
     {
-        foreach ($products as $product) {
-            $media = $product->media()->updateOrCreate(
-                ['path' => 'images/catalog/kabulfit-product-placeholder.svg'],
-                [
-                    'mime_type' => 'image/svg+xml',
-                    'width' => 900,
-                    'height' => 1100,
-                    'sort_order' => 10,
-                    'is_primary' => true,
+        $definitions = [
+            'KF-M-PT-001' => [
+                'path' => 'images/kabulfit-live/catalog/product-ffc752e95c3e.webp',
+                'alt' => [
+                    'en' => 'Classic Afghan Perahan Tunban — KabulFit',
+                    'fa' => 'پیرهن تنبان کلاسیک افغانی — کابل‌فیت',
+                    'ps' => 'کلاسیک افغان پیرهن تنبان — کابل‌فټ',
                 ],
-            );
+            ],
+            'KF-W-DR-001' => [
+                'path' => 'images/kabulfit-live/catalog/product-07194d890503.webp',
+                'alt' => [
+                    'en' => 'Herat embroidered Afghan dress — KabulFit',
+                    'fa' => 'لباس خامک‌دوزی‌شده افغانی هرات — کابل‌فیت',
+                    'ps' => 'د هرات ګنډل شوی افغان لباس — کابل‌فټ',
+                ],
+            ],
+            'KF-K-VS-001' => [
+                'path' => 'images/kabulfit-live/catalog/product-6cba1993081b.webp',
+                'alt' => [
+                    'en' => 'Kids Afghan waistcoat set — KabulFit',
+                    'fa' => 'ست واسکت افغانی کودکانه — کابل‌فیت',
+                    'ps' => 'د ماشومانو افغان واسکټ سېټ — کابل‌فټ',
+                ],
+            ],
+            'KF-M-WC-001' => [
+                'path' => 'images/kabulfit-live/catalog/product-3a42c0121c9b.webp',
+                'alt' => [
+                    'en' => 'Traditional Afghan waistcoat styling — KabulFit',
+                    'fa' => 'استایل واسکت سنتی افغانی — کابل‌فیت',
+                    'ps' => 'دودیز افغان واسکټ سټایل — کابل‌فټ',
+                ],
+            ],
+            'KF-A-KS-001' => [
+                'path' => 'images/kabulfit-live/catalog/product-e3216ebea370.webp',
+                'alt' => [
+                    'en' => 'Kuchi-inspired Afghan shawl styling — KabulFit',
+                    'fa' => 'استایل شال افغانی با الهام از کوچی — کابل‌فیت',
+                    'ps' => 'د کوچیانو له دود څخه الهام اخیستی افغان شال — کابل‌فټ',
+                ],
+            ],
+        ];
 
-            foreach ($product->translations as $translation) {
-                $media->translations()->updateOrCreate(
-                    ['locale' => $translation->locale],
-                    ['alt_text' => $translation->name.' — KabulFit'],
-                );
+        foreach ($products as $sku => $product) {
+            $definition = $definitions[$sku] ?? null;
+
+            if (! $definition) {
+                continue;
+            }
+
+            $product->media()->delete();
+
+            $media = $product->media()->create([
+                'path' => $definition['path'],
+                'mime_type' => 'image/webp',
+                'width' => 1200,
+                'height' => 1600,
+                'sort_order' => 10,
+                'is_primary' => true,
+            ]);
+
+            foreach (['en', 'fa', 'ps'] as $locale) {
+                $media->translations()->create([
+                    'locale' => $locale,
+                    'alt_text' => $definition['alt'][$locale],
+                ]);
             }
         }
     }

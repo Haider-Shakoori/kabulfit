@@ -8,12 +8,15 @@ return [
     'shop_description' => 'Explore KabulFit collections of authentic Afghan clothing for men, women and children.',
 
     'skip_to_content' => 'Skip to content',
-    'announcement' => 'Authentic Afghan clothing · Custom sizing',
+    'announcement' => 'Free Shipping 🚚 for a Limited Time! & Exclusive Free Gifts! 🎁',
     'menu' => 'Menu',
     'primary_navigation' => 'Primary navigation',
     'kabulfit_home' => 'KabulFit home',
     'shop' => 'Shop',
     'categories' => 'Categories',
+    'about' => 'About',
+    'support' => 'Support',
+    'company' => 'Company',
     'custom_tailoring' => 'Custom Tailoring',
     'language' => 'Language',
 
@@ -30,7 +33,7 @@ return [
     'hero_subtitle' => 'Discover timeless traditions woven into modern fashion.',
     'shop_now' => 'Shop Now',
     'measurement_guide' => 'Measurement Guide',
-    'hero_art_alt' => 'KabulFit geometric textile-inspired Afghan pattern',
+    'hero_art_alt' => 'Authentic Afghan fashion and tailoring by KabulFit',
     'years_tradition' => 'Years of Tradition',
     'languages_supported' => 'Languages',
     'perfect_fit_guarantee' => 'Perfect fit guarantee',
@@ -42,6 +45,8 @@ return [
     'global_shipping_text' => 'We ship to over 50 countries',
     'quality_assured' => 'Quality Assured',
     'quality_assured_text' => 'Premium fabrics and craftsmanship',
+    'handcrafted' => 'Handcrafted',
+    'handcrafted_text' => 'Made by skilled Afghan artisans',
 
     'discover' => 'Discover',
     'shop_by_category' => 'Shop by Category',
@@ -60,7 +65,7 @@ return [
     'story_p1' => 'Afghan clothing represents centuries of artistry, from intricate embroidery to luxurious fabrics. Each piece tells a story of heritage and craftsmanship.',
     'story_p2' => 'Our artisans carry forward generations of knowledge, creating pieces that honor tradition while embracing contemporary style. Every stitch tells a story of resilience, beauty, and cultural pride.',
     'craftsmanship' => 'Craftsmanship',
-    'craftsmanship_alt' => 'Abstract KabulFit artwork inspired by Afghan embroidery and craftsmanship',
+    'craftsmanship_alt' => 'Afghan craftsmanship and traditional tailoring',
     'learn_more' => 'Learn More',
 
     'perfect_fit_technology' => 'Perfect Fit Technology',
