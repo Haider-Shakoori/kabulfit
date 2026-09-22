@@ -1,14 +1,58 @@
 @extends('layouts.app')
+
 @section('content')
-<section class="page-hero"><div class="container"><p class="eyebrow">{{ __('measurements.custom_tailoring') }}</p><h1>{{ __('measurements.profiles') }}</h1><p>{{ __('measurements.profiles_intro') }}</p></div></section>
-<section class="section"><div class="container"><x-form-errors />@if(session('status'))<p role="status">{{ session('status') }}</p>@endif
-<div class="account-grid"><div class="account-main">
-@forelse($profiles as $profile)<article class="account-panel"><h2>{{ $profile->name }}</h2><p>{{ __('measurements.garment_type') }}: {{ __('measurements.'.$profile->garment_type) }} · {{ $profile->display_unit }}</p><dl class="account-facts">@foreach($profile->values as $value)<div><dt>{{ $value->definition->translation()?->name }}</dt><dd>{{ \App\Support\Measurements\MeasurementConverter::fromCm($value->value_cm,$profile->display_unit) }} {{ $profile->display_unit }}</dd></div>@endforeach</dl><form method="post" action="{{ route('measurements.destroy',['locale'=>app()->getLocale(),'profile'=>$profile]) }}">@csrf @method('DELETE')<button class="text-button danger-link" type="submit">{{ __('measurements.delete_profile') }}</button></form></article>@empty<p>{{ __('measurements.no_profiles') }}</p>@endforelse
-</div><aside class="account-panel"><h2>{{ __('measurements.new_profile') }}</h2><form method="post" action="{{ route('measurements.store',['locale'=>app()->getLocale()]) }}">@csrf
-<label>{{ __('measurements.profile_name') }}<input name="name" required maxlength="100"></label>
-<label>{{ __('measurements.garment_type') }}<select name="garment_type" required><option value="perahan_tunban">{{ __('measurements.perahan_tunban') }}</option><option value="dress">{{ __('measurements.dress') }}</option><option value="waistcoat">{{ __('measurements.waistcoat') }}</option></select></label>
-<label>{{ __('measurements.unit') }}<select name="display_unit"><option value="cm">cm</option><option value="in">in</option></select></label>
-<p class="muted">{{ __('measurements.form_hint') }}</p>
-@foreach($definitions as $definition)<label data-garment="{{ $definition->garment_type }}">{{ $definition->translation()?->name }}<input type="number" step="0.01" name="measurements[{{ $loop->index }}][value]"><input type="hidden" name="measurements[{{ $loop->index }}][code]" value="{{ $definition->code }}"><small>{{ $definition->translation()?->instructions }}</small></label>@endforeach
-<label><input type="checkbox" name="is_default" value="1"> {{ __('measurements.make_default') }}</label><button class="button button-primary" type="submit">{{ __('measurements.save_profile') }}</button></form></aside></div></div></section>
+<section class="page-hero">
+    <div class="container">
+        <p class="eyebrow">{{ __('measurements.custom_tailoring') }}</p>
+        <h1>{{ __('measurements.profiles') }}</h1>
+        <p>{{ __('measurements.profiles_intro') }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <x-form-errors />
+        @if (session('status'))
+            <p role="status">{{ session('status') }}</p>
+        @endif
+
+        <div class="section-heading">
+            <div><h2>{{ __('measurements.profiles') }}</h2></div>
+            <a class="button button-primary" href="{{ route('measurements.create', ['locale' => app()->getLocale()]) }}">{{ __('measurements.new_profile') }}</a>
+        </div>
+
+        <div class="account-grid">
+            <div class="account-main">
+                @forelse ($profiles as $profile)
+                    <article class="account-panel">
+                        <h2>{{ $profile->name }}</h2>
+                        <p>{{ __('measurements.garment_type') }}: {{ __('measurements.garment_'.$profile->garment_type) }} · {{ $profile->display_unit }}</p>
+                        @if ($profile->is_default)<p><strong>{{ __('measurements.default_profile') }}</strong></p>@endif
+                        <dl class="account-facts">
+                            @foreach ($profile->values as $value)
+                                <div>
+                                    <dt>{{ $value->definition->translation()?->name }}</dt>
+                                    <dd>{{ \App\Support\Measurements\MeasurementConverter::fromCm($value->value_cm, $profile->display_unit) }} {{ $profile->display_unit }}</dd>
+                                </div>
+                            @endforeach
+                        </dl>
+                        <div class="button-row">
+                            <a class="button button-secondary" href="{{ route('measurements.edit', ['locale' => app()->getLocale(), 'profile' => $profile]) }}">{{ __('measurements.edit_profile') }}</a>
+                            <form method="post" action="{{ route('measurements.destroy', ['locale' => app()->getLocale(), 'profile' => $profile]) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button class="text-button danger-link" type="submit">{{ __('measurements.delete_profile') }}</button>
+                            </form>
+                        </div>
+                    </article>
+                @empty
+                    <div class="account-panel">
+                        <p>{{ __('measurements.no_profiles') }}</p>
+                        <a class="button button-primary" href="{{ route('measurements.create', ['locale' => app()->getLocale()]) }}">{{ __('measurements.new_profile') }}</a>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+</section>
 @endsection
