@@ -362,7 +362,7 @@ Feature-branch validation from GitHub Actions run `35715388139`:
 
 ## Batch 11 — Performance/media/API hardening
 
-Status: **implementation complete on `feat/batch-11-performance-media-api`; validation and merge are pending.**
+Status: **implementation complete on `feat/batch-11-performance-media-api`; feature-branch CI is green and PR/merge are pending.**
 
 Implemented:
 
@@ -384,7 +384,18 @@ Implemented:
 - Frontend JS/CSS per-file and combined asset budgets enforced in CI.
 - Dedicated performance/operations documentation and regression tests.
 
-Validation evidence: **pending feature-branch CI**.
+Feature-branch validation from GitHub Actions run `35718128218`:
+
+- PHPUnit: **109 tests, 622 assertions, zero warnings**.
+- Laravel Pint: **245 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Production config cache: **successful**.
+- Production route cache: **successful**.
+- Scheduler resolution: **successful** for checkout expiry, responsive-media generation and failed-job pruning.
+- Vite production build: **successful**.
+- Frontend assets: **38,905-byte CSS + 55,087-byte JS = 93,992 bytes**, all below Batch 11 budgets.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
 
 ## Not yet complete
 
@@ -396,4 +407,4 @@ Validation evidence: **pending feature-branch CI**.
 
 ## Release gate
 
-Batch 10 is fully closed. Batch 11 implementation is complete on its feature branch and is awaiting the required feature-branch/PR CI gates before merge.
+Batch 10 is fully closed. Batch 11 has green feature-branch CI and is awaiting PR CI before merge.
