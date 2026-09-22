@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TailoringRequest extends Model
 {
@@ -35,6 +36,11 @@ class TailoringRequest extends Model
     public function measurementProfile(): BelongsTo
     {
         return $this->belongsTo(MeasurementProfile::class);
+    }
+
+    public function orderItem(): HasOne
+    {
+        return $this->hasOne(OrderItem::class, 'tailoring_request_uuid', 'uuid');
     }
 
     public function getRouteKeyName(): string
