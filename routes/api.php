@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\MobileAddressController;
 use App\Http\Controllers\Api\V1\MobileAuthController;
 use App\Http\Controllers\Api\V1\MobilePasswordController;
 use App\Http\Controllers\Api\V1\MobileVerificationController;
+use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\TailoringController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,8 @@ Route::prefix('v1/{locale}')
             Route::post('/wishlist', [CommerceController::class, 'wishlistStore'])->name('api.v1.wishlist.store');
             Route::delete('/wishlist/{slug}', [CommerceController::class, 'wishlistDestroy'])->name('api.v1.wishlist.destroy');
             Route::post('/checkout', [CommerceController::class, 'checkout'])->middleware('throttle:20,1')->name('api.v1.checkout');
-            Route::get('/orders/{order:uuid}', [CommerceController::class, 'order'])->name('api.v1.orders.show');
+            Route::get('/orders', [OrderController::class, 'index'])->name('api.v1.orders.index');
+            Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('api.v1.orders.show');
+            Route::get('/events', [OrderController::class, 'events'])->name('api.v1.events.index');
         });
     });

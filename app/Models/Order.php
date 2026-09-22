@@ -26,6 +26,16 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function statusHistory(): HasMany
+    {
+        return $this->hasMany(OrderStatusHistory::class)->orderBy('occurred_at');
+    }
+
+    public function shipments(): HasMany
+    {
+        return $this->hasMany(Shipment::class)->orderByDesc('created_at');
+    }
+
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class);
