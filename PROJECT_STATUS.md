@@ -1,6 +1,6 @@
 # KabulFit Project Status
 
-Last updated: 2026-09-21
+Last updated: 2026-09-22
 
 ## Repository audit
 
@@ -300,7 +300,7 @@ Feature-branch validation from GitHub Actions run `35694202519`:
 
 ## Batch 9 — Tailor dashboard
 
-Status: **implementation complete on `feat/batch-09-tailor-dashboard`; feature-branch CI is green and PR/merge are pending.**
+Status: **complete and merged to `main` via PR #16 after green feature-branch and PR CI; post-merge `main` CI is green**.
 
 Implemented:
 
@@ -327,6 +327,8 @@ Feature-branch validation from GitHub Actions run `35701204501`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35701511405`: **quality + MySQL smoke both green**.
+- Post-merge `main` CI run `35701632174`: **quality + MySQL smoke both green**.
 
 ## Not yet complete
 
@@ -340,4 +342,4 @@ Feature-branch validation from GitHub Actions run `35701204501`:
 
 ## Release gate
 
-Batch 8 is fully closed. Batch 9 implementation has green feature-branch CI and is awaiting PR CI before merge.
+Batch 9 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 10 — Content/SEO CMS and legacy migration.
