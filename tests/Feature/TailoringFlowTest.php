@@ -208,7 +208,7 @@ class TailoringFlowTest extends TestCase
         $snapshot = $item->measurements->firstOrFail();
         $original = (float) $snapshot->value_cm;
 
-        $profile->values()->whereHas('definition', fn ($query) => $query->where('code', $snapshot->code))
+        $profile->values()->whereHas('definition', fn ($query) => $query->where('code', $snapshot->definition_code))
             ->firstOrFail()
             ->update(['value_cm' => $original + 7]);
 
