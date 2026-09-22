@@ -167,3 +167,21 @@ Stable event types currently include:
 Event payloads are additive and intended to feed the future Flutter push-notification bridge. Mobile clients should ignore unknown additive payload fields and event types they do not yet handle.
 
 Order and shipment customer notifications are queued after transaction commit, localized using the customer's preferred English, Dari or Pashto locale, and persisted through Laravel's database notification channel in addition to mail.
+
+## Authorized tailor workspace
+
+Batch 9 adds authenticated staff endpoints for users with `tailoring.work`. These endpoints are assignment-scoped and use the same server-authoritative tailoring workflow as the Blade workspace.
+
+- `GET /api/v1/{locale}/tailor/assignments`
+- `GET /api/v1/{locale}/tailor/assignments/{assignment_uuid}`
+- `POST /api/v1/{locale}/tailor/assignments/{assignment_uuid}/status`
+- `POST /api/v1/{locale}/tailor/assignments/{assignment_uuid}/notes`
+
+List responses are paginated and may be filtered by assignment status. Detail responses include the product SKU/name, variant SKU, customer UUID/name, order UUID/number, immutable order-time measurement snapshot, append-only internal notes, assignment event history and currently allowed next states.
+
+A tailor can retrieve or mutate only assignments explicitly assigned to that authenticated user. Another tailor's assignment returns HTTP 404 through the staff API. Administrators assign/reassign work through the protected web administration workflow.
+
+Assignment status transitions are server-authoritative. Clients must submit one of the allowed next statuses returned by the detail payload and must not infer their own transition graph.
+
+No database primary keys are exposed. Stable identifiers are assignment/tailoring/customer/order/note/event UUIDs plus product/variant SKUs and human-facing order numbers.
+

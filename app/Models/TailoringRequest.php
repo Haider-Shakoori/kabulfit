@@ -43,6 +43,11 @@ class TailoringRequest extends Model
         return $this->hasOne(OrderItem::class, 'tailoring_request_uuid', 'uuid');
     }
 
+    public function assignment(): HasOne
+    {
+        return $this->hasOne(TailorAssignment::class);
+    }
+
     public function getRouteKeyName(): string
     {
         return 'uuid';

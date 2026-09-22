@@ -84,6 +84,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(TailoringRequest::class);
     }
 
+    public function tailorAssignments(): HasMany
+    {
+        return $this->hasMany(TailorAssignment::class, 'tailor_id');
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

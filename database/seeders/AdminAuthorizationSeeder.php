@@ -25,7 +25,7 @@ class AdminAuthorizationSeeder extends Seeder
             'settings.manage' => 'Manage site and SEO settings',
             'audit.view' => 'View immutable audit logs',
             'roles.manage' => 'Manage user roles and role permissions',
-            'tailoring.work' => 'Use the future tailor workspace',
+            'tailoring.work' => 'Use tailor workspace',
         ];
 
         foreach ($permissions as $slug => $name) {

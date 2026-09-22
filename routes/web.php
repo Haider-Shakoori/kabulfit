@@ -26,6 +26,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\TailoringController;
+use App\Http\Controllers\TailorWorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect('/'.config('kabulfit.default_locale')));
@@ -89,6 +90,16 @@ Route::prefix('{locale}')
             Route::get('/products/{slug}/tailor', [TailoringController::class, 'create'])->name('tailoring.create');
             Route::post('/products/{slug}/tailor', [TailoringController::class, 'store'])->name('tailoring.store');
 
+            Route::prefix('tailor')
+                ->name('tailor.')
+                ->middleware('permission:tailoring.work')
+                ->group(function (): void {
+                    Route::get('/', [TailorWorkspaceController::class, 'index'])->name('index');
+                    Route::get('/assignments/{assignment:uuid}', [TailorWorkspaceController::class, 'show'])->name('show');
+                    Route::post('/assignments/{assignment:uuid}/status', [TailorWorkspaceController::class, 'transition'])->name('status');
+                    Route::post('/assignments/{assignment:uuid}/notes', [TailorWorkspaceController::class, 'note'])->name('notes.store');
+                });
+
             Route::get('/cart', [CommerceController::class, 'cart'])->name('cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('cart.items.store');
             Route::put('/cart/items/{item:uuid}', [CommerceController::class, 'update'])->name('cart.items.update');
@@ -127,6 +138,7 @@ Route::prefix('{locale}')
 
                     Route::get('/tailoring', [AdminTailoringController::class, 'index'])->name('tailoring.index');
                     Route::get('/tailoring/{tailoring:uuid}', [AdminTailoringController::class, 'show'])->name('tailoring.show');
+                    Route::post('/tailoring/{tailoring:uuid}/assignment', [AdminTailoringController::class, 'assign'])->name('tailoring.assign');
                     Route::post('/tailoring/{tailoring:uuid}/cancel', [AdminTailoringController::class, 'cancel'])->name('tailoring.cancel');
 
                     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');

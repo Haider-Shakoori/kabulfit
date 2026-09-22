@@ -298,11 +298,39 @@ Feature-branch validation from GitHub Actions run `35694202519`:
 - PR-triggered CI run `35694438047`: **quality + MySQL smoke both green**.
 - Post-merge `main` CI run `35694542343`: **quality + MySQL smoke both green**.
 
-Batch 9 intentionally remains responsible for the dedicated tailor workspace, tailor assignments and tailor-specific workflow.
+## Batch 9 — Tailor dashboard
+
+Status: **implementation complete on `feat/batch-09-tailor-dashboard`; feature-branch CI is green and PR/merge are pending.**
+
+Implemented:
+
+- Dedicated locale-scoped tailor dashboard separated from the customer and administrator workspaces.
+- One operational tailor assignment per ordered custom-tailoring request.
+- Assignment eligibility requires a successful paid order and the immutable checkout measurement snapshot.
+- Active tailor selection through existing RBAC using the `tailoring.work` permission.
+- Strict assignment ownership for tailor web and API access.
+- Server-authoritative assignment state machine: assigned, accepted, in progress, fitting, completed and cancelled.
+- Controlled administrator reassignment with completed-work protection.
+- Append-only tailor workmanship notes and assignment event history.
+- Existing immutable order-item measurements remain the only production measurement source after checkout.
+- Administrative audit logging for assignment, reassignment, status changes and notes.
+- Versioned authorized staff API for future Flutter/mobile tailor clients using UUIDs/SKUs only.
+- English/Dari/Pashto workspace localization with RTL through the shared application shell.
+- Dedicated Tailor Workspace architecture/authorization documentation.
+- Regression tests for assignment eligibility, ownership, state transitions, staff API isolation, public identifiers, immutable snapshots/notes/events and RTL localization.
+
+Feature-branch validation from GitHub Actions run `35701204501`:
+
+- PHPUnit: **92 tests, 515 assertions, zero warnings**.
+- Laravel Pint: **219 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
 
 ## Not yet complete
 
-- Dedicated tailor dashboard and tailor assignment workflow.
+- Blog/content CMS.
 - Blog/content CMS.
 - Flutter application implementation.
 - Real legacy-ID mapping crawl.
@@ -312,4 +340,4 @@ Batch 9 intentionally remains responsible for the dedicated tailor workspace, ta
 
 ## Release gate
 
-Batch 8 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 9 — tailor dashboard.
+Batch 8 is fully closed. Batch 9 implementation has green feature-branch CI and is awaiting PR CI before merge.

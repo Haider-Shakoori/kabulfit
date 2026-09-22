@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\MobilePasswordController;
 use App\Http\Controllers\Api\V1\MobileVerificationController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\TailoringController;
+use App\Http\Controllers\Api\V1\TailorWorkspaceController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +60,22 @@ Route::prefix('v1/{locale}')
                 ->whereUuid('tailoring')
                 ->name('api.v1.tailoring.show');
             Route::post('/tailoring', [TailoringController::class, 'store'])->name('api.v1.tailoring.store');
+
+            Route::prefix('tailor')
+                ->name('api.v1.tailor.')
+                ->middleware('permission:tailoring.work')
+                ->group(function (): void {
+                    Route::get('/assignments', [TailorWorkspaceController::class, 'index'])->name('assignments.index');
+                    Route::get('/assignments/{assignment}', [TailorWorkspaceController::class, 'show'])
+                        ->whereUuid('assignment')
+                        ->name('assignments.show');
+                    Route::post('/assignments/{assignment}/status', [TailorWorkspaceController::class, 'transition'])
+                        ->whereUuid('assignment')
+                        ->name('assignments.status');
+                    Route::post('/assignments/{assignment}/notes', [TailorWorkspaceController::class, 'note'])
+                        ->whereUuid('assignment')
+                        ->name('assignments.notes.store');
+                });
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('api.v1.cart.items.store');
