@@ -212,11 +212,15 @@ class TailoringFlowTest extends TestCase
             ->firstOrFail()
             ->update(['value_cm' => $original + 7]);
 
-        $this->getJson('/api/v1/en/tailoring/'.$created->json('data.uuid'))
+        $historyResponse = $this->getJson('/api/v1/en/tailoring/'.$created->json('data.uuid'))
             ->assertOk()
             ->assertJsonPath('data.status', 'ordered')
-            ->assertJsonPath('data.order.uuid', $order->uuid)
-            ->assertJsonPath('data.measurements.0.value_cm', $original);
+            ->assertJsonPath('data.order.uuid', $order->uuid);
+
+        $this->assertEquals(
+            $original,
+            $historyResponse->json('data.measurements.0.value_cm'),
+        );
 
         $this->actingAs($user)
             ->get('/en/tailoring/'.$created->json('data.uuid'))
