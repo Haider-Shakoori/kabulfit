@@ -33,6 +33,20 @@
 
         <div class="account-main">
             <x-form-errors />
+
+            <section class="account-panel">
+                <div class="panel-heading">
+                    <div>
+                        <p class="eyebrow">{{ __('orders.customer_orders') }}</p>
+                        <h2>{{ __('orders.orders') }}</h2>
+                    </div>
+                    <a class="button button-secondary" href="{{ route('orders.index', ['locale' => app()->getLocale()]) }}">
+                        {{ __('orders.view_orders') }}
+                    </a>
+                </div>
+                <p>{{ __('orders.account_intro') }}</p>
+            </section>
+
             <section class="account-panel">
                 <div class="panel-heading">
                     <div><p class="eyebrow">{{ __('measurements.custom_tailoring') }}</p><h2>{{ __('measurements.profiles') }}</h2></div>

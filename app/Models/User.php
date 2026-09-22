@@ -54,6 +54,16 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(TailoringRequest::class);
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function customerEvents(): HasMany
+    {
+        return $this->hasMany(CustomerEvent::class);
+    }
+
     public function preferredLocale(): string
     {
         return in_array($this->preferred_locale, config('kabulfit.supported_locales'), true)
