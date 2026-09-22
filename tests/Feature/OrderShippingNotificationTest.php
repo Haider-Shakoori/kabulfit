@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Order;
-use App\Models\Shipment;
 use App\Models\User;
 use App\Notifications\OrderStatusChanged;
 use App\Notifications\ShipmentStatusChanged;
