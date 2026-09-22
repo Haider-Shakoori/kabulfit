@@ -19,12 +19,21 @@ class HomeController extends Controller
             ->where('is_active', true)
             ->with('translations')
             ->orderBy('sort_order')
+            ->limit(4)
             ->get();
 
         $featuredProducts = Product::query()
             ->where('is_active', true)
             ->where('is_featured', true)
             ->with(CatalogQuery::cardEagerLoads())
+            ->orderBy('sort_order')
+            ->limit(8)
+            ->get();
+
+        $bestSellerProducts = Product::query()
+            ->where('is_active', true)
+            ->with(CatalogQuery::cardEagerLoads())
+            ->orderByDesc('is_featured')
             ->orderBy('sort_order')
             ->limit(8)
             ->get();
@@ -46,7 +55,7 @@ class HomeController extends Controller
             ],
         );
 
-        return view('home', compact('categories', 'featuredProducts', 'seo'));
+        return view('home', compact('categories', 'featuredProducts', 'bestSellerProducts', 'seo'));
     }
 
     private function localeAlternates(string $routeName, array $parameters = []): array
