@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureActiveUser;
+use App\Http\Middleware\RequirePermission;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'locale' => SetLocale::class,
             'active.user' => EnsureActiveUser::class,
+            'permission' => RequirePermission::class,
         ]);
 
         $middleware->redirectGuestsTo(fn (Request $request): string => route('login', [

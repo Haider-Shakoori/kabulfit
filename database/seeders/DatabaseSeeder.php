@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
             CatalogDomainSeeder::class,
             MeasurementSeeder::class,
             CommerceSeeder::class,
+            AdminAuthorizationSeeder::class,
         ]);
     }
 }

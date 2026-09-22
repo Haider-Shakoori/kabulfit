@@ -29,6 +29,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
+@php($contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com'))
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
 <header class="site-header" x-data="{ open: false }" @keydown.escape.window="open = false">
@@ -58,6 +59,9 @@
             @auth
                 <a class="nav-account-link" href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}">{{ __('commerce.wishlist') }}</a>
                 <a class="nav-account-link" href="{{ route('cart', ['locale' => app()->getLocale()]) }}">{{ __('commerce.cart') }}</a>
+                @if (auth()->user()->hasPermission('admin.access'))
+                    <a class="nav-account-link" href="{{ route('admin.dashboard', ['locale' => app()->getLocale()]) }}">Admin</a>
+                @endif
                 <a class="nav-account-link" href="{{ route('account', ['locale' => app()->getLocale()]) }}">{{ __('auth.account') }}</a>
             @else
                 <a class="nav-account-link" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('auth.login') }}</a>
@@ -97,7 +101,7 @@
         </div>
         <div>
             <h2>{{ __('site.contact') }}</h2>
-            <a href="mailto:info@kabulfit.com">info@kabulfit.com</a>
+            <a href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
             <p>{{ __('site.whatsapp_contact') }}</p>
             <p>{{ __('site.locations') }}</p>
         </div>

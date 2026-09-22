@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -25,6 +27,13 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected static function booted(): void
+    {
+        static::creating(function (User $user): void {
+            $user->uuid ??= (string) Str::uuid();
+        });
+    }
+
     protected function casts(): array
     {
         return [
@@ -32,6 +41,27 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'is_active' => 'boolean',
             'password' => 'hashed',
         ];
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole(string $slug): bool
+    {
+        return $this->roles()->where('slug', $slug)->exists();
+    }
+
+    public function hasPermission(string $slug): bool
+    {
+        if ($this->hasRole('super-admin')) {
+            return true;
+        }
+
+        return $this->roles()
+            ->whereHas('permissions', fn ($query) => $query->where('slug', $slug))
+            ->exists();
     }
 
     public function addresses(): HasMany
