@@ -1,195 +1,352 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="live-hero" data-section="hero">
-    <img class="live-hero-image" src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" width="1600" height="1000" alt="{{ __('site.hero_art_alt') }}" fetchpriority="high" decoding="async">
-    <div class="live-hero-overlay" aria-hidden="true"></div>
-    <div class="container live-hero-content">
-        <div class="live-hero-copy">
-            <span class="live-badge">{{ __('site.featured_label') }}</span>
-            <h1>{{ __('site.hero_title') }}</h1>
-            <p>{{ __('site.hero_subtitle') }}</p>
-            <div class="button-row">
-                <a class="button live-gradient-button" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
-                    {{ __('site.shop_now') }} <span aria-hidden="true">→</span>
-                </a>
-                <a class="button live-outline-button" href="#tailoring">
-                    <x-icon name="ruler" /> {{ __('site.measurement_guide') }}
-                </a>
+@php
+    $locale = app()->getLocale();
+    $measurementSlug = $locale === 'en' ? 'measurement-guide' : ($locale === 'fa' ? 'راهنمای-اندازه-گیری' : 'د-اندازې-لارښود');
+    $aboutSlug = $locale === 'en' ? 'about' : ($locale === 'fa' ? 'درباره' : 'زموږ-په-اړه');
+
+    $heroSlides = [
+        [
+            'image' => 'images/kabulfit-live/hero-heritage.png',
+            'title' => __('site.hero_title'),
+            'subtitle' => __('site.hero_subtitle'),
+            'cta' => __('site.shop_now'),
+            'href' => route('shop', ['locale' => $locale]),
+        ],
+        [
+            'image' => 'images/kabulfit-live/measurement-guide.png',
+            'title' => __('site.traditional_elegance'),
+            'subtitle' => __('site.traditional_elegance_subtitle'),
+            'cta' => __('site.explore_collection'),
+            'href' => route('shop', ['locale' => $locale]),
+        ],
+        [
+            'image' => 'images/kabulfit-live/hero-heritage.png',
+            'title' => __('site.custom_fit_guarantee'),
+            'subtitle' => __('site.custom_fit_guarantee_subtitle'),
+            'cta' => __('site.measurement_guide'),
+            'href' => route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]),
+        ],
+    ];
+
+    $categoryImages = [
+        'images/kabulfit-live/catalog/category-3ed66ce35408.webp',
+        'images/kabulfit-live/catalog/category-861c19f93a16.webp',
+        'images/kabulfit-live/catalog/category-15e0668e6ecf.png',
+        'images/kabulfit-live/catalog/product-e3216ebea370.webp',
+    ];
+@endphp
+
+<div class="min-h-screen" x-data="{ hero: 0 }" x-init="setInterval(() => hero = (hero + 1) % {{ count($heroSlides) }}, 6000)">
+    <section class="relative h-screen overflow-hidden" data-section="hero">
+        @foreach ($heroSlides as $index => $slide)
+            <div
+                x-show="hero === {{ $index }}"
+                x-transition.opacity.duration.1000ms
+                class="absolute inset-0"
+                @if($index !== 0) x-cloak @endif
+            >
+                <div class="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+                <img
+                    src="{{ asset($slide['image']) }}"
+                    alt="{{ $slide['title'] }}"
+                    class="h-full w-full object-cover object-[center_50%]"
+                    @if($index === 0) fetchpriority="high" @else loading="lazy" @endif
+                    decoding="async"
+                >
+            </div>
+        @endforeach
+
+        <div class="absolute inset-0 z-20 flex items-center">
+            <div class="mx-auto w-full max-w-7xl px-4">
+                @foreach ($heroSlides as $index => $slide)
+                    <div
+                        x-show="hero === {{ $index }}"
+                        @if($index !== 0) x-cloak @endif
+                        class="mt-16 max-w-2xl sm:mt-20"
+                    >
+                        <span class="mb-4 inline-flex items-center rounded-full border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white sm:mb-6 sm:text-sm">
+                            <x-icon name="scissors" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
+                            {{ __('site.featured_label') }}
+                        </span>
+
+                        <h1 class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl">
+                            {{ $slide['title'] }}
+                        </h1>
+
+                        <p class="mb-6 text-base text-white/80 sm:mb-8 sm:text-lg md:text-xl lg:text-2xl">
+                            {{ $slide['subtitle'] }}
+                        </p>
+
+                        <div class="flex flex-wrap gap-3 sm:gap-4">
+                            <a
+                                href="{{ $slide['href'] }}"
+                                class="inline-flex items-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                            >
+                                {{ $slide['cta'] }}
+                                <span class="ml-1 text-lg leading-none sm:ml-2" aria-hidden="true">→</span>
+                            </a>
+
+                            <a
+                                href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}"
+                                class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                            >
+                                <x-icon name="ruler" class="!mr-1 !h-4 !w-4 sm:!mr-2 sm:!h-5 sm:!w-5" />
+                                {{ __('site.measurement_guide') }}
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
-    </div>
-    <div class="live-hero-fade" aria-hidden="true"></div>
-</section>
 
-<section class="live-assurance" data-section="trust" aria-label="{{ __('site.service_highlights') }}">
-    <div class="container live-assurance-grid">
-        <div class="live-assurance-item">
-            <span class="live-assurance-icon"><x-icon name="ruler" /></span>
-            <div><strong>{{ __('site.custom_sizing') }}</strong><span>{{ __('site.custom_sizing_text') }}</span></div>
-        </div>
-        <div class="live-assurance-item">
-            <span class="live-assurance-icon"><x-icon name="globe" /></span>
-            <div><strong>{{ __('site.global_shipping') }}</strong><span>{{ __('site.global_shipping_text') }}</span></div>
-        </div>
-        <div class="live-assurance-item">
-            <span class="live-assurance-icon"><x-icon name="quality" /></span>
-            <div><strong>{{ __('site.quality_assured') }}</strong><span>{{ __('site.quality_assured_text') }}</span></div>
-        </div>
-        <div class="live-assurance-item">
-            <span class="live-assurance-icon"><x-icon name="scissors" /></span>
-            <div><strong>{{ __('site.handcrafted') }}</strong><span>{{ __('site.handcrafted_text') }}</span></div>
-        </div>
-    </div>
-</section>
-
-<section id="categories" class="section live-category-section" data-section="categories">
-    <div class="container">
-        <div class="live-section-heading live-section-heading-centered">
-            <h2>{{ __('site.shop_by_category') }}</h2>
-            <p>{{ __('site.category_intro') }}</p>
-        </div>
-        @php($categoryImages = [
-            'images/kabulfit-live/catalog/category-3ed66ce35408.webp',
-            'images/kabulfit-live/catalog/category-861c19f93a16.webp',
-            'images/kabulfit-live/catalog/category-15e0668e6ecf.png',
-            'images/kabulfit-live/catalog/product-e3216ebea370.webp',
-        ])
-        <div class="live-category-grid">
-            @foreach ($categories as $category)
-                @php($translation = $category->translation())
-                @php($categoryImage = $categoryImages[($loop->index) % count($categoryImages)])
-                <a class="live-category-card" href="{{ route('categories.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}">
-                    <img src="{{ asset($categoryImage) }}" alt="{{ $translation?->name }}" loading="lazy" decoding="async">
-                    <span class="live-category-overlay" aria-hidden="true"></span>
-                    <span class="live-category-copy">
-                        <strong>{{ $translation?->name }}</strong>
-                        <span>{{ __('site.explore_collection') }} <span aria-hidden="true">→</span></span>
-                    </span>
-                </a>
+        <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-3">
+            @foreach ($heroSlides as $index => $slide)
+                <button
+                    type="button"
+                    @click="hero = {{ $index }}"
+                    class="h-3 rounded-full transition-all"
+                    :class="hero === {{ $index }} ? 'w-8 bg-gradient-to-r from-[#881C27] to-[#2A6867]' : 'w-3 bg-white/50'"
+                    aria-label="{{ __('site.hero_slide', ['number' => $index + 1]) }}"
+                ></button>
             @endforeach
         </div>
-    </div>
-</section>
 
-<section class="section live-products-section" data-section="featured">
-    <div class="container">
-        <div class="live-section-heading live-section-heading-split">
-            <div>
-                <h2>{{ __('site.featured_label') }}</h2>
-                <p>{{ __('site.featured_title') }}</p>
-            </div>
-            <a class="button live-gradient-button live-small-button" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
-                {{ __('site.view_all') }} <span aria-hidden="true">→</span>
-            </a>
-        </div>
-        <div class="product-grid">
-            @forelse ($featuredProducts as $product)
-                <x-product-card :product="$product" />
-            @empty
-                <div class="empty-state">
-                    <p>{{ __('site.no_featured') }}</p>
-                    <a class="button live-gradient-button" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.browse_all_products') }}</a>
-                </div>
-            @endforelse
-        </div>
-    </div>
-</section>
+        <div class="absolute bottom-0 left-0 right-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent"></div>
+    </section>
 
-<section id="story" class="live-story" data-section="story">
-    <img class="live-story-bg" src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" alt="" loading="lazy" decoding="async">
-    <div class="live-story-overlay" aria-hidden="true"></div>
-    <div class="container live-story-grid">
-        <div class="live-story-copy">
-            <span class="live-badge live-teal-badge">{{ __('site.our_story') }}</span>
-            <h2>{{ __('site.afghan_culture') }}</h2>
-            <p class="live-story-lead">{{ __('site.story_p1') }}</p>
-            <p>{{ __('site.story_p2') }}</p>
-            <a class="button live-outline-button" href="#heritage-content">{{ __('site.learn_more') }} <span aria-hidden="true">→</span></a>
-        </div>
-        <div class="live-story-visual">
-            <img src="{{ asset('images/kabulfit-live/craftsmanship.jpg') }}" width="900" height="900" loading="lazy" decoding="async" alt="{{ __('site.craftsmanship_alt') }}">
-            <div class="live-story-stat">
-                <span class="live-stat-icon"><x-icon name="scissors" /></span>
-                <div><strong>100+</strong><span>{{ __('site.years_tradition') }}</span></div>
+    <section class="border-y border-gray-100 bg-white py-12" data-section="trust" aria-label="{{ __('site.service_highlights') }}">
+        <div class="mx-auto max-w-7xl px-4">
+            <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
+                @foreach ([
+                    ['ruler', __('site.custom_sizing'), __('site.custom_sizing_text')],
+                    ['globe', __('site.global_shipping'), __('site.global_shipping_text')],
+                    ['quality', __('site.quality_assured'), __('site.quality_assured_text')],
+                    ['scissors', __('site.handcrafted'), __('site.handcrafted_text')],
+                ] as [$icon, $title, $description])
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10">
+                            <x-icon :name="$icon" class="!h-6 !w-6 text-[#881C27]" />
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">{{ $title }}</h3>
+                            <p class="text-sm text-gray-500">{{ $description }}</p>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section id="tailoring" class="section live-measurement-section" data-section="measurements">
-    <div class="container">
-        <div class="live-measurement-card">
-            <div class="live-measurement-copy">
-                <span class="live-badge live-glass-badge"><x-icon name="ruler" /> {{ __('site.perfect_fit_technology') }}</span>
-                <h2>{{ __('site.measurements_title') }}</h2>
-                <p>{{ __('site.measurements_text') }}</p>
-                <div class="button-row">
-                    <a class="button live-gradient-button" href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}">
-                        {{ __('site.start_measuring') }} <span aria-hidden="true">→</span>
+    <section id="categories" class="py-20" data-section="categories">
+        <div class="mx-auto max-w-7xl px-4">
+            <div class="mb-12 text-center">
+                <h2 class="mb-4 text-4xl font-bold text-gray-900">{{ __('site.shop_by_category') }}</h2>
+                <p class="mx-auto max-w-2xl text-gray-600">{{ __('site.category_intro') }}</p>
+            </div>
+
+            <div class="grid grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+                @foreach ($categories as $category)
+                    @php($translation = $category->translation())
+                    @php($image = $categoryImages[$loop->index] ?? $categoryImages[0])
+                    <a
+                        href="{{ route('categories.show', ['locale' => $locale, 'slug' => $translation?->slug]) }}"
+                        class="group relative h-[300px] overflow-hidden rounded-2xl sm:h-[400px] sm:rounded-[2.5rem] md:h-[500px] md:rounded-[3rem]"
+                    >
+                        <img
+                            src="{{ asset($image) }}"
+                            alt="{{ $translation?->name }}"
+                            loading="lazy"
+                            decoding="async"
+                            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        >
+                        <span class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true"></span>
+                        <span class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
+                            <strong class="mb-1 block text-xl font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{{ $translation?->name }}</strong>
+                            <span class="flex items-center text-sm font-medium text-white group-hover:underline sm:text-base">
+                                {{ __('site.explore_collection') }}
+                                <span class="ml-1 transition-transform group-hover:translate-x-1 sm:ml-2" aria-hidden="true">→</span>
+                            </span>
+                        </span>
                     </a>
-                    <a class="button live-outline-button" href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}">
-                        {{ __('site.watch_tutorial') }}
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white py-20" data-section="featured">
+        <div class="mx-auto max-w-7xl px-4">
+            <div class="mb-12 flex items-center justify-between gap-6">
+                <div>
+                    <h2 class="mb-2 text-4xl font-bold text-gray-900">{{ __('site.featured_label') }}</h2>
+                    <p class="text-gray-600">{{ __('site.featured_title') }}</p>
+                </div>
+                <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex shrink-0 items-center rounded-full border-2 border-transparent bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 font-semibold text-white transition hover:opacity-90">
+                    {{ __('site.view_all') }} <span class="ml-2" aria-hidden="true">→</span>
+                </a>
+            </div>
+
+            @if ($featuredProducts->isNotEmpty())
+                <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+                    @foreach ($featuredProducts as $product)
+                        <x-product-card :product="$product" />
+                    @endforeach
+                </div>
+            @else
+                <div class="py-16 text-center">
+                    <p class="mb-4 text-gray-500">{{ __('site.no_featured') }}</p>
+                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex rounded-md bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-3 font-semibold text-white">
+                        {{ __('site.browse_all_products') }}
                     </a>
                 </div>
-            </div>
-            <div class="live-measurement-visual">
-                <img src="{{ asset('images/kabulfit-live/measurement-guide.png') }}" width="1000" height="900" loading="lazy" decoding="async" alt="{{ __('site.measurement_guide') }}">
-            </div>
+            @endif
         </div>
-    </div>
-</section>
+    </section>
 
-<section id="heritage-content" class="section live-editorial" data-section="heritage-content">
-    <div class="container">
-        <div class="live-editorial-intro">
-            <h2>{{ __('site.seo_heading') }}</h2>
-            <p>{{ __('site.seo_intro') }}</p>
+    <section id="story" class="relative overflow-hidden py-20" data-section="story">
+        <div class="absolute inset-0">
+            <img src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover">
+            <div class="absolute inset-0 bg-black/85"></div>
         </div>
-        <div class="live-editorial-stack">
-            <article>
-                <h3>{{ __('site.gand_heading') }}</h3>
-                <p>{{ __('site.gand_text') }}</p>
-            </article>
-            <article>
-                <h3>{{ __('site.embroidery_heading') }}</h3>
-                <p>{{ __('site.embroidery_text') }}</p>
-            </article>
-            <article>
-                <h3>{{ __('site.tailoring_heading') }}</h3>
-                <p>{{ __('site.tailoring_text') }}</p>
-            </article>
-        </div>
-        <div class="button-row live-editorial-actions">
-            <a class="button live-gradient-button" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop_afghan_clothes') }}</a>
-            <a class="button button-secondary" href="#tailoring">{{ __('site.start_custom_tailoring') }}</a>
-        </div>
-    </div>
-</section>
 
-<section class="section live-testimonials" data-section="testimonials" aria-labelledby="testimonials-title">
-    <div class="container">
-        <div class="live-section-heading live-section-heading-centered">
-            <h2 id="testimonials-title">{{ __('site.testimonials_title') }}</h2>
-            <p>{{ __('site.testimonials_intro') }}</p>
+        <div class="relative mx-auto max-w-7xl px-4">
+            <div class="grid items-center gap-12 md:grid-cols-2">
+                <div>
+                    <span class="mb-6 inline-flex rounded-full bg-[#2A6867] px-3 py-1 text-sm font-semibold text-white">{{ __('site.our_story') }}</span>
+                    <h2 class="mb-6 text-4xl font-bold text-white md:text-5xl">{{ __('site.afghan_culture') }}</h2>
+                    <p class="mb-8 text-xl leading-relaxed text-white/80">{{ __('site.story_p1') }}</p>
+                    <p class="mb-8 text-white/70">{{ __('site.story_p2') }}</p>
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-8 py-3 font-semibold text-white transition hover:bg-white hover:text-black">
+                        {{ __('site.learn_more') }} <span class="ml-2" aria-hidden="true">→</span>
+                    </a>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-square overflow-hidden rounded-[3rem]">
+                        <img src="{{ asset('images/kabulfit-live/craftsmanship.jpg') }}" alt="{{ __('site.craftsmanship_alt') }}" loading="lazy" decoding="async" class="h-full w-full object-cover">
+                    </div>
+                    <div class="absolute -bottom-3 -left-3 rounded-xl bg-white p-3 shadow-xl sm:-bottom-4 sm:-left-4 sm:rounded-[1.5rem] sm:p-4 md:-bottom-6 md:-left-6 md:rounded-[2rem] md:p-6">
+                        <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10 sm:h-12 sm:w-12 md:h-16 md:w-16">
+                                <x-icon name="scissors" class="!h-5 !w-5 text-[#881C27] sm:!h-6 sm:!w-6 md:!h-8 md:!w-8" />
+                            </div>
+                            <div>
+                                <p class="text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">100+</p>
+                                <p class="text-xs text-gray-500 sm:text-sm md:text-base">{{ __('site.years_tradition') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="testimonial-grid">
-            <figure class="testimonial-card live-review-card">
-                <div class="live-stars" aria-label="5 out of 5">★★★★★</div>
-                <blockquote>“{{ __('site.review_1_quote') }}”</blockquote>
-                <figcaption><span class="avatar" aria-hidden="true">A</span><div><strong>Ahmad K.</strong><small>Dubai, UAE</small></div></figcaption>
-            </figure>
-            <figure class="testimonial-card live-review-card">
-                <div class="live-stars" aria-label="5 out of 5">★★★★★</div>
-                <blockquote>“{{ __('site.review_2_quote') }}”</blockquote>
-                <figcaption><span class="avatar" aria-hidden="true">S</span><div><strong>Sarah M.</strong><small>London, UK</small></div></figcaption>
-            </figure>
-            <figure class="testimonial-card live-review-card">
-                <div class="live-stars" aria-label="5 out of 5">★★★★★</div>
-                <blockquote>“{{ __('site.review_3_quote') }}”</blockquote>
-                <figcaption><span class="avatar" aria-hidden="true">F</span><div><strong>Farid A.</strong><small>Toronto, Canada</small></div></figcaption>
-            </figure>
+    </section>
+
+    @if ($bestSellerProducts->isNotEmpty())
+        <section class="bg-gradient-to-b from-[#FDF5E6] to-[#FDFBF7] py-20" data-section="best-sellers">
+            <div class="mx-auto max-w-7xl px-4">
+                <div class="mb-12 text-center">
+                    <span class="mb-4 inline-flex items-center rounded-full bg-[#2A6867] px-3 py-1 text-sm font-semibold text-white">
+                        <span class="mr-1" aria-hidden="true">★</span>{{ __('site.top_rated') }}
+                    </span>
+                    <h2 class="mb-4 text-4xl font-bold text-gray-900">{{ __('site.best_sellers') }}</h2>
+                    <p class="text-gray-600">{{ __('site.customers_favorite') }}</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+                    @foreach ($bestSellerProducts as $product)
+                        <x-product-card :product="$product" />
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
+    <section class="py-20" data-section="measurements" id="tailoring">
+        <div class="mx-auto max-w-7xl px-4">
+            <div class="overflow-hidden rounded-xl border border-white/10 bg-gradient-to-r from-[#881C27] to-[#2A6867] shadow-sm">
+                <div class="grid gap-8 md:grid-cols-2">
+                    <div class="flex flex-col justify-center p-8 md:p-12">
+                        <span class="mb-6 inline-flex w-fit items-center rounded-full bg-white/20 px-3 py-1 text-sm font-semibold text-white">
+                            <x-icon name="ruler" class="!mr-2 !h-4 !w-4" />{{ __('site.perfect_fit_technology') }}
+                        </span>
+                        <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">{{ __('site.measurements_title') }}</h2>
+                        <p class="mb-8 text-white/80">{{ __('site.measurements_text') }}</p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex items-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white ring-1 ring-white/20 transition hover:opacity-90">
+                                {{ __('site.start_measuring') }} <span class="ml-2" aria-hidden="true">→</span>
+                            </a>
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-6 py-3 font-semibold text-white transition hover:bg-white hover:text-gray-900">
+                                <span class="mr-2" aria-hidden="true">▶</span>{{ __('site.watch_tutorial') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="relative h-[400px] md:h-auto">
+                        <img src="{{ asset('images/kabulfit-live/measurement-guide.png') }}" alt="{{ __('site.measurement_guide') }}" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent md:hidden"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section class="bg-[#FDFBF7] py-16" data-section="heritage-content" id="heritage-content">
+        <div class="mx-auto max-w-4xl px-4">
+            <h2 class="mb-6 text-center text-2xl font-bold text-gray-900 md:text-3xl">{{ __('site.seo_heading') }}</h2>
+            <div class="text-gray-700">
+                <p class="mb-5 leading-7">{{ __('site.seo_intro') }}</p>
+
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
+                <p class="leading-7">{{ __('site.gand_text') }}</p>
+
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
+                <p class="leading-7">{{ __('site.embroidery_text') }}</p>
+
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
+                <p class="leading-7">{{ __('site.tailoring_text') }}</p>
+            </div>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+                <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white transition hover:opacity-90">
+                    {{ __('site.shop_afghan_clothes') }}
+                </a>
+                <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex rounded-full border-2 border-[#881C27] px-6 py-3 font-semibold text-[#881C27] transition hover:bg-[#881C27] hover:text-white">
+                    {{ __('site.start_custom_tailoring') }}
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white py-20" data-section="testimonials" aria-labelledby="testimonials-title">
+        <div class="mx-auto max-w-7xl px-4">
+            <div class="mb-12 text-center">
+                <h2 id="testimonials-title" class="mb-4 text-4xl font-bold text-gray-900">{{ __('site.testimonials_title') }}</h2>
+                <p class="text-gray-600">{{ __('site.testimonials_intro') }}</p>
+            </div>
+
+            <div class="grid gap-8 md:grid-cols-3">
+                @foreach ([
+                    ['Ahmad K.', 'Dubai, UAE', __('site.review_1_quote')],
+                    ['Sarah M.', 'London, UK', __('site.review_2_quote')],
+                    ['Farid A.', 'Toronto, Canada', __('site.review_3_quote')],
+                ] as [$name, $location, $quote])
+                    <figure class="h-full rounded-xl border border-gray-200 bg-white shadow-sm">
+                        <div class="p-6">
+                            <div class="mb-4 flex gap-1 text-xl text-[#2A6867]" aria-label="5 out of 5">★★★★★</div>
+                            <blockquote class="mb-6 italic text-gray-700">“{{ $quote }}”</blockquote>
+                            <figcaption class="flex items-center gap-3">
+                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10 font-bold text-[#881C27]" aria-hidden="true">{{ mb_substr($name, 0, 1) }}</span>
+                                <span>
+                                    <strong class="block font-semibold text-gray-900">{{ $name }}</strong>
+                                    <small class="text-sm text-gray-500">{{ $location }}</small>
+                                </span>
+                            </figcaption>
+                        </div>
+                    </figure>
+                @endforeach
+            </div>
+        </div>
+    </section>
+</div>
 @endsection
