@@ -4,17 +4,42 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Models\BlogPostTranslation;
 use App\Models\ContentPage;
+use App\Models\ContentPageTranslation;
 use App\Services\Admin\AuditService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ContentController extends Controller
 {
+    private const RESERVED_PAGE_SLUGS = [
+        'shop',
+        'categories',
+        'collections',
+        'products',
+        'blog',
+        'login',
+        'register',
+        'forgot-password',
+        'reset-password',
+        'verify-email',
+        'account',
+        'measurements',
+        'tailoring',
+        'tailor',
+        'cart',
+        'wishlist',
+        'checkout',
+        'orders',
+        'admin',
+    ];
+
     public function index(): View
     {
         $this->authorize('viewAny', ContentPage::class);
@@ -30,6 +55,7 @@ class ContentController extends Controller
     {
         $this->authorize('update', $page);
         $data = $this->contentData($request);
+        $this->validatePageSlugs($data['translations'], $page);
 
         DB::transaction(function () use ($page, $data): void {
             $page->update(['is_published' => (bool) ($data['is_published'] ?? false)]);
@@ -44,7 +70,8 @@ class ContentController extends Controller
     public function storePost(Request $request, AuditService $audit): RedirectResponse
     {
         $this->authorize('create', BlogPost::class);
-        $data = $this->contentData($request, true);
+        $data = $this->contentData($request);
+        $this->validatePostSlugs($data['translations']);
 
         $post = DB::transaction(function () use ($request, $data): BlogPost {
             $post = BlogPost::query()->create([
@@ -66,7 +93,8 @@ class ContentController extends Controller
     public function updatePost(Request $request, string $locale, BlogPost $post, AuditService $audit): RedirectResponse
     {
         $this->authorize('update', $post);
-        $data = $this->contentData($request, true);
+        $data = $this->contentData($request);
+        $this->validatePostSlugs($data['translations'], $post);
 
         DB::transaction(function () use ($post, $data): void {
             $published = (bool) ($data['is_published'] ?? false);
@@ -92,7 +120,7 @@ class ContentController extends Controller
         return back()->with('status', 'Blog post deleted.');
     }
 
-    private function contentData(Request $request, bool $post = false): array
+    private function contentData(Request $request): array
     {
         return $request->validate([
             'is_published' => 'nullable|boolean',
@@ -104,6 +132,52 @@ class ContentController extends Controller
             'translations.*.seo_title' => 'nullable|string|max:255',
             'translations.*.seo_description' => 'nullable|string|max:320',
         ]);
+    }
+
+    private function validatePageSlugs(array $translations, ContentPage $page): void
+    {
+        foreach ($translations as $locale => $translation) {
+            $slug = trim((string) $translation['slug']);
+
+            if (in_array($slug, self::RESERVED_PAGE_SLUGS, true)) {
+                throw ValidationException::withMessages([
+                    "translations.{$locale}.slug" => 'This slug is reserved by the application.',
+                ]);
+            }
+
+            $exists = ContentPageTranslation::query()
+                ->where('locale', $locale)
+                ->where('slug', $slug)
+                ->where('content_page_id', '!=', $page->id)
+                ->exists();
+
+            if ($exists) {
+                throw ValidationException::withMessages([
+                    "translations.{$locale}.slug" => 'This page slug is already in use for this language.',
+                ]);
+            }
+        }
+    }
+
+    private function validatePostSlugs(array $translations, ?BlogPost $post = null): void
+    {
+        foreach ($translations as $locale => $translation) {
+            $slug = trim((string) $translation['slug']);
+
+            $query = BlogPostTranslation::query()
+                ->where('locale', $locale)
+                ->where('slug', $slug);
+
+            if ($post) {
+                $query->where('blog_post_id', '!=', $post->id);
+            }
+
+            if ($query->exists()) {
+                throw ValidationException::withMessages([
+                    "translations.{$locale}.slug" => 'This journal slug is already in use for this language.',
+                ]);
+            }
+        }
     }
 
     private function syncTranslations(ContentPage|BlogPost $model, array $translations): void
