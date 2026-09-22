@@ -136,6 +136,117 @@ class TailoringFlowTest extends TestCase
         );
     }
 
+    public function test_customer_can_view_only_their_tailoring_history_on_web_and_api(): void
+    {
+        $user = User::factory()->create();
+        $other = User::factory()->create();
+        $profile = $this->profile($user, 'perahan_tunban');
+
+        Sanctum::actingAs($user);
+        $created = $this->postJson('/api/v1/en/tailoring', [
+            'product_slug' => 'classic-afghan-perahan-tunban',
+            'variant_sku' => 'KF-M-PT-001-M-BLACK',
+            'measurement_profile_uuid' => $profile->uuid,
+            'notes' => 'History visibility test.',
+        ])->assertCreated();
+
+        $uuid = $created->json('data.uuid');
+
+        $this->getJson('/api/v1/en/tailoring')
+            ->assertOk()
+            ->assertJsonPath('data.0.uuid', $uuid)
+            ->assertJsonMissingPath('data.0.id');
+
+        $this->getJson('/api/v1/en/tailoring/'.$uuid)
+            ->assertOk()
+            ->assertJsonPath('data.uuid', $uuid)
+            ->assertJsonPath('data.product.sku', 'KF-M-PT-001')
+            ->assertJsonMissingPath('data.id');
+
+        $this->actingAs($user)
+            ->get('/en/tailoring')
+            ->assertOk()
+            ->assertSee($uuid)
+            ->assertSee('Tailoring History');
+
+        $this->actingAs($user)
+            ->get('/en/tailoring/'.$uuid)
+            ->assertOk()
+            ->assertSee('History visibility test.')
+            ->assertSee('Current profile measurements');
+
+        Sanctum::actingAs($other);
+        $this->getJson('/api/v1/en/tailoring/'.$uuid)->assertNotFound();
+
+        $this->actingAs($other)
+            ->get('/en/tailoring/'.$uuid)
+            ->assertNotFound();
+    }
+
+    public function test_tailoring_history_uses_order_snapshot_after_profile_changes(): void
+    {
+        $user = User::factory()->create(['preferred_locale' => 'en']);
+        $profile = $this->profile($user, 'perahan_tunban');
+        Sanctum::actingAs($user);
+
+        $created = $this->postJson('/api/v1/en/tailoring', [
+            'product_slug' => 'classic-afghan-perahan-tunban',
+            'variant_sku' => 'KF-M-PT-001-M-BLACK',
+            'measurement_profile_uuid' => $profile->uuid,
+            'notes' => 'Snapshot history test.',
+        ])->assertCreated();
+
+        $address = $this->address($user);
+        $order = app(CheckoutService::class)->create(
+            $user,
+            app(CartService::class)->forUser($user),
+            $address,
+            ShippingMethod::where('code', 'standard-af')->firstOrFail(),
+        );
+
+        $item = $order->items()->with('measurements')->firstOrFail();
+        $snapshot = $item->measurements->firstOrFail();
+        $original = (float) $snapshot->value_cm;
+
+        $profile->values()->whereHas('definition', fn ($query) => $query->where('code', $snapshot->code))
+            ->firstOrFail()
+            ->update(['value_cm' => $original + 7]);
+
+        $this->getJson('/api/v1/en/tailoring/'.$created->json('data.uuid'))
+            ->assertOk()
+            ->assertJsonPath('data.status', 'ordered')
+            ->assertJsonPath('data.order.uuid', $order->uuid)
+            ->assertJsonPath('data.measurements.0.value_cm', $original);
+
+        $this->actingAs($user)
+            ->get('/en/tailoring/'.$created->json('data.uuid'))
+            ->assertOk()
+            ->assertSee('Measurements at order time')
+            ->assertSee('immutable order-time snapshot');
+    }
+
+    public function test_tailoring_pages_have_complete_english_dari_and_pashto_copy(): void
+    {
+        $user = User::factory()->create();
+        $this->profile($user, 'perahan_tunban');
+
+        $this->actingAs($user)
+            ->get('/en/products/classic-afghan-perahan-tunban/tailor')
+            ->assertOk()
+            ->assertSee('Choose a compatible saved measurement profile')
+            ->assertDontSee('measurements.tailoring_intro');
+
+        $this->actingAs($user)
+            ->get('/fa/tailoring')
+            ->assertOk()
+            ->assertSee('تاریخچه خیاطی');
+
+        $this->actingAs($user)
+            ->get('/ps/tailoring')
+            ->assertOk()
+            ->assertSee('د خیاطۍ تاریخچه');
+    }
+
     private function profile(User $user, string $garmentType)
     {
         $definitions = MeasurementDefinition::query()
