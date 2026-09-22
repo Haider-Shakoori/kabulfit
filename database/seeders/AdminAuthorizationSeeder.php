@@ -65,12 +65,12 @@ class AdminAuthorizationSeeder extends Seeder
         }
 
         foreach ([
-            'seo.home.title.en' => ['seo', 'KabulFit — Afghan Fashion & Custom Tailoring'],
-            'seo.home.title.fa' => ['seo', 'کابل‌فیت — پوشاک افغانی و خیاطی سفارشی'],
-            'seo.home.title.ps' => ['seo', 'کابل‌فټ — افغان فېشن او سفارشي خیاطي'],
-            'seo.home.description.en' => ['seo', 'Discover Afghan clothing, custom tailoring and contemporary KabulFit designs.'],
-            'seo.home.description.fa' => ['seo', 'پوشاک افغانی، خیاطی سفارشی و طرح‌های معاصر کابل‌فیت را ببینید.'],
-            'seo.home.description.ps' => ['seo', 'افغان کالي، سفارشي خیاطي او د کابل‌فټ معاصر ډیزاینونه وپلټئ.'],
+            'seo.home.title.en' => ['seo', 'Authentic Afghan Clothes & Custom Tailoring | KabulFit'],
+            'seo.home.title.fa' => ['seo', 'لباس اصیل افغانی و خیاطی سفارشی | کابل‌فیت'],
+            'seo.home.title.ps' => ['seo', 'اصلي افغان جامې او سفارشي خیاطي | کابل‌فټ'],
+            'seo.home.description.en' => ['seo', 'Discover authentic Afghan clothing, Perahan Tunban, embroidered dresses and made-to-measure tailoring from KabulFit.'],
+            'seo.home.description.fa' => ['seo', 'لباس‌های اصیل افغانی، پیرهن تنبان، لباس‌های خامک‌دوزی‌شده و خیاطی سفارشی را در کابل‌فیت کشف کنید.'],
+            'seo.home.description.ps' => ['seo', 'په کابل‌فټ کې اصلي افغان جامې، پیرهن تنبان، ګنډل شوي لباسونه او د اندازې مطابق خیاطي ومومئ.'],
             'site.contact_email' => ['general', 'info@kabulfit.com'],
         ] as $key => [$group, $value]) {
             Setting::query()->updateOrCreate(
