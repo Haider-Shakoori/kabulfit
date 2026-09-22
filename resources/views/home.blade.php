@@ -38,7 +38,11 @@
     ];
 @endphp
 
-<div class="min-h-screen" x-data="{ hero: 0 }" x-init="setInterval(() => hero = (hero + 1) % {{ count($heroSlides) }}, 6000)">
+<div
+    class="min-h-screen"
+    x-data='{ hero: 0, slides: @json($heroSlides, JSON_HEX_APOS | JSON_HEX_QUOT) }'
+    x-init="setInterval(() => hero = (hero + 1) % slides.length, 6000)"
+>
     <section class="relative h-screen overflow-hidden" data-section="hero">
         @foreach ($heroSlides as $index => $slide)
             <div
@@ -60,44 +64,41 @@
 
         <div class="absolute inset-0 z-20 flex items-center">
             <div class="mx-auto w-full max-w-7xl px-4">
-                @foreach ($heroSlides as $index => $slide)
-                    <div
-                        x-show="hero === {{ $index }}"
-                        @if($index !== 0) x-cloak @endif
-                        class="mt-16 max-w-2xl sm:mt-20"
-                    >
-                        <span class="mb-4 inline-flex items-center rounded-full border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white sm:mb-6 sm:text-sm">
-                            <x-icon name="scissors" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
-                            {{ __('site.featured_label') }}
-                        </span>
+                <div class="mt-16 max-w-2xl sm:mt-20">
+                    <span class="mb-4 inline-flex items-center rounded-full border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white sm:mb-6 sm:text-sm">
+                        <x-icon name="scissors" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
+                        {{ __('site.featured_label') }}
+                    </span>
 
-                        <h1 class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl">
-                            {{ $slide['title'] }}
-                        </h1>
+                    <h1
+                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl"
+                        x-text="slides[hero].title"
+                    >{{ $heroSlides[0]['title'] }}</h1>
 
-                        <p class="mb-6 text-base text-white/80 sm:mb-8 sm:text-lg md:text-xl lg:text-2xl">
-                            {{ $slide['subtitle'] }}
-                        </p>
+                    <p
+                        class="mb-6 text-base text-white/80 sm:mb-8 sm:text-lg md:text-xl lg:text-2xl"
+                        x-text="slides[hero].subtitle"
+                    >{{ $heroSlides[0]['subtitle'] }}</p>
 
-                        <div class="flex flex-wrap gap-3 sm:gap-4">
-                            <a
-                                href="{{ $slide['href'] }}"
-                                class="inline-flex items-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
-                            >
-                                {{ $slide['cta'] }}
-                                <span class="ml-1 text-lg leading-none sm:ml-2" aria-hidden="true">→</span>
-                            </a>
+                    <div class="flex flex-wrap gap-3 sm:gap-4">
+                        <a
+                            :href="slides[hero].href"
+                            href="{{ $heroSlides[0]['href'] }}"
+                            class="inline-flex items-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                        >
+                            <span x-text="slides[hero].cta">{{ $heroSlides[0]['cta'] }}</span>
+                            <span class="ml-1 text-lg leading-none sm:ml-2" aria-hidden="true">→</span>
+                        </a>
 
-                            <a
-                                href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}"
-                                class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
-                            >
-                                <x-icon name="ruler" class="!mr-1 !h-4 !w-4 sm:!mr-2 sm:!h-5 sm:!w-5" />
-                                {{ __('site.measurement_guide') }}
-                            </a>
-                        </div>
+                        <a
+                            href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}"
+                            class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                        >
+                            <x-icon name="ruler" class="!mr-1 !h-4 !w-4 sm:!mr-2 sm:!h-5 sm:!w-5" />
+                            {{ __('site.measurement_guide') }}
+                        </a>
                     </div>
-                @endforeach
+                </div>
             </div>
         </div>
 
