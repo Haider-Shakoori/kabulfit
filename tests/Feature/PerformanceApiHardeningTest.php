@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Product;
 use App\Models\ProductMediaDerivative;
 use App\Models\User;
+use App\Services\Catalog\CatalogFilterOptions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -102,21 +103,28 @@ class PerformanceApiHardeningTest extends TestCase
 
         $this->getJson('/api/v1/en/catalog?per_page=5')->assertOk();
 
-        $firstCount = count(DB::getQueryLog());
+        $queryCount = count(DB::getQueryLog());
 
         $this->assertLessThanOrEqual(
             24,
-            $firstCount,
-            "Catalog query count exceeded the Batch 11 N+1 ceiling: {$firstCount}",
+            $queryCount,
+            "Catalog query count exceeded the Batch 11 N+1 ceiling: {$queryCount}",
         );
 
+        Cache::clear();
         DB::flushQueryLog();
 
-        $this->getJson('/api/v1/en/catalog?per_page=5')->assertOk();
+        $filters = app(CatalogFilterOptions::class);
+        $filters->forApi('en');
+        $firstMetadataCount = count(DB::getQueryLog());
 
-        $secondCount = count(DB::getQueryLog());
+        $this->assertGreaterThan(0, $firstMetadataCount);
+        $this->assertTrue(Cache::has('catalog:filters:api:en:v1'));
 
-        $this->assertLessThan($firstCount, $secondCount);
+        DB::flushQueryLog();
+        $filters->forApi('en');
+
+        $this->assertSame(0, count(DB::getQueryLog()));
     }
 
     public function test_responsive_media_sources_are_exposed_to_web_and_mobile_clients(): void
