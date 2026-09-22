@@ -28,7 +28,8 @@ class CatalogDomainTest extends TestCase
         $this->assertCount(4, $product->variants);
         $this->assertSame(14, $product->availableStock());
         $this->assertNotNull($product->primaryMedia);
-        $this->assertSame('image/svg+xml', $product->primaryMedia->mime_type);
+        $this->assertSame('image/webp', $product->primaryMedia->mime_type);
+        $this->assertStringStartsWith('images/kabulfit-live/catalog/product-', $product->primaryMedia->path);
         $this->assertGreaterThanOrEqual(1, $product->collections->count());
         $this->assertGreaterThanOrEqual(1, $product->relatedProducts()->count());
     }
