@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderItem extends Model
 {
@@ -23,6 +24,11 @@ class OrderItem extends Model
             'line_total_minor' => 'integer',
             'is_custom_tailored' => 'boolean',
         ];
+    }
+
+    public function measurements(): HasMany
+    {
+        return $this->hasMany(OrderItemMeasurement::class);
     }
 
     public function order(): BelongsTo

@@ -54,6 +54,16 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(TailoringRequest::class);
     }
 
+    public function measurementProfiles(): HasMany
+    {
+        return $this->hasMany(MeasurementProfile::class);
+    }
+
+    public function tailoringRequests(): HasMany
+    {
+        return $this->hasMany(TailoringRequest::class);
+    }
+
     public function preferredLocale(): string
     {
         return in_array($this->preferred_locale, config('kabulfit.supported_locales'), true)

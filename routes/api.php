@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\V1\CatalogController;
 use App\Http\Controllers\Api\V1\CommerceController;
 use App\Http\Controllers\Api\V1\MeasurementController;
+use App\Http\Controllers\Api\V1\MeasurementController;
+use App\Http\Controllers\Api\V1\TailoringController;
 use App\Http\Controllers\Api\V1\MobileAddressController;
 use App\Http\Controllers\Api\V1\MobileAuthController;
 use App\Http\Controllers\Api\V1\MobilePasswordController;
@@ -54,6 +56,13 @@ Route::prefix('v1/{locale}')
             Route::put('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'update'])->name('api.v1.measurement-profiles.update');
             Route::delete('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('api.v1.measurement-profiles.destroy');
             Route::post('/tailoring', [TailoringController::class, 'store'])->name('api.v1.tailoring.store');
+
+            Route::get('/measurements/definitions', [MeasurementController::class, 'definitions'])->name('api.v1.measurements.definitions');
+            Route::get('/measurements/profiles', [MeasurementController::class, 'index'])->name('api.v1.measurements.index');
+            Route::post('/measurements/profiles', [MeasurementController::class, 'store'])->name('api.v1.measurements.store');
+            Route::put('/measurements/profiles/{profile:uuid}', [MeasurementController::class, 'update'])->name('api.v1.measurements.update');
+            Route::delete('/measurements/profiles/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('api.v1.measurements.destroy');
+            Route::post('/tailoring/requests', [TailoringController::class, 'store'])->name('api.v1.tailoring.store');
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('api.v1.cart.items.store');
