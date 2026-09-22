@@ -11,7 +11,6 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyRedirectController;
-use App\Http\Controllers\MeasurementController;
 use App\Http\Controllers\MeasurementProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
@@ -75,10 +74,6 @@ Route::prefix('{locale}')
             Route::get('/products/{slug}/tailor', [TailoringController::class, 'create'])->name('tailoring.create');
             Route::post('/products/{slug}/tailor', [TailoringController::class, 'store'])->name('tailoring.store');
 
-            Route::get('/measurements', [MeasurementController::class, 'index'])->name('measurements.index');
-            Route::post('/measurements', [MeasurementController::class, 'store'])->name('measurements.store');
-            Route::put('/measurements/{profile:uuid}', [MeasurementController::class, 'update'])->name('measurements.update');
-            Route::delete('/measurements/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('measurements.destroy');
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('cart.items.store');

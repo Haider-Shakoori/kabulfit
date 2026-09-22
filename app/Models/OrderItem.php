@@ -25,11 +25,6 @@ class OrderItem extends Model
         ];
     }
 
-    public function measurements(): HasMany
-    {
-        return $this->hasMany(OrderItemMeasurement::class);
-    }
-
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

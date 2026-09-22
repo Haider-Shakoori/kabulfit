@@ -55,11 +55,6 @@ Route::prefix('v1/{locale}')
             Route::delete('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('api.v1.measurement-profiles.destroy');
             Route::post('/tailoring', [TailoringController::class, 'store'])->name('api.v1.tailoring.store');
 
-            Route::get('/measurements/profiles', [MeasurementController::class, 'index'])->name('api.v1.measurements.index');
-            Route::post('/measurements/profiles', [MeasurementController::class, 'store'])->name('api.v1.measurements.store');
-            Route::put('/measurements/profiles/{profile:uuid}', [MeasurementController::class, 'update'])->name('api.v1.measurements.update');
-            Route::delete('/measurements/profiles/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('api.v1.measurements.destroy');
-            Route::post('/tailoring/requests', [TailoringController::class, 'store'])->name('api.v1.tailoring.requests.store');
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('api.v1.cart.items.store');

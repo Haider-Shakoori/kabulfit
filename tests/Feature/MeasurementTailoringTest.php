@@ -24,7 +24,7 @@ class MeasurementTailoringTest extends TestCase
     {
         $u = User::factory()->create();
         Sanctum::actingAs($u);
-        $r = $this->postJson('/api/v1/en/measurements/profiles', ['name' => 'My Perahan', 'garment_type' => 'perahan_tunban', 'display_unit' => 'in', 'is_default' => true, 'measurements' => [
+        $r = $this->postJson('/api/v1/en/measurement-profiles', ['name' => 'My Perahan', 'garment_type' => 'perahan_tunban', 'display_unit' => 'in', 'is_default' => true, 'measurements' => [
             ['code' => 'chest', 'value' => 40], ['code' => 'shoulder', 'value' => 18], ['code' => 'sleeve', 'value' => 24], ['code' => 'shirt_length', 'value' => 42], ['code' => 'waist', 'value' => 36], ['code' => 'trouser_length', 'value' => 40],
         ]]);
         $r->assertCreated()->assertJsonPath('data.display_unit', 'in')->assertJsonPath('data.is_default', true)->assertJsonPath('data.measurements.0.unit', 'in');
@@ -35,7 +35,7 @@ class MeasurementTailoringTest extends TestCase
     {
         $u = User::factory()->create();
         Sanctum::actingAs($u);
-        $this->postJson('/api/v1/en/measurements/profiles', ['name' => 'Bad', 'garment_type' => 'perahan_tunban', 'display_unit' => 'cm', 'measurements' => [
+        $this->postJson('/api/v1/en/measurement-profiles', ['name' => 'Bad', 'garment_type' => 'perahan_tunban', 'display_unit' => 'cm', 'measurements' => [
             ['code' => 'chest', 'value' => 20], ['code' => 'shoulder', 'value' => 45], ['code' => 'sleeve', 'value' => 60], ['code' => 'shirt_length', 'value' => 100], ['code' => 'waist', 'value' => 90], ['code' => 'trouser_length', 'value' => 100],
         ]])->assertUnprocessable();
     }
@@ -46,7 +46,7 @@ class MeasurementTailoringTest extends TestCase
         $other = User::factory()->create();
         $profile = MeasurementProfile::create(['uuid' => (string) Str::uuid(), 'user_id' => $owner->id, 'name' => 'Private', 'garment_type' => 'dress', 'display_unit' => 'cm']);
         Sanctum::actingAs($other);
-        $this->putJson('/api/v1/en/measurements/profiles/'.$profile->uuid, ['name' => 'Changed', 'garment_type' => 'dress', 'display_unit' => 'cm', 'measurements' => []])->assertNotFound();
+        $this->putJson('/api/v1/en/measurement-profiles/'.$profile->uuid, ['name' => 'Changed', 'garment_type' => 'dress', 'display_unit' => 'cm', 'measurements' => []])->assertNotFound();
     }
 
     public function test_mobile_customer_can_create_tailoring_request_from_owned_profile(): void
@@ -54,7 +54,7 @@ class MeasurementTailoringTest extends TestCase
         $u = User::factory()->create();
         Sanctum::actingAs($u);
         $profile = MeasurementProfile::create(['uuid' => (string) Str::uuid(), 'user_id' => $u->id, 'name' => 'Dress', 'garment_type' => 'dress', 'display_unit' => 'cm']);
-        $this->postJson('/api/v1/en/tailoring/requests', ['product_slug' => 'hand-embroidered-afghan-dress', 'measurement_profile_uuid' => $profile->uuid, 'notes' => 'Wedding fit'])->assertCreated()->assertJsonPath('data.status', 'ready');
+        $this->postJson('/api/v1/en/tailoring', ['product_slug' => 'hand-embroidered-afghan-dress', 'measurement_profile_uuid' => $profile->uuid, 'notes' => 'Wedding fit'])->assertCreated()->assertJsonPath('data.status', 'ready');
         $this->assertDatabaseHas('tailoring_requests', ['user_id' => $u->id, 'status' => 'ready']);
     }
 }
