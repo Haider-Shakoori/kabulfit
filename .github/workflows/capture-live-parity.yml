@@ -26,7 +26,7 @@ jobs:
         run: |
           mkdir -p live-parity
           npx playwright screenshot --browser=chromium --viewport-size="1440,1200" --full-page https://kabulfit.com/ live-parity/desktop.png
-          npx playwright screenshot --browser=chromium --device="iPhone 13" --full-page https://kabulfit.com/ live-parity/mobile.png
+          npx playwright screenshot --browser=chromium --viewport-size="390,844" --full-page https://kabulfit.com/ live-parity/mobile.png
           curl -LfsS https://kabulfit.com/ -o live-parity/index.html
           wget --page-requisites --convert-links --adjust-extension --span-hosts --domains=kabulfit.com,www.kabulfit.com --directory-prefix=live-parity/site https://kabulfit.com/ || true
           find live-parity -type f -print | sort > live-parity/manifest.txt
