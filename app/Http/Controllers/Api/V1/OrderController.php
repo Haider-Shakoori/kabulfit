@@ -13,12 +13,13 @@ class OrderController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+        $data = $request->validate(['per_page' => 'nullable|integer|min:1|max:50']);
         $orders = $request->user()
             ->orders()
             ->withCount('items')
             ->with(['shipments.events'])
             ->latest()
-            ->paginate(20);
+            ->paginate((int) ($data['per_page'] ?? 20));
 
         return response()->json([
             'data' => $orders->getCollection()->map(fn (Order $order) => $this->summary($order))->values(),

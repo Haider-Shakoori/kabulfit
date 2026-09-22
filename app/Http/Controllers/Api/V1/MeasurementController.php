@@ -46,14 +46,25 @@ class MeasurementController extends Controller
 
     public function index(Request $request): JsonResponse
     {
+        $data = $request->validate(['per_page' => 'nullable|integer|min:1|max:50']);
         $profiles = $request->user()
             ->measurementProfiles()
             ->with('values.definition.translations')
             ->orderByDesc('is_default')
             ->orderBy('name')
-            ->get();
+            ->paginate((int) ($data['per_page'] ?? 20));
 
-        return response()->json(['data' => $profiles->map(fn ($profile) => $this->profileData($profile))]);
+        return response()->json([
+            'data' => $profiles->getCollection()
+                ->map(fn ($profile) => $this->profileData($profile))
+                ->values(),
+            'meta' => [
+                'current_page' => $profiles->currentPage(),
+                'last_page' => $profiles->lastPage(),
+                'per_page' => $profiles->perPage(),
+                'total' => $profiles->total(),
+            ],
+        ]);
     }
 
     public function store(MeasurementProfileRequest $request, MeasurementProfileService $service): JsonResponse

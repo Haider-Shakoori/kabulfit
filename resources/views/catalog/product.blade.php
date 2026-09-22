@@ -16,7 +16,13 @@
             <div class="product-gallery" aria-label="{{ __('site.product_gallery') }}">
                 @forelse ($product->media as $media)
                     <figure @class(['product-gallery-item', 'is-primary' => $media->is_primary])>
-                        <img src="{{ $media->url() }}" width="{{ $media->width }}" height="{{ $media->height }}" alt="{{ $media->translation()?->alt_text }}" @if (! $media->is_primary) loading="lazy" @else fetchpriority="high" @endif>
+                        <x-responsive-product-image
+                            :media="$media"
+                            :alt="$media->translation()?->alt_text"
+                            :loading="$media->is_primary ? 'eager' : 'lazy'"
+                            :fetchpriority="$media->is_primary ? 'high' : null"
+                            sizes="(max-width: 860px) 100vw, 50vw"
+                        />
                     </figure>
                 @empty
                     <div class="product-gallery-placeholder" role="img" aria-label="{{ __('site.product_image_placeholder', ['product' => $translation?->name]) }}"><span>KabulFit</span></div>

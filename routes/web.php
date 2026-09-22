@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
+use App\Http\Controllers\DefaultLocaleRedirectController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyPageRedirectController;
@@ -33,7 +34,7 @@ use App\Http\Controllers\TailoringController;
 use App\Http\Controllers\TailorWorkspaceController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect('/'.config('kabulfit.default_locale')));
+Route::get('/', DefaultLocaleRedirectController::class)->name('locale.default');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitemap');
 Route::get('/sitemaps/catalog.xml', [SeoController::class, 'catalogSitemap'])->name('sitemaps.catalog');

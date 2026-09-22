@@ -83,8 +83,9 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('password-reset', fn (Request $request) => Limit::perMinute(5)
             ->by('password-reset:'.($request->ip() ?: 'unknown')));
 
-        RateLimiter::for('account-api', fn (Request $request) => Limit::perMinute(120)
-            ->by('account:'.($request->user()?->getAuthIdentifier() ?? $request->ip() ?? 'unknown')));
+        RateLimiter::for('account-api', fn (Request $request) => Limit::perMinute(
+            in_array($request->method(), ['GET', 'HEAD'], true) ? 180 : 60
+        )->by('account:'.($request->user()?->getAuthIdentifier() ?? $request->ip() ?? 'unknown')));
 
         VerifyEmail::createUrlUsing(function (object $notifiable): string {
             return URL::temporarySignedRoute(

@@ -36,6 +36,31 @@ class ProductMedia extends Model
         return $this->hasMany(ProductMediaTranslation::class);
     }
 
+    public function derivatives(): HasMany
+    {
+        return $this->hasMany(ProductMediaDerivative::class)
+            ->orderBy('format')
+            ->orderBy('width');
+    }
+
+    public function responsiveSources(): array
+    {
+        $derivatives = $this->relationLoaded('derivatives')
+            ? $this->derivatives
+            : $this->derivatives()->get();
+
+        return [
+            'avif' => $derivatives
+                ->where('format', 'avif')
+                ->map(fn (ProductMediaDerivative $item): string => $item->url().' '.$item->width.'w')
+                ->implode(', '),
+            'webp' => $derivatives
+                ->where('format', 'webp')
+                ->map(fn (ProductMediaDerivative $item): string => $item->url().' '.$item->width.'w')
+                ->implode(', '),
+        ];
+    }
+
     public function translation(?string $locale = null): ?ProductMediaTranslation
     {
         $locale ??= app()->getLocale();

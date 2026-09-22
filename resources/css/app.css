@@ -1605,3 +1605,23 @@ button, a { -webkit-tap-highlight-color: transparent; }
     .measurement-field { grid-template-columns: 1fr; }
     .measurement-field > small { grid-column: auto; }
 }
+
+
+/* Batch 11 — responsive product media */
+.product-media picture,
+.product-media picture img,
+.product-gallery-item picture,
+.product-gallery-item picture img {
+    width: 100%;
+    height: 100%;
+}
+
+.product-media picture,
+.product-gallery-item picture {
+    display: block;
+}
+
+.product-media picture img,
+.product-gallery-item picture img {
+    object-fit: cover;
+}

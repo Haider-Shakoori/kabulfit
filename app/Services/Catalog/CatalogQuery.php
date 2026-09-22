@@ -111,6 +111,7 @@ class CatalogQuery
             'translations',
             'category.translations',
             'primaryMedia.translations',
+            'primaryMedia.derivatives',
             'variants' => fn ($query) => $query
                 ->where('is_active', true)
                 ->with(['size', 'color.translations', 'inventory'])
@@ -123,6 +124,7 @@ class CatalogQuery
         return [
             ...self::cardEagerLoads(),
             'media.translations',
+            'media.derivatives',
             'collections.translations',
         ];
     }
