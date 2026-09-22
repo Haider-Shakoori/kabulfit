@@ -1,23 +1,22 @@
 @import "tailwindcss";
 @import "./auth.css";
-@import "./live-site.css";
 
 :root {
-    --brand-primary: #173b2d;
-    --brand-secondary: #7c2f28;
-    --brand-accent: #c99a4a;
-    --brand-background: #f8f5ef;
+    --brand-primary: #881c27;
+    --brand-secondary: #2a6867;
+    --brand-accent: #d6ad65;
+    --brand-background: #fdfbf7;
     --brand-surface: #ffffff;
-    --brand-text: #20241f;
-    --brand-muted: #696d68;
-    --brand-border: #ddd6ca;
+    --brand-text: #171717;
+    --brand-muted: #6b7280;
+    --brand-border: #e7e5e4;
 
-    --brand-primary-deep: #0f2b20;
-    --brand-primary-soft: #e8eee9;
-    --brand-secondary-deep: #571d19;
-    --brand-accent-soft: #f1e2c6;
-    --brand-soft: #eee7dc;
-    --brand-cream: #fbf8f2;
+    --brand-primary-deep: #6f1520;
+    --brand-primary-soft: #f8e9eb;
+    --brand-secondary-deep: #205453;
+    --brand-accent-soft: #fdf5e6;
+    --brand-soft: #f3efe9;
+    --brand-cream: #fdfbf7;
     --brand-ink-inverse: #f8f5ef;
 
     --shadow-sm: 0 10px 30px rgba(24, 34, 28, .07);
