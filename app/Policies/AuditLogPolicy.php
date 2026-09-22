@@ -7,6 +7,13 @@ use App\Models\User;
 
 class AuditLogPolicy
 {
-    public function viewAny(User $user): bool { return $user->hasPermission('audit.view'); }
-    public function view(User $user, AuditLog $auditLog): bool { return $this->viewAny($user); }
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermission('audit.view');
+    }
+
+    public function view(User $user, AuditLog $auditLog): bool
+    {
+        return $this->viewAny($user);
+    }
 }

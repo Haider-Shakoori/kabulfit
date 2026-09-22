@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\PaymentEvent;
 use App\Services\Payments\PaymentService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +29,7 @@ class PaymentController extends Controller
 
         return view('admin.payments.show', [
             'payment' => $payment->load(['order.user']),
-            'events' => \App\Models\PaymentEvent::query()->where('payment_id', $payment->id)->latest()->get(),
+            'events' => PaymentEvent::query()->where('payment_id', $payment->id)->latest()->get(),
             'seo' => PrivatePageSeo::make('Admin Payment', route('admin.payments.show', ['locale' => app()->getLocale(), 'payment' => $payment])),
         ]);
     }

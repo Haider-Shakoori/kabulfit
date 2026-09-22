@@ -7,6 +7,13 @@ use App\Models\User;
 
 class SettingPolicy
 {
-    public function viewAny(User $user): bool { return $user->hasPermission('settings.manage'); }
-    public function update(User $user, Setting $setting): bool { return $this->viewAny($user); }
+    public function viewAny(User $user): bool
+    {
+        return $user->hasPermission('settings.manage');
+    }
+
+    public function update(User $user, Setting $setting): bool
+    {
+        return $this->viewAny($user);
+    }
 }

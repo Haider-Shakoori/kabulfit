@@ -11,8 +11,8 @@ use App\Services\Admin\AuditService;
 use App\Services\Commerce\CheckoutService;
 use App\Services\Orders\OrderLifecycleService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class PaymentService
 {
@@ -106,29 +106,37 @@ class PaymentService
 
             $payment = Payment::where('provider_payment_id', $providerPaymentId)->lockForUpdate()->first();
             $event = PaymentEvent::create(['payment_id' => $payment?->id, 'provider' => 'stripe', 'provider_event_id' => $eventId, 'type' => $type, 'payload' => $payload]);
+
             if (! $payment) {
                 $event->update(['processed_at' => now()]);
 
                 return;
             }
+
             if ($type === 'payment_intent.succeeded' && $payment->status !== 'succeeded') {
                 $payment->update(['status' => 'succeeded']);
                 $payment->order->update(['payment_status' => 'succeeded', 'paid_at' => now()]);
                 $this->orders->transition($payment->order, 'paid', 'stripe');
                 $this->checkout->captureReservations($payment->order->load('items'));
-            } elseif (in_array($type, ['charge.refunded', 'refund.updated'], true)
+            } elseif (
+                in_array($type, ['charge.refunded', 'refund.updated'], true)
                 && ($object['status'] ?? 'succeeded') === 'succeeded'
-                && $payment->status === 'succeeded') {
+                && $payment->status === 'succeeded'
+            ) {
                 $payment->update(['status' => 'refunded']);
                 $payment->order->update(['payment_status' => 'refunded']);
                 $this->orders->transition($payment->order, 'refunded', 'stripe');
-            } elseif (in_array($type, ['payment_intent.payment_failed', 'payment_intent.canceled'], true) && ! in_array($payment->status, ['succeeded', 'refunded'], true)) {
+            } elseif (
+                in_array($type, ['payment_intent.payment_failed', 'payment_intent.canceled'], true)
+                && ! in_array($payment->status, ['succeeded', 'refunded'], true)
+            ) {
                 $status = $type === 'payment_intent.canceled' ? 'cancelled' : 'failed';
                 $payment->update(['status' => $status, 'failure_message' => $object['last_payment_error']['message'] ?? null]);
                 $payment->order->update(['payment_status' => $status]);
                 $this->orders->transition($payment->order, $status === 'cancelled' ? 'cancelled' : 'payment_failed', 'stripe');
                 $this->checkout->releaseReservations($payment->order);
             }
+
             $event->update(['processed_at' => now()]);
         }, 3);
     }

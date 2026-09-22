@@ -4,6 +4,7 @@ namespace App\Services\Settings;
 
 use App\Models\Setting;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class SiteSettings
 {
@@ -21,7 +22,7 @@ class SiteSettings
         $setting = Setting::query()->updateOrCreate(
             ['key' => $key],
             [
-                'uuid' => Setting::query()->where('key', $key)->value('uuid') ?? (string) \Illuminate\Support\Str::uuid(),
+                'uuid' => Setting::query()->where('key', $key)->value('uuid') ?? (string) Str::uuid(),
                 'group' => $group,
                 'value' => $value,
             ],

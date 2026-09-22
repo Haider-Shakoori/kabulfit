@@ -11,6 +11,8 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    public function __construct(private readonly SiteSettings $settings) {}
+
     public function __invoke(string $locale): View
     {
         $categories = Category::query()
