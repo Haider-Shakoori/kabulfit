@@ -14,7 +14,7 @@ return [
     'kabulfit_home' => 'د کابل‌فټ کورپاڼه',
     'shop' => 'پلورنځی',
     'categories' => 'کټګورۍ',
-    'custom_tailoring' => 'سفارشي خیاطي',
+    'about' => 'زموږ په اړه',\n    'support' => 'مرسته',\n    'company' => 'شرکت',\n    'custom_tailoring' => 'سفارشي خیاطي',
     'language' => 'ژبه',
 
     'footer_intro' => 'اصلي افغان فیشن چې د میراث، هنر او عصري اندازې له تجربې سره جوړ شوی.',
