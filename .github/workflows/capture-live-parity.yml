@@ -17,132 +17,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Capture rendered live site
-        shell: bash
+      - name: Install Playwright
         run: |
-          set -euxo pipefail
-          mkdir -p /tmp/kabulfit-capture live-parity
-          cd /tmp/kabulfit-capture
-          npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 --no-audit --no-fund
           npx playwright install chromium
 
-          cat > capture.mjs <<'NODE'
-          import { chromium } from 'playwright';
-          import fs from 'node:fs';
-
-          const browser = await chromium.launch({headless:true});
-          const targets = [
-            {name:'desktop', width:1440, height:1200, isMobile:false},
-            {name:'mobile', width:390, height:844, isMobile:true},
-          ];
-
-          for (const target of targets) {
-            const context = await browser.newContext({
-              viewport:{width:target.width,height:target.height},
-              isMobile:target.isMobile,
-              deviceScaleFactor:1,
-              locale:'en-US'
-            });
-            const page = await context.newPage();
-            await page.goto('https://kabulfit.com/', {waitUntil:'networkidle', timeout:120000});
-            await page.evaluate(async () => {
-              for (let y = 0; y < document.body.scrollHeight; y += 700) {
-                window.scrollTo(0, y);
-                await new Promise(r => setTimeout(r, 120));
-              }
-              window.scrollTo(0, 0);
-            });
-            await page.waitForTimeout(800);
-
-            await page.screenshot({
-              path:`/home/runner/work/kabulfit/kabulfit/live-parity/${target.name}.png`,
-              fullPage:true
-            });
-
-            const snapshot = await page.evaluate(() => {
-              const rect = el => {
-                if (!el) return null;
-                const r = el.getBoundingClientRect();
-                return {
-                  x:Math.round(r.x), y:Math.round(r.y + window.scrollY),
-                  width:Math.round(r.width), height:Math.round(r.height)
-                };
-              };
-              const css = el => {
-                if (!el) return null;
-                const s = getComputedStyle(el);
-                return {
-                  display:s.display, position:s.position,
-                  fontFamily:s.fontFamily, fontSize:s.fontSize, fontWeight:s.fontWeight,
-                  lineHeight:s.lineHeight, letterSpacing:s.letterSpacing,
-                  color:s.color, background:s.background, backgroundColor:s.backgroundColor,
-                  padding:s.padding, margin:s.margin, gap:s.gap,
-                  borderRadius:s.borderRadius, boxShadow:s.boxShadow,
-                  maxWidth:s.maxWidth, minHeight:s.minHeight, height:s.height
-                };
-              };
-              const byText = (selector, text) => [...document.querySelectorAll(selector)].find(e => e.textContent.trim().includes(text));
-              const allText = selector => [...document.querySelectorAll(selector)].map(e => e.textContent.trim()).filter(Boolean);
-              const sectionData = [...document.querySelectorAll('main section')].map((el, i) => ({
-                i,
-                id:el.id || null,
-                className:el.className || null,
-                rect:rect(el),
-                css:css(el),
-                heading:el.querySelector('h1,h2,h3')?.textContent.trim() || null
-              }));
-              const nav = document.querySelector('header nav');
-              const footer = document.querySelector('footer');
-              const h1 = document.querySelector('h1');
-              const headings = [...document.querySelectorAll('main h1,main h2')].map(el => ({
-                text:el.textContent.trim(), rect:rect(el), css:css(el)
-              }));
-              const buttons = [...document.querySelectorAll('main a,main button')]
-                .filter(el => {
-                  const s=getComputedStyle(el);
-                  return s.display.includes('flex') || s.display.includes('block') || s.paddingTop !== '0px';
-                })
-                .slice(0,80)
-                .map(el => ({text:el.textContent.trim(), rect:rect(el), css:css(el), className:el.className || null}));
-              return {
-                url:location.href,
-                title:document.title,
-                body:{rect:rect(document.body),css:css(document.body)},
-                header:{rect:rect(document.querySelector('header')),css:css(document.querySelector('header'))},
-                nav:{texts:nav ? allText('header nav a') : [],rect:rect(nav),css:css(nav)},
-                h1:{text:h1?.textContent.trim()||null,rect:rect(h1),css:css(h1)},
-                sections:sectionData,
-                headings,
-                buttons,
-                footer:{rect:rect(footer),css:css(footer),links:footer ? [...footer.querySelectorAll('a')].map(a=>a.textContent.trim()).filter(Boolean):[]},
-                topLevel:[...document.querySelector('body').children].map(el=>({tag:el.tagName,id:el.id||null,className:el.className||null,rect:rect(el)}))
-              };
-            });
-
-            fs.writeFileSync(`/home/runner/work/kabulfit/kabulfit/live-parity/${target.name}.json`, JSON.stringify(snapshot,null,2));
-            fs.writeFileSync(`/home/runner/work/kabulfit/kabulfit/live-parity/${target.name}.html`, await page.content());
-
-            const styles = await page.evaluate(async () => {
-              const hrefs = [...document.styleSheets].map(s=>s.href).filter(Boolean);
-              const out = [];
-              for (const href of hrefs) {
-                try {
-                  const text = await fetch(href).then(r=>r.text());
-                  out.push({href,text});
-                } catch (e) {
-                  out.push({href,error:String(e)});
-                }
-              }
-              return out;
-            });
-            fs.writeFileSync(`/home/runner/work/kabulfit/kabulfit/live-parity/${target.name}-styles.json`, JSON.stringify(styles));
-            await context.close();
-          }
-          await browser.close();
-NODE
-
-          node capture.mjs
+      - name: Capture desktop and mobile
+        run: |
+          mkdir -p live-parity
+          npx playwright screenshot --browser=chromium --viewport-size="1440,1200" --full-page https://kabulfit.com/ live-parity/desktop.png
+          npx playwright screenshot --browser=chromium --device="iPhone 13" --full-page https://kabulfit.com/ live-parity/mobile.png
+          curl -LfsS https://kabulfit.com/ -o live-parity/index.html
+          wget --page-requisites --convert-links --adjust-extension --span-hosts --domains=kabulfit.com,www.kabulfit.com --directory-prefix=live-parity/site https://kabulfit.com/ || true
+          find live-parity -type f -print | sort > live-parity/manifest.txt
 
       - name: Upload parity reference
         uses: actions/upload-artifact@v4
