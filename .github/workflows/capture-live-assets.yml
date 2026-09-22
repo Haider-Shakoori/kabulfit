@@ -17,15 +17,58 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Capture live reference
+      - name: Capture live reference and public data
         shell: bash
         run: |
           set -euxo pipefail
-          mkdir -p live-capture
-          cd live-capture
-          wget             --recursive             --level=2             --page-requisites             --convert-links             --adjust-extension             --span-hosts             --domains=kabulfit.com,www.kabulfit.com             --no-parent             --execute robots=off             https://kabulfit.com/ || true
-          find . -type f -print | sort > manifest.txt
-          du -ah . | sort -h > sizes.txt
+          mkdir -p live-capture/site live-capture/data live-capture/media
+          wget             --recursive             --level=2             --page-requisites             --convert-links             --adjust-extension             --span-hosts             --domains=kabulfit.com,www.kabulfit.com             --no-parent             --execute robots=off             --directory-prefix=live-capture/site             https://kabulfit.com/ || true
+
+          APP_ID="6944d141c2878421ef544832"
+          BASE="https://base44.app/api/apps/$APP_ID/entities"
+          for entity in Product Category SiteSetting; do
+            curl --fail-with-body --silent --show-error               -H "X-App-Id: $APP_ID"               "$BASE/$entity?limit=200"               -o "live-capture/data/$entity.json" || true
+          done
+
+          cat > live-capture/known-image-urls.txt <<'URLS'
+https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/d653e6253_Favicon.png
+https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/4ce74c49d_KabulFit_logo_shopify_header.png
+https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/b6d3c7505_KabulFit_logo_white.png
+https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png
+https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/58f1df170_2.png
+https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg
+URLS
+
+          python - <<'PY'
+          import json, pathlib, re
+          root=pathlib.Path("live-capture")
+          urls=set(root.joinpath("known-image-urls.txt").read_text().splitlines())
+          for p in root.joinpath("data").glob("*.json"):
+              try:
+                  data=json.loads(p.read_text())
+              except Exception:
+                  continue
+              def walk(v):
+                  if isinstance(v, dict):
+                      for x in v.values(): walk(x)
+                  elif isinstance(v, list):
+                      for x in v: walk(x)
+                  elif isinstance(v, str) and v.startswith("http"):
+                      if re.search(r'\.(?:png|jpe?g|webp|svg)(?:$|[?/])', v, re.I):
+                          urls.add(v)
+              walk(data)
+          root.joinpath("all-image-urls.txt").write_text("\n".join(sorted(urls))+"\n")
+          PY
+
+          while IFS= read -r url; do
+            [ -n "$url" ] || continue
+            clean="${url%%\?*}"
+            name="$(printf '%s' "$url" | sha256sum | cut -c1-12)_$(basename "$clean")"
+            curl --fail --location --silent --show-error "$url" -o "live-capture/media/$name" || true
+          done < live-capture/all-image-urls.txt
+
+          find live-capture -type f -print | sort > live-capture/manifest.txt
+          du -ah live-capture | sort -h > live-capture/sizes.txt
 
       - name: Upload live reference
         uses: actions/upload-artifact@v4
