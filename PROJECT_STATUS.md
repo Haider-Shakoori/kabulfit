@@ -300,7 +300,7 @@ Feature-branch validation from GitHub Actions run `35694202519`:
 
 ## Batch 9 — Tailor dashboard
 
-Status: **implementation complete on `feat/batch-09-tailor-dashboard`; validation and merge are pending.**
+Status: **implementation complete on `feat/batch-09-tailor-dashboard`; feature-branch CI is green and PR/merge are pending.**
 
 Implemented:
 
@@ -319,7 +319,14 @@ Implemented:
 - Dedicated Tailor Workspace architecture/authorization documentation.
 - Regression tests for assignment eligibility, ownership, state transitions, staff API isolation, public identifiers, immutable snapshots/notes/events and RTL localization.
 
-Validation evidence: **pending feature-branch CI**.
+Feature-branch validation from GitHub Actions run `35701204501`:
+
+- PHPUnit: **92 tests, 515 assertions, zero warnings**.
+- Laravel Pint: **219 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
 
 ## Not yet complete
 
@@ -333,4 +340,4 @@ Validation evidence: **pending feature-branch CI**.
 
 ## Release gate
 
-Batch 8 is fully closed. Batch 9 implementation is complete on its feature branch and is awaiting the required green feature-branch/PR CI gates before merge.
+Batch 8 is fully closed. Batch 9 implementation has green feature-branch CI and is awaiting PR CI before merge.
