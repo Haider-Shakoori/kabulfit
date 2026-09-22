@@ -142,3 +142,28 @@ A tailoring request requires a product that explicitly supports tailoring and a 
 At checkout, Laravel snapshots measurement codes/names/centimetre values, profile name and tailoring notes into the order item. Later profile changes or deletion cannot change historical order measurements. Snapshot models reject direct update/delete operations so order-time measurements remain application-layer immutable.
 
 Tailoring history endpoints are ownership-scoped to the authenticated customer and expose UUIDs/SKUs/slugs rather than internal database IDs. Detail responses return the immutable order-time snapshot once an order exists; before checkout they reflect the customer's current saved profile.
+
+
+## Orders, shipping, notifications and mobile events
+
+Authenticated order and tracking endpoints are ownership-scoped and use public UUIDs. Database primary keys are never part of the v1 contract.
+
+- `GET /api/v1/{locale}/orders`
+- `GET /api/v1/{locale}/orders/{order_uuid}`
+- `GET /api/v1/{locale}/orders/{order_uuid}/tracking`
+- `GET /api/v1/{locale}/events?after={event_uuid}&limit={1..100}`
+
+Order detail responses include server-authoritative totals, immutable order-item snapshots, status history and shipment tracking events. Shipment responses expose shipment/event UUIDs, carrier/service data and tracking information without internal IDs.
+
+The mobile event feed uses the previous public event UUID as an opaque cursor. The response returns `meta.next_cursor` as another UUID and `meta.has_more`. A cursor owned by another customer is rejected. Clients must not interpret cursors as sequence numbers.
+
+Stable event types currently include:
+
+- `order.created`
+- `order.status_changed`
+- `shipment.created`
+- `shipment.status_changed`
+
+Event payloads are additive and intended to feed the future Flutter push-notification bridge. Mobile clients should ignore unknown additive payload fields and event types they do not yet handle.
+
+Order and shipment customer notifications are queued after transaction commit, localized using the customer's preferred English, Dari or Pashto locale, and persisted through Laravel's database notification channel in addition to mail.

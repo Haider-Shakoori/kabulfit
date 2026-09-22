@@ -10,12 +10,15 @@ use App\Models\Order;
 use App\Models\ShippingMethod;
 use App\Models\TailoringRequest;
 use App\Models\User;
+use App\Services\Orders\OrderLifecycleService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class CheckoutService
 {
+    public function __construct(private readonly OrderLifecycleService $orders) {}
+
     public function create(User $user, Cart $cart, Address $address, ShippingMethod $shipping, ?Coupon $coupon = null): Order
     {
         abort_unless($cart->user_id === $user->id && $address->user_id === $user->id, 404);
@@ -91,6 +94,11 @@ class CheckoutService
                 'status' => 'pending_payment',
                 'source' => 'checkout',
                 'occurred_at' => now(),
+            ]);
+
+            $this->orders->event($order, 'order.created', [
+                'status' => 'pending_payment',
+                'payment_status' => 'pending',
             ]);
 
             foreach ($cart->items as $item) {
