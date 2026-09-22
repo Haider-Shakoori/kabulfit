@@ -224,7 +224,7 @@ Validation evidence from GitHub Actions run `35645248956`:
 
 ## Batch 7 — Orders, shipping, notifications + mobile event contract
 
-Status: **implementation complete on `feat/batch-07-orders-shipping-notifications`; feature-branch CI is green and the batch is ready for PR validation**.
+Status: **complete and merged to `main` via PR #14 after green feature-branch and PR CI; post-merge `main` CI is green**.
 
 Implemented:
 
@@ -257,6 +257,8 @@ Feature-branch validation from GitHub Actions run `35692548969`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35692734951`: **quality + MySQL smoke both green**.
+- Post-merge `main` CI run `35692831968`: **quality + MySQL smoke both green**.
 
 ## Not yet complete
 
@@ -270,4 +272,4 @@ Feature-branch validation from GitHub Actions run `35692548969`:
 
 ## Release gate
 
-Batch 7 has passed feature-branch CI. It must still pass pull-request CI before merge and post-merge `main` CI before the batch is considered fully closed.
+Batch 7 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 8 — admin, roles, Stripe operations and audit logging.
