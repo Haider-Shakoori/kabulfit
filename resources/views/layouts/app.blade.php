@@ -50,7 +50,8 @@
         <nav id="primary-nav" class="primary-nav" :class="{ 'is-open': open }" aria-label="{{ __('site.primary_navigation') }}">
             <a @click="open = false" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop') }}</a>
             <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#categories">{{ __('site.categories') }}</a>
-            <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#story">{{ __('site.our_story') }}</a>
+            <a @click="open = false" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.our_story') }}</a>
+            <a @click="open = false" href="{{ route('blog.index', ['locale' => app()->getLocale()]) }}">{{ __('content.blog') }}</a>
             <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring">{{ __('site.custom_tailoring') }}</a>
             <a @click="open = false" href="{{ route('home', ['locale' => app()->getLocale()]) }}#contact">{{ __('site.contact') }}</a>
         </nav>
@@ -101,6 +102,8 @@
             <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}">{{ __('site.shop') }}</a>
             <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#categories">{{ __('site.categories') }}</a>
             <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring">{{ __('site.custom_tailoring') }}</a>
+            <a href="{{ route('blog.index', ['locale' => app()->getLocale()]) }}">{{ __('content.blog') }}</a>
+            <a href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.our_story') }}</a>
         </div>
         <div>
             <h2>{{ __('site.contact') }}</h2>

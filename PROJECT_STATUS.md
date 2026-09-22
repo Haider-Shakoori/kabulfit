@@ -330,9 +330,23 @@ Feature-branch validation from GitHub Actions run `35701204501`:
 - PR-triggered CI run `35701511405`: **quality + MySQL smoke both green**.
 - Post-merge `main` CI run `35701632174`: **quality + MySQL smoke both green**.
 
+## Batch 10 — Content/SEO CMS and legacy migration
+
+Status: **implementation in progress on `feat/batch-10-content-seo-legacy`; validation and merge pending.**
+
+Scope in this branch:
+
+- localized public content pages and journal/blog
+- server-rendered WebPage/BlogPosting structured data
+- internal editorial linking
+- sitemap index with catalog/content child sitemaps
+- CMS administration with RBAC and audit logging
+- verified legacy URL inventory and explicit 301 mappings
+- legacy ProductDetail IDs remain explicit mapping-only; unknown IDs remain 404
+- migration documentation and regression tests
+
 ## Not yet complete
 
-- Blog/content CMS.
 - Blog/content CMS.
 - Flutter application implementation.
 - Real legacy-ID mapping crawl.
@@ -342,4 +356,4 @@ Feature-branch validation from GitHub Actions run `35701204501`:
 
 ## Release gate
 
-Batch 9 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 10 — Content/SEO CMS and legacy migration.
+Batch 9 is fully closed. Batch 10 implementation is in progress on its feature branch.

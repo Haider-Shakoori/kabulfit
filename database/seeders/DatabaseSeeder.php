@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             MeasurementSeeder::class,
             CommerceSeeder::class,
             AdminAuthorizationSeeder::class,
+            ContentSeeder::class,
         ]);
     }
 }
