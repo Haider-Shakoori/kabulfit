@@ -59,6 +59,9 @@
             @auth
                 <a class="nav-account-link" href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}">{{ __('commerce.wishlist') }}</a>
                 <a class="nav-account-link" href="{{ route('cart', ['locale' => app()->getLocale()]) }}">{{ __('commerce.cart') }}</a>
+                @if (auth()->user()->hasPermission('tailoring.work'))
+                    <a class="nav-account-link" href="{{ route('tailor.index', ['locale' => app()->getLocale()]) }}">{{ __('tailor.nav') }}</a>
+                @endif
                 @if (auth()->user()->hasPermission('admin.access'))
                     <a class="nav-account-link" href="{{ route('admin.dashboard', ['locale' => app()->getLocale()]) }}">Admin</a>
                 @endif
