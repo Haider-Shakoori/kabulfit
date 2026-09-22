@@ -9,6 +9,7 @@ use App\Services\Measurements\TailoringService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TailoringController extends Controller
@@ -87,6 +88,10 @@ class TailoringController extends Controller
         $variant = ! empty($data['variant_sku'])
             ? $product->variants->firstWhere('sku', $data['variant_sku'])
             : null;
+
+        if (! empty($data['variant_sku']) && ! $variant) {
+            throw ValidationException::withMessages(['variant_sku' => __('commerce.invalid_item')]);
+        }
 
         $service->addToCart(
             $request->user(),

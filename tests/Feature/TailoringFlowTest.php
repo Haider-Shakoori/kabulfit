@@ -13,6 +13,7 @@ use App\Services\Measurements\MeasurementProfileService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
+use LogicException;
 use Tests\TestCase;
 
 class TailoringFlowTest extends TestCase
@@ -134,6 +135,63 @@ class TailoringFlowTest extends TestCase
             'ordered',
             TailoringRequest::where('uuid', $item->tailoring_request_uuid)->firstOrFail()->status,
         );
+    }
+
+    public function test_order_measurement_snapshots_reject_direct_update_and_delete(): void
+    {
+        $user = User::factory()->create(['preferred_locale' => 'en']);
+        $profile = $this->profile($user, 'perahan_tunban');
+        Sanctum::actingAs($user);
+
+        $this->postJson('/api/v1/en/tailoring', [
+            'product_slug' => 'classic-afghan-perahan-tunban',
+            'variant_sku' => 'KF-M-PT-001-M-BLACK',
+            'measurement_profile_uuid' => $profile->uuid,
+        ])->assertCreated();
+
+        $order = app(CheckoutService::class)->create(
+            $user,
+            app(CartService::class)->forUser($user),
+            $this->address($user),
+            ShippingMethod::where('code', 'standard-af')->firstOrFail(),
+        );
+
+        $snapshot = $order->items()->firstOrFail()->measurements()->firstOrFail();
+        $originalValue = $snapshot->value_cm;
+
+        try {
+            $snapshot->update(['value_cm' => (float) $originalValue + 5]);
+            $this->fail('Expected immutable snapshot update to fail.');
+        } catch (LogicException $exception) {
+            $this->assertSame('Order item measurement snapshots are immutable.', $exception->getMessage());
+        }
+
+        try {
+            $snapshot->delete();
+            $this->fail('Expected immutable snapshot deletion to fail.');
+        } catch (LogicException $exception) {
+            $this->assertSame('Order item measurement snapshots are immutable.', $exception->getMessage());
+        }
+
+        $this->assertDatabaseHas('order_item_measurements', [
+            'id' => $snapshot->id,
+            'value_cm' => $originalValue,
+        ]);
+    }
+
+    public function test_web_tailoring_rejects_unknown_variant_sku(): void
+    {
+        $user = User::factory()->create();
+        $profile = $this->profile($user, 'perahan_tunban');
+
+        $this->actingAs($user)
+            ->post('/en/products/classic-afghan-perahan-tunban/tailor', [
+                'variant_sku' => 'NOT-A-REAL-SKU',
+                'measurement_profile_uuid' => $profile->uuid,
+            ])
+            ->assertSessionHasErrors('variant_sku');
+
+        $this->assertSame(0, $user->tailoringRequests()->count());
     }
 
     public function test_customer_can_view_only_their_tailoring_history_on_web_and_api(): void

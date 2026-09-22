@@ -45,6 +45,6 @@ Authenticated customers have ownership-scoped web and API history for their tail
 
 ## Historical integrity
 
-Order-item measurement snapshots do not depend on the future state of a saved profile. Customers may edit or delete profiles after checkout without mutating historical tailoring instructions. The customer history surface deliberately reads the snapshot after order creation so historical values cannot silently follow later profile edits.
+Order-item measurement snapshots do not depend on the future state of a saved profile. Customers may edit or delete profiles after checkout without mutating historical tailoring instructions. The snapshot model rejects direct update/delete operations, and the customer history surface deliberately reads the snapshot after order creation so historical values cannot silently follow later profile edits.
 
 Batch 8 will add administrative tailoring operations and authorization. Batch 9 will add the tailor-specific dashboard. Batch 14 will consume these APIs in Flutter.
