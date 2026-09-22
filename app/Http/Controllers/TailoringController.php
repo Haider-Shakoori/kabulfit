@@ -4,14 +4,54 @@ namespace App\Http\Controllers;
 
 use App\Models\MeasurementProfile;
 use App\Models\Product;
+use App\Models\TailoringRequest;
 use App\Services\Measurements\TailoringService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TailoringController extends Controller
 {
+    public function index(Request $request): View
+    {
+        $requests = TailoringRequest::query()
+            ->where('user_id', $request->user()->id)
+            ->with([
+                'product.translations',
+                'variant',
+                'measurementProfile',
+                'orderItem.order',
+            ])
+            ->latest()
+            ->get();
+
+        return view('tailoring.index', [
+            'requests' => $requests,
+            'seo' => PrivatePageSeo::make(
+                __('measurements.tailoring_history'),
+                route('tailoring.index', ['locale' => app()->getLocale()]),
+            ),
+        ]);
+    }
+
+    public function show(Request $request, string $locale, string $tailoring): View
+    {
+        $tailoringRequest = $this->ownedRequest($request, $tailoring);
+
+        return view('tailoring.show', [
+            'tailoring' => $tailoringRequest,
+            'seo' => PrivatePageSeo::make(
+                __('measurements.tailoring_request'),
+                route('tailoring.show', [
+                    'locale' => app()->getLocale(),
+                    'tailoring' => $tailoringRequest->uuid,
+                ]),
+            ),
+        ]);
+    }
+
     public function create(Request $request, string $locale, string $slug): View
     {
         $product = $this->product($slug);
@@ -49,6 +89,10 @@ class TailoringController extends Controller
             ? $product->variants->firstWhere('sku', $data['variant_sku'])
             : null;
 
+        if (! empty($data['variant_sku']) && ! $variant) {
+            throw ValidationException::withMessages(['variant_sku' => __('commerce.invalid_item')]);
+        }
+
         $service->addToCart(
             $request->user(),
             $product,
@@ -60,6 +104,21 @@ class TailoringController extends Controller
         return redirect()
             ->route('cart', ['locale' => app()->getLocale()])
             ->with('status', __('measurements.tailoring_added'));
+    }
+
+    private function ownedRequest(Request $request, string $uuid): TailoringRequest
+    {
+        return TailoringRequest::query()
+            ->where('user_id', $request->user()->id)
+            ->where('uuid', $uuid)
+            ->with([
+                'product.translations',
+                'variant',
+                'measurementProfile.values.definition.translations',
+                'orderItem.order',
+                'orderItem.measurements',
+            ])
+            ->firstOrFail();
     }
 
     private function product(string $slug): Product
