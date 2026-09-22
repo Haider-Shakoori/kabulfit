@@ -38,9 +38,11 @@ Each of the five deterministic demo products receives a distinct locally stored 
 
 The current deterministic catalog continues to provide stable fixtures for automated tests and commerce flows; live photography is used to make those fixtures representative of KabulFit rather than to change their business identities.
 
-## Design system
+## Design system and parity method
 
-The live-site visual layer is defined in `resources/css/live-site.css` and loaded through the main Vite CSS entry. It uses the live KabulFit burgundy/red and teal treatment while retaining the existing reusable base components and responsive behavior.
+The earlier approximation stylesheet has been removed. The live KabulFit burgundy/red and teal palette is now part of the core design tokens in `resources/css/app.css`, while the homepage, product cards, header and footer use the responsive utility structure measured from the rendered live site and verified against its current React/Tailwind bundle.
+
+The parity pass uses full-page desktop (1440 px) and mobile (390 px) captures of `https://kabulfit.com/` as the visual reference. It preserves Laravel routing, localization, accessibility, commerce and SEO behavior while matching the live component hierarchy, breakpoints, spacing, card proportions, header actions, Best Sellers block, newsletter footer and mobile bottom navigation.
 
 Key alignment colors:
 
