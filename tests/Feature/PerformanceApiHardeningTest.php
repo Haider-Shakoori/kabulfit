@@ -95,6 +95,7 @@ class PerformanceApiHardeningTest extends TestCase
 
     public function test_catalog_query_count_is_bounded_and_filter_metadata_is_cached(): void
     {
+        Cache::setDefaultDriver('array');
         Cache::clear();
         DB::flushQueryLog();
         DB::enableQueryLog();
