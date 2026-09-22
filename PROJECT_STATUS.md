@@ -332,7 +332,7 @@ Feature-branch validation from GitHub Actions run `35701204501`:
 
 ## Batch 10 — Content/SEO CMS and legacy migration
 
-Status: **implementation complete on `feat/batch-10-content-seo-legacy`; feature-branch CI is green and PR/merge are pending.**
+Status: **complete and merged to `main` via PR #17 after green feature-branch and PR CI; post-merge `main` CI is green**.
 
 Implemented:
 
@@ -349,7 +349,7 @@ Implemented:
 - Deterministic content/legacy seed timestamps.
 - Dedicated migration documentation and regression tests.
 
-Feature-branch validation from GitHub Actions run `35715200931`:
+Feature-branch validation from GitHub Actions run `35715388139`:
 
 - PHPUnit: **102 tests, 571 assertions, zero warnings**.
 - Laravel Pint: **237 files passed**.
@@ -357,6 +357,8 @@ Feature-branch validation from GitHub Actions run `35715200931`:
 - Vite production build: **successful**.
 - MySQL 8.4: **fresh migration + deterministic seeding successful**.
 - PHP syntax checks and Composer validation: **passed**.
+- PR-triggered CI run `35715545330`: **quality + MySQL smoke both green**.
+- Post-merge `main` CI run `35715681629`: **quality + MySQL smoke both green**.
 
 ## Not yet complete
 
@@ -368,4 +370,4 @@ Feature-branch validation from GitHub Actions run `35715200931`:
 
 ## Release gate
 
-Batch 9 is fully closed. Batch 10 implementation has green feature-branch CI and is awaiting PR CI before merge.
+Batch 10 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 11 — Performance/media/API hardening.
