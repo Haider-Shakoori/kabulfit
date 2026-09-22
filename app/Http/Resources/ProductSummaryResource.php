@@ -37,6 +37,7 @@ class ProductSummaryResource extends JsonResource
                 'alt' => $mediaTranslation?->alt_text,
                 'width' => $media->width,
                 'height' => $media->height,
+                'sources' => $media->responsiveSources(),
             ] : null,
             'featured' => $this->is_featured,
             'tailoring_enabled' => $this->tailoring_enabled,

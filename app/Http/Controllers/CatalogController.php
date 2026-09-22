@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CatalogFilterRequest;
 use App\Models\Category;
 use App\Models\Collection;
-use App\Models\Color;
-use App\Models\Size;
+use App\Services\Catalog\CatalogFilterOptions;
 use App\Services\Catalog\CatalogQuery;
 use App\Support\Seo\CatalogSchema;
 use App\Support\Seo\SeoData;
@@ -18,9 +17,10 @@ class CatalogController extends Controller
         CatalogFilterRequest $request,
         string $locale,
         CatalogQuery $catalog,
+        CatalogFilterOptions $catalogFilters,
     ): View {
         $products = $catalog->paginate($request, $locale);
-        $filterOptions = $this->filterOptions();
+        $filterOptions = $catalogFilters->forWeb($locale);
         $filters = $request->validated();
 
         $seo = new SeoData(
@@ -48,6 +48,7 @@ class CatalogController extends Controller
         string $locale,
         string $slug,
         CatalogQuery $catalog,
+        CatalogFilterOptions $catalogFilters,
     ): View {
         $category = Category::query()
             ->where('is_active', true)
@@ -59,7 +60,7 @@ class CatalogController extends Controller
 
         $translation = $category->translation($locale);
         $products = $catalog->paginate($request, $locale, categorySlug: $slug);
-        $filterOptions = $this->filterOptions();
+        $filterOptions = $catalogFilters->forWeb($locale);
         $filters = $request->validated();
 
         $canonical = route('categories.show', ['locale' => $locale, 'slug' => $translation?->slug]);
@@ -91,6 +92,7 @@ class CatalogController extends Controller
         string $locale,
         string $slug,
         CatalogQuery $catalog,
+        CatalogFilterOptions $catalogFilters,
     ): View {
         $collection = Collection::query()
             ->where('is_active', true)
@@ -102,7 +104,7 @@ class CatalogController extends Controller
 
         $translation = $collection->translation($locale);
         $products = $catalog->paginate($request, $locale, collectionSlug: $slug);
-        $filterOptions = $this->filterOptions();
+        $filterOptions = $catalogFilters->forWeb($locale);
         $filters = $request->validated();
 
         $canonical = route('collections.show', ['locale' => $locale, 'slug' => $translation?->slug]);
@@ -127,31 +129,6 @@ class CatalogController extends Controller
         );
 
         return view('catalog.collection', compact('collection', 'products', 'filterOptions', 'filters', 'seo'));
-    }
-
-    private function filterOptions(): array
-    {
-        return [
-            'categories' => Category::query()
-                ->where('is_active', true)
-                ->with('translations')
-                ->orderBy('sort_order')
-                ->get(),
-            'collections' => Collection::query()
-                ->where('is_active', true)
-                ->with('translations')
-                ->orderBy('sort_order')
-                ->get(),
-            'sizes' => Size::query()
-                ->where('is_active', true)
-                ->orderBy('sort_order')
-                ->get(),
-            'colors' => Color::query()
-                ->where('is_active', true)
-                ->with('translations')
-                ->orderBy('sort_order')
-                ->get(),
-        ];
     }
 
     private function shopAlternates(): array

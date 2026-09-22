@@ -48,9 +48,28 @@ class CommerceController extends Controller
 
     public function wishlist(Request $r): JsonResponse
     {
-        $items = Wishlist::where('user_id', $r->user()->id)->with('product.translations')->latest()->get();
+        $data = $r->validate(['per_page' => 'nullable|integer|min:1|max:50']);
+        $items = Wishlist::query()
+            ->where('user_id', $r->user()->id)
+            ->with('product.translations')
+            ->latest()
+            ->paginate((int) ($data['per_page'] ?? 20));
 
-        return response()->json(['data' => $items->map(fn ($w) => ['slug' => $w->product->translation()?->slug, 'sku' => $w->product->sku, 'name' => $w->product->translation()?->name])]);
+        return response()->json([
+            'data' => $items->getCollection()
+                ->map(fn ($w) => [
+                    'slug' => $w->product->translation()?->slug,
+                    'sku' => $w->product->sku,
+                    'name' => $w->product->translation()?->name,
+                ])
+                ->values(),
+            'meta' => [
+                'current_page' => $items->currentPage(),
+                'last_page' => $items->lastPage(),
+                'per_page' => $items->perPage(),
+                'total' => $items->total(),
+            ],
+        ]);
     }
 
     public function wishlistStore(Request $r): JsonResponse

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApiCacheHeaders;
 use App\Http\Middleware\EnsureActiveUser;
 use App\Http\Middleware\RequirePermission;
 use App\Http\Middleware\SecurityHeaders;
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'locale' => SetLocale::class,
+            'api.cache' => ApiCacheHeaders::class,
             'active.user' => EnsureActiveUser::class,
             'permission' => RequirePermission::class,
         ]);

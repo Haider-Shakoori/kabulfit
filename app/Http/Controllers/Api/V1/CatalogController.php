@@ -14,7 +14,10 @@ use App\Models\Color;
 use App\Models\Product;
 use App\Models\Size;
 use App\Services\Catalog\CatalogQuery;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\ValidationException;
 
 class CatalogController extends Controller
 {
@@ -30,8 +33,18 @@ class CatalogController extends Controller
         ]);
     }
 
-    public function product(string $locale, string $slug): ProductDetailResource
+    public function product(Request $request, string $locale, string $slug): ProductDetailResource
     {
+        $data = $request->validate(['include' => 'nullable|string|max:100']);
+        $requested = array_values(array_filter(explode(',', (string) ($data['include'] ?? ''))));
+        $allowed = ['tailoring', 'collections', 'media', 'variants'];
+
+        if (array_diff($requested, $allowed) !== []) {
+            throw ValidationException::withMessages([
+                'include' => 'Unsupported product expansion requested.',
+            ]);
+        }
+
         $product = Product::query()
             ->where('is_active', true)
             ->whereHas('translations', fn ($query) => $query
@@ -43,24 +56,32 @@ class CatalogController extends Controller
         return new ProductDetailResource($product);
     }
 
-    public function categories(): AnonymousResourceCollection
+    public function categories(string $locale): AnonymousResourceCollection
     {
-        $categories = Category::query()
-            ->where('is_active', true)
-            ->with('translations')
-            ->orderBy('sort_order')
-            ->get();
+        $categories = Cache::remember(
+            "catalog:categories:{$locale}:v1",
+            now()->addMinutes((int) config('kabulfit.catalog.filter_cache_minutes', 10)),
+            fn () => Category::query()
+                ->where('is_active', true)
+                ->with('translations')
+                ->orderBy('sort_order')
+                ->get(),
+        );
 
         return CategoryResource::collection($categories);
     }
 
-    public function collections(): AnonymousResourceCollection
+    public function collections(string $locale): AnonymousResourceCollection
     {
-        $collections = Collection::query()
-            ->where('is_active', true)
-            ->with('translations')
-            ->orderBy('sort_order')
-            ->get();
+        $collections = Cache::remember(
+            "catalog:collections:{$locale}:v1",
+            now()->addMinutes((int) config('kabulfit.catalog.filter_cache_minutes', 10)),
+            fn () => Collection::query()
+                ->where('is_active', true)
+                ->with('translations')
+                ->orderBy('sort_order')
+                ->get(),
+        );
 
         return CollectionResource::collection($collections);
     }

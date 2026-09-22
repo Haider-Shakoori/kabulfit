@@ -185,3 +185,27 @@ Assignment status transitions are server-authoritative. Clients must submit one 
 
 No database primary keys are exposed. Stable identifiers are assignment/tailoring/customer/order/note/event UUIDs plus product/variant SKUs and human-facing order numbers.
 
+## Batch 11 performance and mobile payload rules
+
+Public GET API responses emit an ETag and `Cache-Control: public, max-age=60, stale-while-revalidate=300`. A matching `If-None-Match` request receives HTTP 304. Authenticated bearer-token responses are marked `private, no-cache`; non-GET API responses are `no-store`.
+
+List endpoints that can grow with customer data now accept bounded `per_page` pagination:
+
+- orders, measurement profiles, tailoring history and wishlist: default 20, maximum 50;
+- catalog: existing default remains configuration-driven, maximum 48;
+- tailor assignments: maximum 50;
+- event feed: explicit `limit` maximum 100.
+
+Product detail remains backward-compatible when no `include` parameter is supplied. Mobile clients that need smaller payloads may request a comma-separated subset of:
+
+- `tailoring`
+- `collections`
+- `media`
+- `variants`
+
+Example: `GET /api/v1/en/products/{slug}?include=variants,tailoring`.
+
+Product media responses now include additive `sources.avif` and `sources.webp` srcset strings when generated derivatives exist. The original `url`, dimensions and alt text remain available as the fallback contract. URLs are storage-disk/ASSET_URL aware for CDN deployment.
+
+Account API throttling is method-sensitive: reads receive a higher allowance than mutations. Checkout retains its stricter dedicated throttle. Clients should still use normal backoff behavior for HTTP 429 responses.
+

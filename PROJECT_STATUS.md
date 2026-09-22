@@ -360,6 +360,43 @@ Feature-branch validation from GitHub Actions run `35715388139`:
 - PR-triggered CI run `35715545330`: **quality + MySQL smoke both green**.
 - Post-merge `main` CI run `35715681629`: **quality + MySQL smoke both green**.
 
+## Batch 11 — Performance/media/API hardening
+
+Status: **implementation complete on `feat/batch-11-performance-media-api`; feature-branch CI is green and PR/merge are pending.**
+
+Implemented:
+
+- Responsive product-media derivative domain for WebP/AVIF sizes at 320/640/960/1280 widths.
+- Queueable/synchronous media generation pipeline with deterministic derivative paths and storage-disk URLs.
+- Shared responsive `<picture>` rendering for product cards and galleries with original-image fallback.
+- Additive responsive media source metadata for future Flutter clients.
+- CDN readiness through Laravel asset/storage URL configuration, including S3/AWS URL compatibility.
+- Cached catalog filter metadata and cached public category/collection reference queries.
+- Bounded query-count regression coverage for the catalog to detect N+1 regressions.
+- ETag/conditional GET support and public/private cache-control rules for versioned APIs.
+- Bounded pagination for orders, measurement profiles, tailoring history and wishlists.
+- Method-sensitive authenticated API throttling.
+- Selective product-detail `include=` expansions for smaller mobile payloads while preserving the full default v1 response.
+- Route-cache-compatible default-locale redirect.
+- Production config/route cache and scheduler compatibility checks in CI.
+- Daily responsive-media generation and failed-queue pruning with single-server/overlap protection.
+- `ops:readiness --strict` deployment verification command.
+- Frontend JS/CSS per-file and combined asset budgets enforced in CI.
+- Dedicated performance/operations documentation and regression tests.
+
+Feature-branch validation from GitHub Actions run `35718128218`:
+
+- PHPUnit: **109 tests, 622 assertions, zero warnings**.
+- Laravel Pint: **245 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Production config cache: **successful**.
+- Production route cache: **successful**.
+- Scheduler resolution: **successful** for checkout expiry, responsive-media generation and failed-job pruning.
+- Vite production build: **successful**.
+- Frontend assets: **38,905-byte CSS + 55,087-byte JS = 93,992 bytes**, all below Batch 11 budgets.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
 ## Not yet complete
 
 - Flutter application implementation.
@@ -370,4 +407,4 @@ Feature-branch validation from GitHub Actions run `35715388139`:
 
 ## Release gate
 
-Batch 10 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 11 — Performance/media/API hardening.
+Batch 10 is fully closed. Batch 11 has green feature-branch CI and is awaiting PR CI before merge.

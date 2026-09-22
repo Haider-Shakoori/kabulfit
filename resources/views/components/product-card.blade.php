@@ -6,7 +6,11 @@
             <span class="product-badge">{{ __('site.featured_label') }}</span>
         @endif
         @if ($media)
-            <img src="{{ $media->url() }}" width="{{ $media->width }}" height="{{ $media->height }}" alt="{{ $media->translation()?->alt_text }}" loading="lazy">
+            <x-responsive-product-image
+                :media="$media"
+                :alt="$media->translation()?->alt_text"
+                sizes="(max-width: 430px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            />
         @else
             <span class="product-media-pattern" aria-hidden="true"></span>
             <span class="product-monogram" aria-hidden="true">KF</span>

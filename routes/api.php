@@ -17,7 +17,7 @@ Route::post('/stripe/webhook', StripeWebhookController::class)->middleware('thro
 
 Route::prefix('v1/{locale}')
     ->where(['locale' => 'en|fa|ps'])
-    ->middleware('locale')
+    ->middleware(['locale', 'api.cache'])
     ->group(function (): void {
         Route::middleware('throttle:catalog-api')->group(function (): void {
             Route::get('/catalog', [CatalogController::class, 'index'])->name('api.v1.catalog');

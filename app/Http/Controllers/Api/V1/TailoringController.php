@@ -16,6 +16,7 @@ class TailoringController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
+        $data = $request->validate(['per_page' => 'nullable|integer|min:1|max:50']);
         $requests = TailoringRequest::query()
             ->where('user_id', $request->user()->id)
             ->with([
@@ -26,10 +27,18 @@ class TailoringController extends Controller
                 'orderItem.measurements',
             ])
             ->latest()
-            ->get();
+            ->paginate((int) ($data['per_page'] ?? 20));
 
         return response()->json([
-            'data' => $requests->map(fn (TailoringRequest $tailoring) => $this->payload($tailoring)),
+            'data' => $requests->getCollection()
+                ->map(fn (TailoringRequest $tailoring) => $this->payload($tailoring))
+                ->values(),
+            'meta' => [
+                'current_page' => $requests->currentPage(),
+                'last_page' => $requests->lastPage(),
+                'per_page' => $requests->perPage(),
+                'total' => $requests->total(),
+            ],
         ]);
     }
 

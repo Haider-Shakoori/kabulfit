@@ -8,6 +8,13 @@ return [
     'catalog' => [
         'per_page' => (int) env('KABULFIT_CATALOG_PER_PAGE', 12),
         'max_per_page' => 48,
+        'filter_cache_minutes' => (int) env('KABULFIT_FILTER_CACHE_MINUTES', 10),
+    ],
+    'media' => [
+        'derivative_disk' => env('KABULFIT_MEDIA_DERIVATIVE_DISK', 'public'),
+        'derivative_directory' => env('KABULFIT_MEDIA_DERIVATIVE_DIRECTORY', 'media/products'),
+        'webp_quality' => (int) env('KABULFIT_MEDIA_WEBP_QUALITY', 78),
+        'avif_quality' => (int) env('KABULFIT_MEDIA_AVIF_QUALITY', 58),
     ],
     'checkout' => [
         'reservation_minutes' => (int) env('KABULFIT_CHECKOUT_RESERVATION_MINUTES', 30),
