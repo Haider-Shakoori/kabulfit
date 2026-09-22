@@ -42,7 +42,7 @@ jobs:
 
       - name: Production cache and scheduler compatibility
         run: |
-          php artisan config:cache
+          CACHE_STORE=file php artisan config:cache
           php artisan route:cache
           php artisan schedule:list
           php artisan optimize:clear
