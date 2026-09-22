@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 use App\Models\MeasurementDefinition;
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -22,8 +23,11 @@ class MeasurementSeeder extends Seeder {
    ['waistcoat','waistcoat_length',35,100,30,['en'=>['Waistcoat length','Measure from high shoulder to desired waistcoat hem.'],'fa'=>['قد واسکت','از بالای شانه تا پایین دلخواه واسکت اندازه بگیرید.'],'ps'=>['د واسکټ اوږدوالی','له لوړې اوږې تر مطلوب پای پورې اندازه واخلئ.']]],
   ];
   foreach($defs as [$garment,$code,$min,$max,$sort,$translations]){
-   $d=MeasurementDefinition::updateOrCreate(['code'=>$garment.'_'.$code],['uuid'=>(string)Str::uuid(),'garment_type'=>$garment,'min_cm'=>$min,'max_cm'=>$max,'step_cm'=>.1,'is_required'=>true,'is_active'=>true,'sort_order'=>$sort]);
+   $d=MeasurementDefinition::updateOrCreate(['garment_type'=>$garment,'code'=>$code],['uuid'=>(string)Str::uuid(),'min_cm'=>$min,'max_cm'=>$max,'step_cm'=>.1,'is_required'=>true,'is_active'=>true,'sort_order'=>$sort]);
    foreach($translations as $locale=>[$name,$instructions])$d->translations()->updateOrCreate(['locale'=>$locale],['name'=>$name,'instructions'=>$instructions]);
   }
+  Product::where('sku','KF-M-PT-001')->update(['tailoring_enabled'=>true,'measurement_garment_type'=>'perahan_tunban']);
+  Product::where('sku','KF-W-DR-001')->update(['tailoring_enabled'=>true,'measurement_garment_type'=>'dress']);
+  Product::where('sku','KF-M-WC-001')->update(['tailoring_enabled'=>true,'measurement_garment_type'=>'waistcoat']);
  });}
 }
