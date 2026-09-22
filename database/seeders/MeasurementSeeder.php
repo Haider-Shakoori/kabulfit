@@ -31,7 +31,7 @@ class MeasurementSeeder extends Seeder
             foreach ($defs as [$garment,$code,$min,$max,$sort,$translations]) {
                 $d = MeasurementDefinition::updateOrCreate(['garment_type' => $garment, 'code' => $code], ['uuid' => (string) Str::uuid(), 'min_cm' => $min, 'max_cm' => $max, 'step_cm' => .1, 'is_required' => true, 'is_active' => true, 'sort_order' => $sort]);
                 foreach ($translations as $locale => [$name,$instructions]) {
-                    $d->translations()->updateOrCreate(['locale' => $locale], ['name' => $name, 'instructions' => $instructions]);
+                    $d->translations()->updateOrCreate(['locale' => $locale], ['name' => $name, 'instructions' => $instructions, 'guide_image_path' => 'images/measurements/'.str_replace('_', '-', $garment).'.svg']);
                 }
             }
             Product::where('sku', 'KF-M-PT-001')->update(['tailoring_enabled' => true, 'measurement_garment_type' => 'perahan_tunban']);
