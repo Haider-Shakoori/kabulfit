@@ -12,6 +12,7 @@ use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\TailoringController;
@@ -83,6 +84,8 @@ Route::prefix('{locale}')
             Route::delete('/wishlist/{slug}', [CommerceController::class, 'wishlistDestroy'])->name('wishlist.destroy');
             Route::get('/checkout', [CommerceController::class, 'checkout'])->name('checkout');
             Route::post('/checkout', [CommerceController::class, 'place'])->middleware('throttle:20,1')->name('checkout.place');
+            Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+            Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('orders.show');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
         });
     });
