@@ -12,7 +12,10 @@ class OrderStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public readonly Order $order, public readonly string $status) {}
+    public function __construct(public readonly Order $order, public readonly string $status)
+    {
+        $this->afterCommit();
+    }
 
     public function via(object $notifiable): array
     {

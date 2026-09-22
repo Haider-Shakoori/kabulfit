@@ -42,6 +42,13 @@ class CheckoutService
             }
 
             $subtotal = 0;
+            $order->statusHistory()->create([
+                'uuid' => (string) Str::uuid(),
+                'status' => 'pending_payment',
+                'source' => 'checkout',
+                'occurred_at' => now(),
+            ]);
+
             foreach ($cart->items as $item) {
                 if ($item->variant) {
                     $inventory = InventoryItem::query()

@@ -7,12 +7,13 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PaymentEvent;
 use App\Services\Commerce\CheckoutService;
+use App\Services\Orders\OrderLifecycleService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PaymentService
 {
-    public function __construct(private readonly PaymentGateway $gateway, private readonly CheckoutService $checkout) {}
+    public function __construct(private readonly PaymentGateway $gateway, private readonly CheckoutService $checkout, private readonly OrderLifecycleService $orders) {}
 
     public function initiate(Order $order): array
     {
@@ -37,12 +38,14 @@ class PaymentService
             }
             if ($type === 'payment_intent.succeeded' && $payment->status !== 'succeeded') {
                 $payment->update(['status' => 'succeeded']);
-                $payment->order->update(['status' => 'paid', 'payment_status' => 'succeeded', 'paid_at' => now()]);
+                $payment->order->update(['payment_status' => 'succeeded', 'paid_at' => now()]);
+                $this->orders->transition($payment->order, 'paid', 'stripe');
                 $this->checkout->captureReservations($payment->order->load('items'));
             } elseif (in_array($type, ['payment_intent.payment_failed', 'payment_intent.canceled'], true) && ! in_array($payment->status, ['succeeded', 'refunded'], true)) {
                 $status = $type === 'payment_intent.canceled' ? 'cancelled' : 'failed';
                 $payment->update(['status' => $status, 'failure_message' => $object['last_payment_error']['message'] ?? null]);
-                $payment->order->update(['status' => $status === 'cancelled' ? 'cancelled' : 'payment_failed', 'payment_status' => $status]);
+                $payment->order->update(['payment_status' => $status]);
+                $this->orders->transition($payment->order, $status === 'cancelled' ? 'cancelled' : 'payment_failed', 'stripe');
                 $this->checkout->releaseReservations($payment->order);
             }
             $event->update(['processed_at' => now()]);
