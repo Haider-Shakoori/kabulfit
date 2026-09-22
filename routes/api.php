@@ -53,6 +53,10 @@ Route::prefix('v1/{locale}')
             Route::post('/measurement-profiles', [MeasurementController::class, 'store'])->name('api.v1.measurement-profiles.store');
             Route::put('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'update'])->name('api.v1.measurement-profiles.update');
             Route::delete('/measurement-profiles/{profile:uuid}', [MeasurementController::class, 'destroy'])->name('api.v1.measurement-profiles.destroy');
+            Route::get('/tailoring', [TailoringController::class, 'index'])->name('api.v1.tailoring.index');
+            Route::get('/tailoring/{tailoring}', [TailoringController::class, 'show'])
+                ->whereUuid('tailoring')
+                ->name('api.v1.tailoring.show');
             Route::post('/tailoring', [TailoringController::class, 'store'])->name('api.v1.tailoring.store');
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
