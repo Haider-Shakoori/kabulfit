@@ -65,7 +65,7 @@ class MeasurementProfileApiTest extends TestCase
         $this->postJson('/api/v1/en/measurement-profiles', $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors([
-                'measurements.shoulder',
+                'measurements.chest',
                 'measurements.not-a-real-measurement',
             ]);
     }

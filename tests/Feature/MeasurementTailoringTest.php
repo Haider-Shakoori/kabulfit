@@ -14,6 +14,12 @@ class MeasurementTailoringTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed();
+    }
+
     public function test_inch_conversion_round_trips_to_canonical_centimetres(): void
     {
         $this->assertSame('25.40', MeasurementConverter::toCm(10, 'in'));
