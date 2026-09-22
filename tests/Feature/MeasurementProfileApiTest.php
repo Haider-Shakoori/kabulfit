@@ -65,7 +65,7 @@ class MeasurementProfileApiTest extends TestCase
         $this->postJson('/api/v1/en/measurement-profiles', $payload)
             ->assertUnprocessable()
             ->assertJsonValidationErrors([
-                'measurements.shoulder',
+                'measurements.chest',
                 'measurements.not-a-real-measurement',
             ]);
     }
@@ -92,7 +92,7 @@ class MeasurementProfileApiTest extends TestCase
             ->get('/en/measurements')
             ->assertOk()
             ->assertSee('<meta name="robots" content="noindex,nofollow">', false)
-            ->assertSee('Measurement Profiles');
+            ->assertSee('Measurement profiles');
     }
 
     private function profilePayload(string $garmentType, string $unit): array
