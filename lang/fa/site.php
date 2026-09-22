@@ -14,7 +14,7 @@ return [
     'kabulfit_home' => 'صفحه اصلی کابل‌فیت',
     'shop' => 'فروشگاه',
     'categories' => 'دسته‌بندی‌ها',
-    'custom_tailoring' => 'خیاطی سفارشی',
+    'about' => 'درباره ما',\n    'support' => 'پشتیبانی',\n    'company' => 'شرکت',\n    'custom_tailoring' => 'خیاطی سفارشی',
     'language' => 'زبان',
 
     'footer_intro' => 'مد اصیل افغانی با الهام از میراث، هنر و تجربه مدرن دوخت به اندازه.',
