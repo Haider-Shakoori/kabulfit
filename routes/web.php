@@ -2,6 +2,16 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Admin\AuditController as AdminAuditController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\MeasurementController as AdminMeasurementController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\RoleController as AdminRoleController;
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\TailoringController as AdminTailoringController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -91,5 +101,45 @@ Route::prefix('{locale}')
             Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
             Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('orders.show');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
+
+            Route::prefix('admin')
+                ->name('admin.')
+                ->middleware('permission:admin.access')
+                ->group(function (): void {
+                    Route::get('/', AdminDashboardController::class)->name('dashboard');
+
+                    Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
+                    Route::put('/products/{product:sku}', [AdminProductController::class, 'update'])->name('products.update');
+
+                    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+                    Route::get('/orders/{order:uuid}', [AdminOrderController::class, 'show'])->name('orders.show');
+                    Route::post('/orders/{order:uuid}/status', [AdminOrderController::class, 'transition'])->name('orders.transition');
+                    Route::post('/orders/{order:uuid}/shipments', [AdminOrderController::class, 'shipment'])->name('orders.shipments.store');
+                    Route::post('/shipments/{shipment:uuid}/status', [AdminOrderController::class, 'shipmentStatus'])->name('shipments.status');
+
+                    Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
+                    Route::get('/customers/{customer:uuid}', [AdminCustomerController::class, 'show'])->name('customers.show');
+                    Route::put('/customers/{customer:uuid}', [AdminCustomerController::class, 'update'])->name('customers.update');
+                    Route::put('/customers/{customer:uuid}/roles', [AdminCustomerController::class, 'roles'])->name('customers.roles');
+
+                    Route::get('/measurements', [AdminMeasurementController::class, 'index'])->name('measurements.index');
+                    Route::put('/measurements/{definition:uuid}', [AdminMeasurementController::class, 'update'])->name('measurements.update');
+
+                    Route::get('/tailoring', [AdminTailoringController::class, 'index'])->name('tailoring.index');
+                    Route::get('/tailoring/{tailoring:uuid}', [AdminTailoringController::class, 'show'])->name('tailoring.show');
+                    Route::post('/tailoring/{tailoring:uuid}/cancel', [AdminTailoringController::class, 'cancel'])->name('tailoring.cancel');
+
+                    Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+                    Route::get('/payments/{payment:uuid}', [AdminPaymentController::class, 'show'])->name('payments.show');
+                    Route::post('/payments/{payment:uuid}/refund', [AdminPaymentController::class, 'refund'])->name('payments.refund');
+
+                    Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
+                    Route::put('/settings', [AdminSettingsController::class, 'update'])->name('settings.update');
+
+                    Route::get('/roles', [AdminRoleController::class, 'index'])->name('roles.index');
+                    Route::put('/roles/{role:uuid}', [AdminRoleController::class, 'update'])->name('roles.update');
+
+                    Route::get('/audit', AdminAuditController::class)->name('audit.index');
+                });
         });
     });

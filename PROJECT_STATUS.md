@@ -260,9 +260,47 @@ Feature-branch validation from GitHub Actions run `35692548969`:
 - PR-triggered CI run `35692734951`: **quality + MySQL smoke both green**.
 - Post-merge `main` CI run `35692831968`: **quality + MySQL smoke both green**.
 
+## Batch 8 — Admin, roles, Stripe operations and audit logging
+
+Status: **implementation complete on `feat/batch-08-admin-roles-stripe-audit`; feature-branch CI is green and the batch is ready for PR validation**.
+
+Implemented:
+
+- First-party relational RBAC with users, roles, permissions and protected super-admin behavior.
+- Laravel policies for products, orders, payments, customers, measurement definitions, tailoring requests, settings, roles and audit logs.
+- Permission middleware for the administration boundary.
+- Safe first-super-admin bootstrap command with no hard-coded production credentials.
+- Custom locale-scoped admin dashboard integrated with the existing KabulFit UI.
+- Product/catalog administration including localized content, SEO fields, pricing, stock and tailoring eligibility.
+- Order administration using the existing authoritative order lifecycle service.
+- Shipment creation/status operations using the existing shipping lifecycle.
+- Customer activation, preferred-language and role administration.
+- Measurement-definition range/required/active controls and localized instructions.
+- Tailoring request administration with safe cancellation only before order placement.
+- Stripe payment visibility and provider/webhook payment-event history.
+- Full Stripe refund operations routed through `PaymentService` and `PaymentGateway`.
+- Refund state propagation into payment/order lifecycle and customer notification flow.
+- Settings-backed homepage SEO for English/Dari/Pashto plus contact email.
+- Existing public SEO baseline preserved when settings are first seeded.
+- Immutable administrative audit logs containing actor, action, subject, metadata, IP/user-agent and timestamp.
+- Role-permission management with protected super-admin permission set.
+- Dedicated `docs/ADMIN.md` operational/authorization documentation.
+- Authorization, bootstrap, role-assignment, SEO-setting, audit immutability, payment event and refund regression tests.
+
+Feature-branch validation from GitHub Actions run `35694202519`:
+
+- PHPUnit: **83 tests, 455 assertions, zero warnings**.
+- Laravel Pint: **207 files passed**.
+- Composer dependency audit: **no security vulnerability advisories found**.
+- Vite production build: **successful**.
+- MySQL 8.4: **fresh migration + deterministic seeding successful**.
+- PHP syntax checks and Composer validation: **passed**.
+
+Batch 9 intentionally remains responsible for the dedicated tailor workspace, tailor assignments and tailor-specific workflow.
+
 ## Not yet complete
 
-- Admin/tailor dashboards and authorization matrix.
+- Dedicated tailor dashboard and tailor assignment workflow.
 - Blog/content CMS.
 - Flutter application implementation.
 - Real legacy-ID mapping crawl.
@@ -272,4 +310,4 @@ Feature-branch validation from GitHub Actions run `35692548969`:
 
 ## Release gate
 
-Batch 7 is fully closed after green feature-branch, PR and post-merge `main` CI. The next implementation gate is Batch 8 — admin, roles, Stripe operations and audit logging.
+Batch 8 has passed feature-branch CI. It must still pass pull-request CI before merge and post-merge `main` CI before the batch is fully closed.

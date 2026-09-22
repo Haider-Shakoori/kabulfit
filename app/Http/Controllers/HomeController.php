@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Services\Catalog\CatalogQuery;
+use App\Services\Settings\SiteSettings;
 use App\Support\Seo\SeoData;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    public function __construct(private readonly SiteSettings $settings) {}
+
     public function __invoke(string $locale): View
     {
         $categories = Category::query()
@@ -26,9 +29,12 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
+        $homeTitle = $this->settings->get('seo.home.title.'.$locale, __('site.home_title'));
+        $homeDescription = $this->settings->get('seo.home.description.'.$locale, __('site.home_description'));
+
         $seo = new SeoData(
-            title: __('site.home_title'),
-            description: __('site.home_description'),
+            title: $homeTitle,
+            description: $homeDescription,
             canonical: route('home', ['locale' => $locale]),
             alternates: $this->localeAlternates('home'),
             jsonLd: [
@@ -36,7 +42,7 @@ class HomeController extends Controller
                 '@type' => 'Organization',
                 'name' => 'KabulFit',
                 'url' => route('home', ['locale' => $locale]),
-                'description' => __('site.home_description'),
+                'description' => $homeDescription,
             ],
         );
 
