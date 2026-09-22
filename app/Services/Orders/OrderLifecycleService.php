@@ -5,7 +5,6 @@ namespace App\Services\Orders;
 use App\Models\CustomerEvent;
 use App\Models\Order;
 use App\Models\Shipment;
-use App\Models\ShipmentEvent;
 use App\Notifications\OrderStatusChanged;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
