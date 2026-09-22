@@ -11,8 +11,10 @@ use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyRedirectController;
+use App\Http\Controllers\MeasurementProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
+use App\Http\Controllers\TailoringController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect('/'.config('kabulfit.default_locale')));
@@ -61,6 +63,16 @@ Route::prefix('{locale}')
             Route::post('/account/addresses', [AddressController::class, 'store'])->name('addresses.store');
             Route::put('/account/addresses/{address:uuid}', [AddressController::class, 'update'])->name('addresses.update');
             Route::delete('/account/addresses/{address:uuid}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+
+            Route::get('/measurements', [MeasurementProfileController::class, 'index'])->name('measurements.index');
+            Route::get('/measurements/create', [MeasurementProfileController::class, 'create'])->name('measurements.create');
+            Route::post('/measurements', [MeasurementProfileController::class, 'store'])->name('measurements.store');
+            Route::get('/measurements/{profile:uuid}/edit', [MeasurementProfileController::class, 'edit'])->name('measurements.edit');
+            Route::put('/measurements/{profile:uuid}', [MeasurementProfileController::class, 'update'])->name('measurements.update');
+            Route::delete('/measurements/{profile:uuid}', [MeasurementProfileController::class, 'destroy'])->name('measurements.destroy');
+
+            Route::get('/products/{slug}/tailor', [TailoringController::class, 'create'])->name('tailoring.create');
+            Route::post('/products/{slug}/tailor', [TailoringController::class, 'store'])->name('tailoring.store');
 
             Route::get('/cart', [CommerceController::class, 'cart'])->name('cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('cart.items.store');

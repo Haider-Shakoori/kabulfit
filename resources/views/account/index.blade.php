@@ -35,6 +35,14 @@
             <x-form-errors />
             <section class="account-panel">
                 <div class="panel-heading">
+                    <div><p class="eyebrow">{{ __('measurements.custom_tailoring') }}</p><h2>{{ __('measurements.profiles') }}</h2></div>
+                    <a class="button button-secondary" href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}">{{ __('measurements.manage_profiles') }}</a>
+                </div>
+                <p>{{ __('measurements.profiles_intro') }}</p>
+            </section>
+
+            <section class="account-panel">
+                <div class="panel-heading">
                     <div><p class="eyebrow">{{ __('account.shipping') }}</p><h2>{{ __('account.addresses') }}</h2></div>
                 </div>
 

@@ -14,6 +14,10 @@ class ProductDetailResource extends ProductSummaryResource
         return [
             ...$base,
             'description' => $translation?->description,
+            'tailoring' => [
+                'enabled' => $this->tailoring_enabled,
+                'garment_type' => $this->measurement_garment_type,
+            ],
             'collections' => $this->collections
                 ->map(function ($collection): array {
                     $translation = $collection->translation();
