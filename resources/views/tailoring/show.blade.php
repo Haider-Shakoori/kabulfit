@@ -45,7 +45,7 @@
                     @if ($orderItem)
                         @foreach ($orderItem->measurements as $measurement)
                             <div>
-                                <dt>{{ $measurement->name }}</dt>
+                                <dt>{{ $measurement->definition_name }}</dt>
                                 <dd>{{ number_format((float) $measurement->value_cm, 2) }} cm</dd>
                             </div>
                         @endforeach
