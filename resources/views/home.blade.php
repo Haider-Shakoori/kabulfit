@@ -50,10 +50,10 @@
             <p>{{ __('site.category_intro') }}</p>
         </div>
         @php($categoryImages = [
-            'images/kabulfit-live/hero-heritage.png',
-            'images/kabulfit-live/measurement-guide.png',
-            'images/kabulfit-live/craftsmanship.jpg',
-            'images/kabulfit-live/hero-heritage.png',
+            'images/kabulfit-live/catalog/category-3ed66ce35408.webp',
+            'images/kabulfit-live/catalog/category-861c19f93a16.webp',
+            'images/kabulfit-live/catalog/category-15e0668e6ecf.png',
+            'images/kabulfit-live/catalog/product-e3216ebea370.webp',
         ])
         <div class="live-category-grid">
             @foreach ($categories as $category)
