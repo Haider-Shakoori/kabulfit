@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\BlogPost;
 use App\Models\ContentPage;
 use App\Models\LegacyUrl;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -106,7 +107,7 @@ class ContentSeeder extends Seeder
 
         $posts = [
             [
-                'published_at' => now()->subDays(10),
+                'published_at' => CarbonImmutable::parse('2026-09-12 09:00:00', 'Asia/Kabul'),
                 'translations' => [
                     'en' => ['How to Measure for a Perahan Tunban', 'how-to-measure-for-perahan-tunban', 'A practical checklist before ordering a made-to-measure Perahan Tunban.', "Accurate measurements make custom tailoring more predictable.\n\nUse the KabulFit measurement guide, keep the tape level and avoid adding extra ease yourself unless the guide asks for it.\n\nSave the completed set as a measurement profile, review each value, then select that profile when tailoring an eligible outfit."],
                     'fa' => ['چگونه برای پیرهن تنبان اندازه بگیریم', 'چگونه-برای-پیرهن-تنبان-اندازه-بگیریم', 'چک‌لیست عملی پیش از سفارش پیرهن تنبان سفارشی.', "اندازه دقیق نتیجه خیاطی سفارشی را قابل پیش‌بینی‌تر می‌کند.\n\nراهنمای اندازه کابل‌فیت را دنبال کنید و متر را صاف نگه دارید.\n\nاندازه‌ها را در پروفایل ذخیره و پیش از سفارش دوباره بررسی کنید."],
@@ -114,7 +115,7 @@ class ContentSeeder extends Seeder
                 ],
             ],
             [
-                'published_at' => now()->subDays(5),
+                'published_at' => CarbonImmutable::parse('2026-09-17 09:00:00', 'Asia/Kabul'),
                 'translations' => [
                     'en' => ['Afghan Embroidery and Modern Tailoring', 'afghan-embroidery-and-modern-tailoring', 'How traditional Afghan embroidery can work with contemporary made-to-measure clothing.', "Afghan embroidery carries regional identity through pattern, color and technique.\n\nModern made-to-measure production can preserve that visual language while improving consistency of fit and order tracking.\n\nKabulFit treats design details and measurements as separate concerns so artisans can focus on craftsmanship without losing the customer's recorded fit."],
                     'fa' => ['خامک‌دوزی افغانی و خیاطی مدرن', 'خامک-دوزی-افغانی-و-خیاطی-مدرن', 'پیوند خامک‌دوزی سنتی با لباس سفارشی امروزی.', "خامک‌دوزی افغانی هویت منطقه‌ای را از طریق نقش، رنگ و شیوه کار منتقل می‌کند.\n\nخیاطی سفارشی مدرن می‌تواند این زبان بصری را حفظ و در عین حال ثبات اندازه را بهتر کند."],
@@ -152,7 +153,7 @@ class ContentSeeder extends Seeder
             }
         }
 
-        $verified = now();
+        $verified = CarbonImmutable::parse('2026-09-22 00:00:00', 'Asia/Kabul');
         $entries = [
             ['/About', 'redirect', '/en/about', 'Verified from the live public route inventory.'],
             ['/Contact', 'redirect', '/en/contact', 'Verified from the live public route inventory.'],
@@ -171,6 +172,16 @@ class ContentSeeder extends Seeder
             ['/MyMeasurements', 'redirect', '/en/measurements', 'Verified legacy customer measurement route.'],
             ['/TailorDashboard', 'redirect', '/en/tailor', 'Verified legacy staff route; destination remains authorization protected.'],
             ['/ProductDetail', 'manual_product', null, 'Verified legacy product route. Query parameter id requires an explicit product mapping; unknown IDs must remain 404.'],
+            ['/AdminCategories', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminDashboard', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminMeasurementGuides', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminMeasurements', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminOrders', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminProducts', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminSettings', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminShippingRates', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminSizeGuides', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
+            ['/AdminUsers', 'private', null, 'Verified legacy administration route; intentionally not redirected to avoid exposing staff navigation.'],
         ];
 
         foreach ($entries as [$path, $disposition, $target, $notes]) {
