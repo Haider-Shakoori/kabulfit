@@ -124,6 +124,46 @@ class ContentSeoCmsTest extends TestCase
         ]);
     }
 
+    public function test_reserved_page_slug_cannot_override_application_routes(): void
+    {
+        $manager = $this->userWithRole('catalog-manager');
+        $page = ContentPage::query()->where('page_key', 'about')->with('translations')->firstOrFail();
+
+        $translations = $page->translations->mapWithKeys(fn ($translation) => [
+            $translation->locale => [
+                'title' => $translation->title,
+                'slug' => $translation->locale === 'en' ? 'shop' : $translation->slug,
+                'excerpt' => $translation->excerpt,
+                'body' => $translation->body,
+                'seo_title' => $translation->seo_title,
+                'seo_description' => $translation->seo_description,
+            ],
+        ])->all();
+
+        $this->actingAs($manager)
+            ->put('/en/admin/content/pages/'.$page->uuid, [
+                'is_published' => '1',
+                'translations' => $translations,
+            ])
+            ->assertSessionHasErrors('translations.en.slug');
+
+        $this->assertSame(
+            'about',
+            $page->fresh('translations')->translations->firstWhere('locale', 'en')->slug,
+        );
+    }
+
+    public function test_verified_legacy_admin_routes_are_inventory_only_and_remain_private(): void
+    {
+        $entry = LegacyUrl::query()->where('legacy_path', '/AdminDashboard')->firstOrFail();
+
+        $this->assertSame('private', $entry->disposition);
+        $this->assertNull($entry->target_path);
+        $this->assertNotNull($entry->verified_at);
+
+        $this->get('/AdminDashboard')->assertNotFound();
+    }
+
     public function test_redirect_inventory_requires_dedicated_permission(): void
     {
         $manager = $this->userWithRole('catalog-manager');
