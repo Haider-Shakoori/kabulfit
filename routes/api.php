@@ -3,11 +3,11 @@
 use App\Http\Controllers\Api\V1\CatalogController;
 use App\Http\Controllers\Api\V1\CommerceController;
 use App\Http\Controllers\Api\V1\MeasurementController;
-use App\Http\Controllers\Api\V1\TailoringController;
 use App\Http\Controllers\Api\V1\MobileAddressController;
 use App\Http\Controllers\Api\V1\MobileAuthController;
 use App\Http\Controllers\Api\V1\MobilePasswordController;
 use App\Http\Controllers\Api\V1\MobileVerificationController;
+use App\Http\Controllers\Api\V1\TailoringController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
 
