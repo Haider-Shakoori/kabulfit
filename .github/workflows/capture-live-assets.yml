@@ -1,0 +1,35 @@
+name: Capture live KabulFit reference assets
+
+on:
+  push:
+    branches:
+      - feat/live-site-layout-seeded-assets
+    paths:
+      - .github/workflows/capture-live-assets.yml
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Capture live reference
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p live-capture
+          cd live-capture
+          wget             --recursive             --level=2             --page-requisites             --convert-links             --adjust-extension             --span-hosts             --domains=kabulfit.com,www.kabulfit.com             --no-parent             --execute robots=off             https://kabulfit.com/ || true
+          find . -type f -print | sort > manifest.txt
+          du -ah . | sort -h > sizes.txt
+
+      - name: Upload live reference
+        uses: actions/upload-artifact@v4
+        with:
+          name: kabulfit-live-reference
+          path: live-capture
+          retention-days: 1
