@@ -32,7 +32,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-@php($contactEmail = app(AppServicesSettingsSiteSettings::class)->get('site.contact_email', 'info@kabulfit.com'))
+@php($contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com'))
 @php($isHome = request()->routeIs('home'))
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
