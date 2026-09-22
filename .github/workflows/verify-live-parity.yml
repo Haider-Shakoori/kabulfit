@@ -59,10 +59,41 @@ jobs:
       - name: Capture live and Laravel at matching viewports
         run: |
           mkdir -p parity-output
-          npx playwright screenshot --browser=chromium --viewport-size="1440,1200" --full-page https://kabulfit.com/ parity-output/live-desktop.png
-          npx playwright screenshot --browser=chromium --viewport-size="1440,1200" --full-page http://127.0.0.1:8000/en parity-output/laravel-desktop.png
-          npx playwright screenshot --browser=chromium --viewport-size="390,844" --full-page https://kabulfit.com/ parity-output/live-mobile.png
-          npx playwright screenshot --browser=chromium --viewport-size="390,844" --full-page http://127.0.0.1:8000/en parity-output/laravel-mobile.png
+          cat > /tmp/capture-parity.mjs <<'NODE'
+          import { chromium } from 'playwright';
+
+          const browser = await chromium.launch({ headless: true });
+
+          async function capture(url, path, width, height) {
+            const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 });
+            const page = await context.newPage();
+            await page.goto(url, { waitUntil: 'networkidle', timeout: 120000 });
+            await page.evaluate(async () => {
+              const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+              for (let y = 0; y < document.body.scrollHeight; y += 650) {
+                window.scrollTo(0, y);
+                await sleep(120);
+              }
+              window.scrollTo(0, 0);
+              await sleep(1000);
+            });
+            await page.waitForFunction(
+              () => [...document.images].every(img => img.complete),
+              { timeout: 20000 }
+            ).catch(() => {});
+            await page.waitForTimeout(1500);
+            await page.screenshot({ path, fullPage: true });
+            await context.close();
+          }
+
+          await capture('https://kabulfit.com/', 'parity-output/live-desktop.png', 1440, 1200);
+          await capture('http://127.0.0.1:8000/en', 'parity-output/laravel-desktop.png', 1440, 1200);
+          await capture('https://kabulfit.com/', 'parity-output/live-mobile.png', 390, 844);
+          await capture('http://127.0.0.1:8000/en', 'parity-output/laravel-mobile.png', 390, 844);
+
+          await browser.close();
+NODE
+          node /tmp/capture-parity.mjs
           cp /tmp/kabulfit-server.log parity-output/server.log
 
       - uses: actions/upload-artifact@v4
