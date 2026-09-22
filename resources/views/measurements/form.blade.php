@@ -58,13 +58,13 @@
                             name="measurements[{{ $loop->index }}][value]"
                             type="number"
                             inputmode="decimal"
-                            step="{{ AppSupportMeasurementsMeasurementConverter::fromCm($definition->step_cm, $unit) }}"
-                            min="{{ AppSupportMeasurementsMeasurementConverter::fromCm($definition->min_cm, $unit) }}"
-                            max="{{ AppSupportMeasurementsMeasurementConverter::fromCm($definition->max_cm, $unit) }}"
+                            step="{{ \App\Support\Measurements\MeasurementConverter::fromCm($definition->step_cm, $unit) }}"
+                            min="{{ \App\Support\Measurements\MeasurementConverter::fromCm($definition->min_cm, $unit) }}"
+                            max="{{ \App\Support\Measurements\MeasurementConverter::fromCm($definition->max_cm, $unit) }}"
                             value="{{ old('measurements.'.$loop->index.'.value', $values[$definition->code] ?? '') }}"
                             required
                         >
-                        <small>{{ AppSupportMeasurementsMeasurementConverter::fromCm($definition->min_cm, $unit) }}–{{ AppSupportMeasurementsMeasurementConverter::fromCm($definition->max_cm, $unit) }} {{ $unit }}</small>
+                        <small>{{ \App\Support\Measurements\MeasurementConverter::fromCm($definition->min_cm, $unit) }}–{{ \App\Support\Measurements\MeasurementConverter::fromCm($definition->max_cm, $unit) }} {{ $unit }}</small>
                     </label>
                 @endforeach
             </div>
