@@ -46,75 +46,73 @@
     <section class="relative h-screen overflow-hidden" data-section="hero">
         @foreach ($heroSlides as $index => $slide)
             <div
-                x-show="hero === {{ $index }}"
-                x-transition.opacity.duration.1000ms
-                class="absolute inset-0"
-                @if($index !== 0) x-cloak @endif
+                class="absolute inset-0 transition-opacity duration-1000"
+                :class="hero === {{ $index }} ? 'opacity-100' : 'opacity-0'"
             >
                 <div class="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
-                <img
-                    src="{{ asset($slide['image']) }}"
-                    alt="{{ $slide['title'] }}"
-                    class="h-full w-full object-cover object-[center_50%]"
-                    @if($index === 0) fetchpriority="high" @else loading="lazy" @endif
-                    decoding="async"
-                >
+                <div class="relative h-full w-full overflow-hidden">
+                    <img
+                        src="{{ asset($slide['image']) }}"
+                        alt="{{ $slide['title'] }}"
+                        class="h-full w-full object-cover object-[center_50%] opacity-100 transition-opacity duration-300"
+                        loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                        decoding="async"
+                        fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                    >
+                </div>
             </div>
         @endforeach
 
         <div class="absolute inset-0 z-20 flex items-center">
-            <div class="mx-auto w-full max-w-7xl px-4">
-                <div class="mt-16 max-w-2xl translate-y-[18px] sm:mt-20">
-                    <span class="mb-4 inline-flex items-center rounded-md border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80 sm:mb-6 sm:text-sm">
-                        <x-icon name="sparkles" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
+            <div class="max-w-7xl mx-auto px-4 w-full">
+                <div class="max-w-2xl mt-16 sm:mt-20" style="opacity: 1; transform: none;">
+                    <div class="inline-flex items-center rounded-md font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent shadow hover:bg-primary/80 bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white mb-4 sm:mb-6 text-xs sm:text-sm px-3 py-1 border-0">
+                        <x-icon name="sparkles" class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                         {{ __('site.featured_label') }}
-                    </span>
+                    </div>
 
                     <h1
-                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl lg:leading-none"
+                        class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight"
                         x-text="slides[hero].title"
                     >{{ $heroSlides[0]['title'] }}</h1>
 
                     <p
-                        class="mb-6 text-base text-white/80 sm:mb-8 sm:text-lg md:text-xl lg:text-2xl"
+                        class="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-6 sm:mb-8"
                         x-text="slides[hero].subtitle"
                     >{{ $heroSlides[0]['subtitle'] }}</p>
 
                     <div class="flex flex-wrap gap-3 sm:gap-4">
-                        <a
-                            :href="slides[hero].href"
-                            href="{{ $heroSlides[0]['href'] }}"
-                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
-                        >
-                            <span x-text="slides[hero].cta">{{ $heroSlides[0]['cta'] }}</span>
-                            <x-icon name="arrow-right" class="!ml-1 !h-4 !w-4 sm:!ml-2 sm:!h-5 sm:!w-5" />
+                        <a :href="slides[hero].href" href="{{ $heroSlides[0]['href'] }}">
+                            <button type="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow hover:bg-primary/90 h-10 bg-gradient-to-r from-[#881C27] to-[#2A6867] hover:opacity-90 text-white px-4 sm:px-6 md:px-8 py-3 sm:py-5 md:py-6 text-sm sm:text-base md:text-lg rounded-full">
+                                <span x-text="slides[hero].cta">{{ $heroSlides[0]['cta'] }}</span>
+                                <x-icon name="arrow-right" class="ml-1 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5" />
+                            </button>
                         </a>
 
-                        <a
-                            href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}"
-                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-[#000000] sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
-                        >
-                            <x-icon name="ruler" class="!mr-1 !h-4 !w-4 sm:!mr-2 sm:!h-5 sm:!w-5" />
-                            {{ __('site.measurement_guide') }}
+                        <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}">
+                            <button type="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-10 bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#000000] px-4 sm:px-6 md:px-8 py-3 sm:py-5 md:py-6 text-sm sm:text-base md:text-lg rounded-full">
+                                <x-icon name="ruler" class="mr-1 sm:mr-2 w-4 h-4 sm:w-5 sm:h-5" />
+                                {{ __('site.measurement_guide') }}
+                            </button>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-3">
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-3">
             @foreach ($heroSlides as $index => $slide)
                 <button
                     type="button"
                     @click="hero = {{ $index }}"
-                    class="h-3 rounded-full transition-all"
-                    :class="hero === {{ $index }} ? 'w-8 bg-gradient-to-r from-[#881C27] to-[#2A6867]' : 'w-3 bg-white/50'"
+                    class="w-3 h-3 rounded-full transition-all"
+                    :class="hero === {{ $index }} ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] w-8' : 'bg-white/50'"
                     aria-label="{{ __('site.hero_slide', ['number' => $index + 1]) }}"
                 ></button>
             @endforeach
         </div>
 
-        <div class="absolute bottom-0 left-0 right-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent z-20"></div>
     </section>
 
     <section class="border-y border-gray-100 bg-white py-12" data-section="trust" aria-label="{{ __('site.service_highlights') }}">
