@@ -52,7 +52,7 @@ return [
 
     'heritage_label' => 'Afghan heritage, tailored for today',
     'hero_title' => 'Authentic Afghan Elegance',
-    'hero_subtitle' => 'Discover timeless traditions woven into modern fashion.',
+    'hero_subtitle' => 'Discover timeless traditions woven into modern fashion',
     'traditional_elegance' => 'Traditional Elegance',
     'traditional_elegance_subtitle' => 'Handcrafted with love, worn with pride',
     'custom_fit_guarantee' => 'Custom Fit Guarantee',
