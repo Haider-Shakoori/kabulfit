@@ -149,26 +149,29 @@
 
             <div class="grid grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 @foreach ($liveCategories as $category)
-                    <a
-                        href="{{ route('shop', ['locale' => $locale, 'category' => $category['query']]) }}"
-                        class="group relative h-[300px] overflow-hidden rounded-2xl sm:h-[400px] sm:rounded-[2.5rem] md:h-[500px] md:rounded-[3rem]"
-                    >
-                        <img
-                            src="{{ asset($category['image']) }}"
-                            alt="{{ $category['name'] }}"
-                            loading="lazy"
-                            decoding="async"
-                            class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        >
-                        <span class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true"></span>
-                        <span class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
-                            <strong class="mb-1 block text-xl font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{{ $category['name'] }}</strong>
-                            <span class="flex items-center text-sm font-medium text-white group-hover:underline sm:text-base">
-                                {{ __('site.explore_collection') }}
-                                <x-icon name="arrow-right" class="!ml-1 !h-3 !w-3 transition-transform group-hover:translate-x-1 sm:!ml-2 sm:!h-4 sm:!w-4" />
-                            </span>
-                        </span>
-                    </a>
+                    <div>
+                        <a href="{{ route('shop', ['locale' => $locale, 'category' => $category['query']]) }}">
+                            <div class="group relative h-[300px] overflow-hidden rounded-2xl sm:h-[400px] sm:rounded-[2.5rem] md:h-[500px] md:rounded-[3rem]">
+                                <div class="relative h-full w-full overflow-hidden">
+                                    <img
+                                        src="{{ asset($category['image']) }}"
+                                        alt="{{ $category['name'] }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                        class="h-full w-full object-cover opacity-100 transition-opacity duration-300 transition-transform duration-700 group-hover:scale-110"
+                                    >
+                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true"></div>
+                                <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
+                                    <h3 class="mb-1 text-xl font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{{ $category['name'] }}</h3>
+                                    <span class="flex items-center text-sm font-medium text-white group-hover:underline sm:text-base">
+                                        {{ __('site.explore_collection') }}
+                                        <x-icon name="arrow-right" class="!ml-1 !h-3 !w-3 transition-transform group-hover:translate-x-1 sm:!ml-2 sm:!h-4 sm:!w-4" />
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 @endforeach
             </div>
         </div>
@@ -181,8 +184,10 @@
                     <h2 class="mb-2 text-4xl font-bold text-gray-900">{{ __('site.featured_label') }}</h2>
                     <p class="text-gray-600">{{ __('site.featured_title') }}</p>
                 </div>
-                <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90">
-                    {{ __('site.view_all') }}
+                <a href="{{ route('shop', ['locale' => $locale]) }}">
+                    <button type="button" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-input bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground hover:opacity-90">
+                        {{ __('site.view_all') }}
+                    </button>
                 </a>
             </div>
 
