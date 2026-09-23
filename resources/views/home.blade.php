@@ -41,7 +41,7 @@
 <div
     class="min-h-screen"
     x-data='{ hero: 0, slides: @json($heroSlides, JSON_HEX_APOS | JSON_HEX_QUOT) }'
-    x-init="setInterval(() => hero = (hero + 1) % slides.length, 6000)"
+    x-init="setInterval(() => hero = (hero + 1) % slides.length, 5000)"
 >
     <section class="relative h-screen overflow-hidden" data-section="hero">
         @foreach ($heroSlides as $index => $slide)
@@ -71,7 +71,7 @@
                     </span>
 
                     <h1
-                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl"
+                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl lg:leading-none"
                         x-text="slides[hero].title"
                     >{{ $heroSlides[0]['title'] }}</h1>
 
