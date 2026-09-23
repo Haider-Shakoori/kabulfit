@@ -24,7 +24,7 @@ class HomeController extends Controller
 
         $featuredProducts = Product::query()
             ->where('is_active', true)
-            ->where('is_featured', true)
+            ->where('sku', 'like', 'LIVE-F-%')
             ->with(CatalogQuery::cardEagerLoads())
             ->orderBy('sort_order')
             ->limit(8)
@@ -32,10 +32,10 @@ class HomeController extends Controller
 
         $bestSellerProducts = Product::query()
             ->where('is_active', true)
+            ->where('sku', 'like', 'LIVE-B-%')
             ->with(CatalogQuery::cardEagerLoads())
-            ->orderByDesc('is_featured')
             ->orderBy('sort_order')
-            ->limit(8)
+            ->limit(16)
             ->get();
 
         $homeTitle = $this->settings->get('seo.home.title.'.$locale, __('site.home_title'));
