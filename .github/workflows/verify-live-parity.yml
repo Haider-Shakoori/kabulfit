@@ -96,7 +96,7 @@ jobs:
             });
 
             await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
-            await page.waitForTimeout(5000);
+            await page.waitForTimeout(1500);
 
             await page.evaluate(async () => {
               const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -110,7 +110,7 @@ jobs:
 
             await page.waitForFunction(
               () => [...document.images].every(img => img.complete),
-              { timeout: 20000 }
+              { timeout: 5000 }
             ).catch(() => {});
             await page.evaluate(async () => {
               const decodeAll = Promise.all([...document.images].map(img => img.decode?.().catch(() => {})));
