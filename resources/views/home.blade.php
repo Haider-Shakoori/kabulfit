@@ -66,7 +66,7 @@
             <div class="mx-auto w-full max-w-7xl px-4">
                 <div class="mt-16 max-w-2xl sm:mt-20">
                     <span class="mb-4 inline-flex items-center rounded-full border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white sm:mb-6 sm:text-sm">
-                        <x-icon name="scissors" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
+                        <x-icon name="sparkles" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
                         {{ __('site.featured_label') }}
                     </span>
 
