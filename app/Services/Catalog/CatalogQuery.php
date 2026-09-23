@@ -112,6 +112,8 @@ class CatalogQuery
             'category.translations',
             'primaryMedia.translations',
             'primaryMedia.derivatives',
+            'media.translations',
+            'media.derivatives',
             'variants' => fn ($query) => $query
                 ->where('is_active', true)
                 ->with(['size', 'color.translations', 'inventory'])
