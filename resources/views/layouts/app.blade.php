@@ -416,7 +416,7 @@
     </div>
 </footer>
 
-<nav class="safe-bottom fixed bottom-0 left-0 right-0 z-50 flex border-t border-gray-200 bg-white md:hidden" style="padding-bottom:max(env(safe-area-inset-bottom),0px)" aria-label="{{ __('site.mobile_navigation') }}">
+<nav class="safe-bottom fixed inset-x-0 bottom-0 z-50 flex border-t border-gray-200 bg-white md:hidden" style="padding-bottom:max(env(safe-area-inset-bottom),0px)" aria-label="{{ __('site.mobile_navigation') }}">
     <a href="{{ route('home', ['locale' => $locale]) }}" class="relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[#881C27] transition-colors">
         <div class="relative"><x-icon name="home" class="!h-5 !w-5" /></div>
         <span class="text-[10px] font-medium">{{ __('site.home') }}</span>
