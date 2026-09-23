@@ -189,7 +189,7 @@
             @if ($featuredProducts->isNotEmpty())
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
                     @foreach ($featuredProducts as $product)
-                        <x-product-card :product="$product" />
+                        <x-product-card :product="$product" :eager="$loop->first" />
                     @endforeach
                 </div>
             @else
@@ -228,7 +228,7 @@
                     <div class="absolute -bottom-3 -left-3 rounded-xl bg-white p-3 shadow-xl sm:-bottom-4 sm:-left-4 sm:rounded-[1.5rem] sm:p-4 md:-bottom-6 md:-left-6 md:rounded-[2rem] md:p-6">
                         <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
                             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10 sm:h-12 sm:w-12 md:h-16 md:w-16">
-                                <x-icon name="scissors" class="!h-5 !w-5 text-[#881C27] sm:!h-6 sm:!w-6 md:!h-8 md:!w-8" />
+                                <x-icon name="sparkles" class="!h-5 !w-5 text-[#881C27] sm:!h-6 sm:!w-6 md:!h-8 md:!w-8" />
                             </div>
                             <div>
                                 <p class="text-xl font-bold text-gray-900 sm:text-2xl md:text-3xl">100+</p>
@@ -332,7 +332,11 @@
                 ] as [$name, $location, $quote])
                     <figure class="h-full rounded-xl border border-gray-200 bg-white shadow-sm">
                         <div class="p-6">
-                            <div class="mb-4 flex gap-1 text-xl text-[#2A6867]" aria-label="5 out of 5">★★★★★</div>
+                            <div class="mb-4 flex gap-1" aria-label="5 out of 5">
+                                @for ($star = 0; $star < 5; $star++)
+                                    <x-icon name="star" class="!h-5 !w-5 fill-[#2A6867] text-[#2A6867]" />
+                                @endfor
+                            </div>
                             <blockquote class="mb-6 italic text-gray-700">“{{ $quote }}”</blockquote>
                             <figcaption class="flex items-center gap-3">
                                 <span class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10 font-bold text-[#881C27]" aria-hidden="true">{{ mb_substr($name, 0, 1) }}</span>
