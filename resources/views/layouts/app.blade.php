@@ -30,6 +30,9 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if (request()->routeIs('home'))
+        <link rel="stylesheet" href="{{ asset('css/kabulfit-live-reference.css') }}">
+    @endif
 </head>
 <body class="min-h-screen flex flex-col bg-[#FDFBF7]">
 @php
@@ -400,8 +403,8 @@
                 <h4 class="mb-2 text-lg font-semibold sm:mb-3 sm:text-xl">{{ __('site.newsletter') }}</h4>
                 <p class="mb-4 text-sm text-gray-400 sm:mb-6 sm:text-base">{{ __('site.subscribe_text') }}</p>
                 <form class="mx-auto flex max-w-md flex-col gap-2 sm:flex-row sm:gap-3" @submit.prevent="subscribed = true">
-                    <input type="email" required placeholder="your@email.com" class="flex h-10 min-w-0 flex-1 rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-white shadow-sm transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring sm:h-12 sm:text-base">
-                    <button type="submit" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring sm:h-12 sm:px-6 sm:text-base">
+                    <input type="email" required placeholder="your@email.com" class="flex h-10 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-white shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm sm:h-12 sm:text-base">
+                    <button type="submit" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-primary-foreground text-white shadow transition-colors hover:bg-primary/90 hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 sm:h-12 sm:px-6 sm:text-base">
                         <x-icon name="mail" class="!mr-2 !h-4 !w-4 sm:!h-5 sm:!w-5" />
                         {{ __('site.subscribe') }}
                     </button>
