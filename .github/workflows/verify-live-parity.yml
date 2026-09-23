@@ -10,7 +10,9 @@ on:
       - resources/views/**
       - resources/css/**
       - resources/js/**
+      - lang/**
       - public/images/kabulfit-live/**
+      - public/css/kabulfit-live-reference.css
       - database/seeders/**
 
 permissions:
