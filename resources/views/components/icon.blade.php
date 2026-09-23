@@ -29,6 +29,14 @@
         @case('heart')
             <path d="M20.8 4.9a5.5 5.5 0 0 0-7.8 0L12 6l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.3 1-1a5.5 5.5 0 0 0 0-7.8Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
             @break
+        @case('eye')
+            <path d="M2.1 12.3a1 1 0 0 1 0-.6 10.7 10.7 0 0 1 19.8 0 1 1 0 0 1 0 .6 10.7 10.7 0 0 1-19.8 0Z" stroke="currentColor" stroke-width="1.7"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
+            @break
+        @case('sparkles')
+            <path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0L9.94 15.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M20 3v4M22 5h-4M4 17v2M5 18H3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            @break
         @case('cart')
             <path d="M3 4h2l1.5 9.2a2 2 0 0 0 2 1.7h7.9a2 2 0 0 0 1.9-1.4L20 7H6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="9" cy="19" r="1.4" fill="currentColor"/>
