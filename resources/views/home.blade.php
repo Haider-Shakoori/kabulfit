@@ -71,7 +71,7 @@
                     </span>
 
                     <h1
-                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl"
+                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl lg:leading-none"
                         x-text="slides[hero].title"
                     >{{ $heroSlides[0]['title'] }}</h1>
 
@@ -300,13 +300,13 @@
             <div class="prose prose-lg max-w-none space-y-4 text-gray-700">
                 <p class="leading-6">{{ __('site.seo_intro') }}</p>
 
-                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
+                <h3 class="text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
                 <p class="leading-6">{{ __('site.gand_text') }}</p>
 
-                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
+                <h3 class="text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
                 <p class="leading-6">{{ __('site.embroidery_text') }}</p>
 
-                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
+                <h3 class="text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
                 <p class="leading-6">{{ __('site.tailoring_text') }}</p>
 
                 <div class="flex flex-wrap gap-4">
