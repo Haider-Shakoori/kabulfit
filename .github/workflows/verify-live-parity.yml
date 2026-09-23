@@ -209,37 +209,86 @@ jobs:
           import pixelmatch from 'pixelmatch';
           import { PNG } from 'pngjs';
 
-          function copyToCanvas(source) {
-            const canvas = new PNG({ width: source.width, height: source.height });
-            PNG.bitblt(source, canvas, 0, 0, source.width, source.height, 0, 0);
-            return canvas;
+          function fillRect(png, rect) {
+            if (!rect) return;
+
+            const x0 = Math.max(0, Math.floor(rect.x));
+            const y0 = Math.max(0, Math.floor(rect.y));
+            const x1 = Math.min(png.width, Math.ceil(rect.x + rect.width));
+            const y1 = Math.min(png.height, Math.ceil(rect.y + rect.height));
+
+            for (let y = y0; y < y1; y++) {
+              for (let x = x0; x < x1; x++) {
+                const offset = (png.width * y + x) << 2;
+                png.data[offset] = 255;
+                png.data[offset + 1] = 255;
+                png.data[offset + 2] = 255;
+                png.data[offset + 3] = 255;
+              }
+            }
           }
 
-          function compare(aPath, bPath, label) {
+          function compare(aPath, bPath, liveJsonPath, laravelJsonPath, label) {
             const a = PNG.sync.read(fs.readFileSync(aPath));
             const b = PNG.sync.read(fs.readFileSync(bPath));
+            const liveData = JSON.parse(fs.readFileSync(liveJsonPath, 'utf8'));
+            const laravelData = JSON.parse(fs.readFileSync(laravelJsonPath, 'utf8'));
             const width = Math.max(a.width, b.width);
             const height = Math.max(a.height, b.height);
             const aa = new PNG({ width, height });
             const bb = new PNG({ width, height });
             PNG.bitblt(a, aa, 0, 0, a.width, a.height, 0, 0);
             PNG.bitblt(b, bb, 0, 0, b.width, b.height, 0, 0);
-            const diff = new PNG({ width, height });
-            const mismatched = pixelmatch(aa.data, bb.data, diff.data, width, height, { threshold: 0.1 });
-            fs.writeFileSync('parity-output/' + label + '-diff.png', PNG.sync.write(diff));
+
+            const rawDiff = new PNG({ width, height });
+            const rawMismatched = pixelmatch(aa.data, bb.data, rawDiff.data, width, height, { threshold: 0.1 });
+            fs.writeFileSync('parity-output/' + label + '-diff.png', PNG.sync.write(rawDiff));
+
+            // The live Base44/Supabase CDN intermittently leaves lazy images blank in
+            // headless full-page screenshots. Mask image rectangles in both renders to
+            // measure the UI/chrome/layout itself while retaining the raw visual score.
+            const uiA = PNG.sync.read(PNG.sync.write(aa));
+            const uiB = PNG.sync.read(PNG.sync.write(bb));
+            for (const image of [...(liveData.images || []), ...(laravelData.images || [])]) {
+              fillRect(uiA, image.rect);
+              fillRect(uiB, image.rect);
+            }
+
+            const uiDiff = new PNG({ width, height });
+            const uiMismatched = pixelmatch(uiA.data, uiB.data, uiDiff.data, width, height, { threshold: 0.1 });
+            fs.writeFileSync('parity-output/' + label + '-ui-diff.png', PNG.sync.write(uiDiff));
+
             return {
               label,
               reference: { width: a.width, height: a.height },
               laravel: { width: b.width, height: b.height },
               canvas: { width, height },
-              mismatchedPixels: mismatched,
-              mismatchPercent: Number(((mismatched / (width * height)) * 100).toFixed(4)),
+              mismatchedPixels: rawMismatched,
+              mismatchPercent: Number(((rawMismatched / (width * height)) * 100).toFixed(4)),
+              uiMismatchedPixels: uiMismatched,
+              uiMismatchPercent: Number(((uiMismatched / (width * height)) * 100).toFixed(4)),
+              sectionGeometry: {
+                reference: (liveData.sections || []).map(section => section.rect),
+                laravel: (laravelData.sections || []).map(section => section.rect),
+              },
             };
           }
 
           const report = [
-            compare('parity-output/live-desktop.png', 'parity-output/laravel-desktop.png', 'desktop'),
-            compare('parity-output/live-mobile.png', 'parity-output/laravel-mobile.png', 'mobile'),
+            compare(
+              'parity-output/live-desktop.png',
+              'parity-output/laravel-desktop.png',
+              'parity-output/live-desktop.json',
+              'parity-output/laravel-desktop.json',
+              'desktop'
+            ),
+            compare(
+              'parity-output/live-mobile.png',
+              'parity-output/laravel-mobile.png',
+              'parity-output/live-mobile.json',
+              'parity-output/laravel-mobile.json',
+              'mobile'
+            ),
           ];
 
           fs.writeFileSync('parity-output/parity-report.json', JSON.stringify(report, null, 2));
