@@ -16,6 +16,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: kabulfit-parity-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   compare:
     runs-on: ubuntu-latest
