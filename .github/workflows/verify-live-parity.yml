@@ -6,6 +6,11 @@ on:
       - fix/live-site-pixel-parity
     paths:
       - .github/workflows/verify-live-parity.yml
+      - resources/views/**
+      - resources/css/**
+      - resources/js/**
+      - public/images/kabulfit-live/**
+      - database/seeders/**
 
 permissions:
   contents: read
@@ -13,7 +18,7 @@ permissions:
 jobs:
   compare:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -37,15 +42,15 @@ jobs:
           npm install --no-audit --no-fund
           npm run build
 
-      - name: Install browser
+      - name: Install browser tooling
         run: |
-          npm install playwright@1.55.0 --no-audit --no-fund
+          npm install playwright@1.55.0 pixelmatch@7.1.0 pngjs@7.0.0 --no-audit --no-fund
           npx playwright install chromium
 
       - name: Start Laravel
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
+          DB_DATABASE: \${{ github.workspace }}/database/database.sqlite
         run: |
           php artisan serve --host=127.0.0.1 --port=8000 > /tmp/kabulfit-server.log 2>&1 &
           echo $! > /tmp/kabulfit-server.pid
@@ -61,14 +66,21 @@ jobs:
           mkdir -p parity-output
           cat > capture-parity.mjs <<'NODE'
           import { chromium } from 'playwright';
+          import fs from 'node:fs/promises';
 
           const browser = await chromium.launch({ headless: true });
 
-          async function capture(url, path, width, height) {
-            const context = await browser.newContext({ viewport: { width, height }, deviceScaleFactor: 1 });
+          async function capture(url, prefix, width, height) {
+            const context = await browser.newContext({
+              viewport: { width, height },
+              deviceScaleFactor: 1,
+              colorScheme: 'light',
+            });
             const page = await context.newPage();
+
             await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
             await page.waitForTimeout(5000);
+
             await page.evaluate(async () => {
               const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
               for (let y = 0; y < document.body.scrollHeight; y += 650) {
@@ -78,27 +90,132 @@ jobs:
               window.scrollTo(0, 0);
               await sleep(1000);
             });
+
             await page.waitForFunction(
               () => [...document.images].every(img => img.complete),
               { timeout: 20000 }
             ).catch(() => {});
             await page.waitForTimeout(1500);
-            await page.screenshot({ path, fullPage: true });
+
+            const data = await page.evaluate(() => {
+              const rect = el => {
+                if (!el) return null;
+                const r = el.getBoundingClientRect();
+                const style = getComputedStyle(el);
+                return {
+                  x: Math.round(r.x),
+                  y: Math.round(r.y),
+                  width: Math.round(r.width),
+                  height: Math.round(r.height),
+                  display: style.display,
+                  position: style.position,
+                  fontSize: style.fontSize,
+                  fontWeight: style.fontWeight,
+                  lineHeight: style.lineHeight,
+                  color: style.color,
+                  backgroundColor: style.backgroundColor,
+                };
+              };
+
+              return {
+                viewport: {
+                  innerWidth: window.innerWidth,
+                  innerHeight: window.innerHeight,
+                  bodyScrollWidth: document.body.scrollWidth,
+                  bodyScrollHeight: document.body.scrollHeight,
+                  documentScrollWidth: document.documentElement.scrollWidth,
+                  documentScrollHeight: document.documentElement.scrollHeight,
+                },
+                title: document.title,
+                bodyClasses: document.body.className,
+                header: rect(document.querySelector('header')),
+                main: rect(document.querySelector('main')),
+                footer: rect(document.querySelector('footer')),
+                headings: [...document.querySelectorAll('h1,h2,h3')].map((el, index) => ({
+                  index,
+                  tag: el.tagName,
+                  text: el.textContent.trim().replace(/\s+/g, ' '),
+                  rect: rect(el),
+                })),
+                images: [...document.images].map((img, index) => ({
+                  index,
+                  src: img.currentSrc || img.src,
+                  alt: img.alt,
+                  naturalWidth: img.naturalWidth,
+                  naturalHeight: img.naturalHeight,
+                  rect: rect(img),
+                })),
+                links: [...document.querySelectorAll('a')].map(a => ({
+                  text: a.textContent.trim().replace(/\s+/g, ' '),
+                  href: a.href,
+                })),
+                resources: performance.getEntriesByType('resource').map(entry => entry.name),
+              };
+            });
+
+            await page.screenshot({ path: 'parity-output/' + prefix + '.png', fullPage: true });
+            await fs.writeFile('parity-output/' + prefix + '.html', await page.content());
+            await fs.writeFile('parity-output/' + prefix + '.json', JSON.stringify(data, null, 2));
             await context.close();
           }
 
-          await capture('https://kabulfit.com/', 'parity-output/live-desktop.png', 1440, 1200);
-          await capture('http://127.0.0.1:8000/en', 'parity-output/laravel-desktop.png', 1440, 1200);
-          await capture('https://kabulfit.com/', 'parity-output/live-mobile.png', 390, 844);
-          await capture('http://127.0.0.1:8000/en', 'parity-output/laravel-mobile.png', 390, 844);
+          await capture('https://kabulfit.com/', 'live-desktop', 1440, 1200);
+          await capture('http://127.0.0.1:8000/en', 'laravel-desktop', 1440, 1200);
+          await capture('https://kabulfit.com/', 'live-mobile', 390, 844);
+          await capture('http://127.0.0.1:8000/en', 'laravel-mobile', 390, 844);
 
           await browser.close();
           NODE
           node capture-parity.mjs
           cp /tmp/kabulfit-server.log parity-output/server.log
 
+      - name: Measure screenshot difference
+        run: |
+          cat > compare-parity.mjs <<'NODE'
+          import fs from 'node:fs';
+          import pixelmatch from 'pixelmatch';
+          import { PNG } from 'pngjs';
+
+          function copyToCanvas(source) {
+            const canvas = new PNG({ width: source.width, height: source.height });
+            PNG.bitblt(source, canvas, 0, 0, source.width, source.height, 0, 0);
+            return canvas;
+          }
+
+          function compare(aPath, bPath, label) {
+            const a = PNG.sync.read(fs.readFileSync(aPath));
+            const b = PNG.sync.read(fs.readFileSync(bPath));
+            const width = Math.max(a.width, b.width);
+            const height = Math.max(a.height, b.height);
+            const aa = new PNG({ width, height });
+            const bb = new PNG({ width, height });
+            PNG.bitblt(a, aa, 0, 0, a.width, a.height, 0, 0);
+            PNG.bitblt(b, bb, 0, 0, b.width, b.height, 0, 0);
+            const diff = new PNG({ width, height });
+            const mismatched = pixelmatch(aa.data, bb.data, diff.data, width, height, { threshold: 0.1 });
+            fs.writeFileSync('parity-output/' + label + '-diff.png', PNG.sync.write(diff));
+            return {
+              label,
+              reference: { width: a.width, height: a.height },
+              laravel: { width: b.width, height: b.height },
+              canvas: { width, height },
+              mismatchedPixels: mismatched,
+              mismatchPercent: Number(((mismatched / (width * height)) * 100).toFixed(4)),
+            };
+          }
+
+          const report = [
+            compare('parity-output/live-desktop.png', 'parity-output/laravel-desktop.png', 'desktop'),
+            compare('parity-output/live-mobile.png', 'parity-output/laravel-mobile.png', 'mobile'),
+          ];
+
+          fs.writeFileSync('parity-output/parity-report.json', JSON.stringify(report, null, 2));
+          console.log(JSON.stringify(report, null, 2));
+          NODE
+          node compare-parity.mjs
+
       - uses: actions/upload-artifact@v4
         with:
           name: kabulfit-parity-comparison
           path: parity-output
-          retention-days: 1
+          retention-days: 3
