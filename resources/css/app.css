@@ -7,7 +7,7 @@
     --brand-accent: #d6ad65;
     --brand-background: #fdfbf7;
     --brand-surface: #ffffff;
-    --brand-text: #171717;
+    --brand-text: #0a0a0a;
     --brand-muted: #6b7280;
     --brand-border: #e7e5e4;
 
@@ -48,7 +48,7 @@ body {
     margin: 0;
     min-width: 20rem;
     overflow-x: clip;
-    background: var(--brand-background);
+    background: #ffffff;
     color: var(--brand-text);
     font-family: var(--font-ui);
     font-size: 1rem;
@@ -60,7 +60,6 @@ body {
     font-family: Tahoma, Arial, sans-serif;
 }
 
-a { color: inherit; text-decoration: none; }
 img, svg { display: block; max-width: 100%; }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
