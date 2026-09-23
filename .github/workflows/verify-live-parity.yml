@@ -146,6 +146,14 @@ jobs:
                   naturalHeight: img.naturalHeight,
                   rect: rect(img),
                 })),
+                sections: [...document.querySelectorAll('main section')].map((section, index) => ({
+                  index,
+                  className: section.className,
+                  rect: rect(section),
+                })),
+                overflowing: [...document.querySelectorAll('body *')]
+                  .map((el, index) => ({ index, tag: el.tagName, className: el.className?.toString?.() || '', rect: rect(el) }))
+                  .filter(item => item.rect && (item.rect.x < -0.5 || item.rect.x + item.rect.width > window.innerWidth + 0.5)),
                 links: [...document.querySelectorAll('a')].map(a => ({
                   text: a.textContent.trim().replace(/\s+/g, ' '),
                   href: a.href,
