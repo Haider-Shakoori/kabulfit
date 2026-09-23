@@ -119,4 +119,5 @@ jobs:
             exit 0
           fi
           git commit -m "chore: sync exact live KabulFit media"
+          git pull --rebase origin fix/live-site-pixel-parity
           git push origin HEAD:fix/live-site-pixel-parity
