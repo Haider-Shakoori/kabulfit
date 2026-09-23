@@ -39,7 +39,7 @@
 @endphp
 
 <div
-    class="min-h-screen"
+    class="min-h-screen bg-[#FDFBF7]"
     x-data='{ hero: 0, slides: @json($heroSlides, JSON_HEX_APOS | JSON_HEX_QUOT) }'
     x-init="setInterval(() => hero = (hero + 1) % slides.length, 6000)"
 >
