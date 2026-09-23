@@ -41,7 +41,7 @@
 <div
     class="min-h-screen"
     x-data='{ hero: 0, slides: @json($heroSlides, JSON_HEX_APOS | JSON_HEX_QUOT) }'
-    x-init="setInterval(() => hero = (hero + 1) % slides.length, 5000)"
+    x-init="setInterval(() => hero = (hero + 1) % slides.length, 6000)"
 >
     <section class="relative h-screen overflow-hidden" data-section="hero">
         @foreach ($heroSlides as $index => $slide)
@@ -122,12 +122,12 @@
             <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
                 @foreach ([
                     ['ruler', __('site.custom_sizing'), __('site.custom_sizing_text')],
-                    ['globe', __('site.global_shipping'), __('site.global_shipping_text')],
-                    ['quality', __('site.quality_assured'), __('site.quality_assured_text')],
-                    ['scissors', __('site.handcrafted'), __('site.handcrafted_text')],
+                    ['truck', __('site.global_shipping'), __('site.global_shipping_text')],
+                    ['shield', __('site.quality_assured'), __('site.quality_assured_text')],
+                    ['sparkles', __('site.handcrafted'), __('site.handcrafted_text')],
                 ] as [$icon, $title, $description])
                     <div class="flex items-center gap-4">
-                        <div class="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10">
+                        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10">
                             <x-icon :name="$icon" class="!h-6 !w-6 text-[#881C27]" />
                         </div>
                         <div>
