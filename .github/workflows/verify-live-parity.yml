@@ -185,6 +185,11 @@ jobs:
           node capture-parity.mjs
           cp /tmp/kabulfit-server.log parity-output/server.log
 
+      - name: Capture live compiled bundles
+        run: |
+          curl --fail --location --retry 3 https://kabulfit.com/assets/index-B5CeItBF.css -o parity-output/live-app.css
+          curl --fail --location --retry 3 https://kabulfit.com/assets/index-OsK23eRo.js -o parity-output/live-app.js
+
       - name: Measure screenshot difference
         run: |
           cat > compare-parity.mjs <<'NODE'
