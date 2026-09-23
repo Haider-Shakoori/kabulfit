@@ -80,25 +80,21 @@
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
 <header
-    class="fixed inset-x-0 top-0 z-50 transition-all duration-500"
-    x-data="{ open: false, searchOpen: false, scrolled: false, scrollDirection: 'down', lastScrollY: 0 }"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+    dir="{{ in_array($locale, config('kabulfit.rtl_locales'), true) ? 'rtl' : 'ltr' }}"
+    x-data="{ open: false, searchOpen: false, scrolled: false, lastScrollY: 0 }"
     @scroll.window="
         const y = window.scrollY;
-        if (y > lastScrollY && y > 100) {
-            scrollDirection = 'down';
-            scrolled = true;
-        } else if (y < lastScrollY) {
-            scrollDirection = 'up';
-        }
+        if (y > 100) scrolled = true;
         lastScrollY = y;
     "
-    :class="{{ $isHome ? "scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'" : "'bg-white shadow-lg'" }}"
+    :class="{{ $isHome ? "scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'" : "'bg-white/95 backdrop-blur-md shadow-lg'" }}"
     @keydown.escape.window="open = false; searchOpen = false"
 >
-    <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm text-white">
-        <div class="mx-auto flex max-w-7xl items-center justify-between">
+    <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white text-sm py-3 px-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
             <p class="hidden md:block animate-blink">{{ __('site.announcement') }}</p>
-            <div class="mx-auto flex items-center gap-1 md:mx-0" aria-label="{{ __('site.language') }}">
+            <div class="flex items-center gap-1 mx-auto md:mx-0" aria-label="{{ __('site.language') }}">
                 @foreach (($seo->alternates ?? []) as $alternateLocale => $href)
                     <a
                         href="{{ $href }}"
@@ -106,7 +102,7 @@
                         lang="{{ $alternateLocale }}"
                         @class([
                             'px-2 py-1 text-sm transition-all',
-                            'border-b-2 border-white font-bold text-white' => $locale === $alternateLocale,
+                            'text-white font-bold border-b-2 border-white' => $locale === $alternateLocale,
                             'text-white/70 hover:text-white' => $locale !== $alternateLocale,
                         ])
                     >
@@ -121,125 +117,114 @@
     </div>
 
     <div>
-        <div class="mx-auto max-w-7xl px-2 py-0.5 sm:px-4 sm:py-1">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 py-0.5 sm:py-1">
             <div class="flex items-center justify-between gap-2">
                 <button
                     type="button"
-                    class="inline-flex h-9 w-9 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground lg:hidden"
+                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 w-9 lg:hidden"
                     :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     @click="open = true"
                     aria-controls="mobile-navigation"
                     :aria-expanded="open.toString()"
                     aria-label="{{ __('site.menu') }}"
                 >
-                    <x-icon name="menu" class="!h-6 !w-6" />
+                    <x-icon name="menu" class="w-6 h-6" />
                 </button>
 
                 <a href="{{ route('home', ['locale' => $locale]) }}" class="flex items-center gap-2" aria-label="{{ __('site.kabulfit_home') }}">
-                    <img
-                        src="{{ asset('images/kabulfit-live/logo-header.png') }}"
-                        width="310"
-                        height="120"
-                        alt="KabulFit"
-                        fetchpriority="high"
-                        class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20"
-                    >
+                    <div class="overflow-hidden relative h-16 sm:h-20 md:h-22 lg:h-25">
+                        <img
+                            src="{{ asset('images/kabulfit-live/logo-header.png') }}"
+                            alt="KabulFit Logo"
+                            loading="eager"
+                            decoding="async"
+                            fetchpriority="high"
+                            class="h-16 sm:h-20 md:h-22 lg:h-25 w-auto object-contain transition-opacity duration-300 opacity-100"
+                        >
+                    </div>
                 </a>
 
-                <nav class="hidden items-center gap-1 lg:flex" aria-label="{{ __('site.primary_navigation') }}">
-                    <a
-                        href="{{ route('home', ['locale' => $locale]) }}"
-                        class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                    >{{ __('site.home') }}</a>
-
-                    <div class="group relative">
-                        <a
-                            href="{{ route('shop', ['locale' => $locale]) }}"
-                            class="relative flex items-center gap-1 overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                            :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                        >
-                            {{ __('site.shop') }}
-                            <span class="text-xs transition-transform duration-300 group-hover:rotate-180" aria-hidden="true">⌄</span>
-                        </a>
-                        <div class="invisible absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-                            <div class="overflow-hidden rounded-xl border border-gray-100 bg-white py-2 shadow-xl">
-                                @foreach ([
-                                    __('site.men') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['men']]),
-                                    __('site.women') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['women']]),
-                                    __('site.boys') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['boys']]),
-                                    __('site.girls') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['girls']]),
-                                    __('site.new_arrivals') => route('shop', ['locale' => $locale, 'sort' => 'newest']),
-                                    __('site.on_sale') => route('shop', ['locale' => $locale]),
-                                ] as $label => $href)
-                                    <a href="{{ $href }}" class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gradient-to-r hover:from-[#881C27]/10 hover:to-transparent hover:pl-6 hover:font-medium hover:text-[#881C27]">
-                                        {{ $label }}
-                                    </a>
-                                @endforeach
-                            </div>
+                <nav class="hidden lg:flex items-center gap-1" aria-label="{{ __('site.primary_navigation') }}">
+                    @foreach ([
+                        [__('site.home'), route('home', ['locale' => $locale])],
+                        [__('site.measurement_guide'), route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['measurement']])],
+                        [__('site.about'), route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['about']])],
+                        [__('site.contact'), $isHome ? '#contact' : route('home', ['locale' => $locale]).'#contact'],
+                    ] as [$label, $href])
+                        <div class="relative group">
+                            <a href="{{ $href }}">
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 relative overflow-hidden transition-all duration-500 font-medium hover:scale-105 hover:shadow-lg before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100 hover:!text-white after:absolute after:bottom-0 after:left-0 after:w-0 after:h-1 after:bg-gradient-to-r after:from-[#881C27] after:to-[#2A6867] after:transition-all after:duration-500 hover:after:w-full after:animate-pulse"
+                                    :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                                >
+                                    <span class="relative z-10">{{ $label }}</span>
+                                </button>
+                            </a>
                         </div>
-                    </div>
 
-                    <a
-                        href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['measurement']]) }}"
-                        class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                    >{{ __('site.measurement_guide') }}</a>
+                        @if ($loop->first)
+                            <div class="relative group">
+                                <a href="{{ route('shop', ['locale' => $locale]) }}">
+                                    <button
+                                        type="button"
+                                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 relative overflow-hidden transition-all duration-500 font-medium hover:scale-105 hover:shadow-lg before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100 hover:!text-white after:absolute after:bottom-0 after:left-0 after:w-0 after:h-1 after:bg-gradient-to-r after:from-[#881C27] after:to-[#2A6867] after:transition-all after:duration-500 hover:after:w-full after:animate-pulse"
+                                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                                    >
+                                        <span class="relative z-10">{{ __('site.shop') }}</span>
+                                        <x-icon name="chevron-down" class="w-4 h-4 ml-1 relative z-10 transition-transform duration-500 group-hover:rotate-180" />
+                                    </button>
+                                </a>
 
-                    <a
-                        href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['about']]) }}"
-                        class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                    >{{ __('site.about') }}</a>
-
-                    <a
-                        href="{{ $isHome ? '#contact' : route('home', ['locale' => $locale]).'#contact' }}"
-                        class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                    >{{ __('site.contact') }}</a>
+                                <div class="invisible absolute left-1/2 top-full z-50 w-52 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                                    <div class="overflow-hidden rounded-xl border border-gray-100 bg-white py-2 shadow-xl">
+                                        @foreach ([
+                                            __('site.men') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['men']]),
+                                            __('site.women') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['women']]),
+                                            __('site.boys') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['boys']]),
+                                            __('site.girls') => route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['girls']]),
+                                            __('site.new_arrivals') => route('shop', ['locale' => $locale, 'sort' => 'newest']),
+                                            __('site.on_sale') => route('shop', ['locale' => $locale]),
+                                        ] as $shopLabel => $shopHref)
+                                            <a href="{{ $shopHref }}" class="block px-4 py-2 text-sm text-gray-700 transition hover:bg-gradient-to-r hover:from-[#881C27]/10 hover:to-transparent hover:pl-6 hover:font-medium hover:text-[#881C27]">
+                                                {{ $shopLabel }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </nav>
 
-                <div class="relative flex items-center gap-1 sm:gap-2">
+                <div class="flex items-center gap-1 sm:gap-2 relative">
                     <button
                         type="button"
                         data-header-action="search"
-                        class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
+                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 w-9 sm:h-10 sm:w-10 transition-all duration-500 relative overflow-hidden hover:scale-105 hover:shadow-lg hover:!text-white before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
                         :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         @click="searchOpen = !searchOpen"
                         aria-label="{{ __('site.search_products') }}"
                     >
-                        <x-icon name="search" class="!h-5 !w-5 relative z-10" />
+                        <x-icon name="search" class="w-5 h-5 relative z-10" />
                     </button>
 
-                    <a
-                        data-header-action="wishlist"
-                        href="{{ route('wishlist', ['locale' => $locale]) }}"
-                        class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                        aria-label="{{ __('commerce.wishlist') }}"
-                    >
-                        <x-icon name="heart" class="!h-5 !w-5 relative z-10" />
-                    </a>
-
-                    <a
-                        data-header-action="cart"
-                        href="{{ route('cart', ['locale' => $locale]) }}"
-                        class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                        aria-label="{{ __('commerce.cart') }}"
-                    >
-                        <x-icon name="shopping-bag" class="!h-5 !w-5 relative z-10" />
-                    </a>
-
-                    <a
-                        data-header-action="account"
-                        href="{{ auth()->check() ? route('account', ['locale' => $locale]) : route('login', ['locale' => $locale]) }}"
-                        class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
-                        aria-label="{{ auth()->check() ? __('auth.account') : __('auth.login') }}"
-                    >
-                        <x-icon name="user" class="!h-5 !w-5 relative z-10" />
-                    </a>
+                    @foreach ([
+                        ['wishlist', route('wishlist', ['locale' => $locale]), 'heart', __('commerce.wishlist')],
+                        ['cart', route('cart', ['locale' => $locale]), 'shopping-bag', __('commerce.cart')],
+                        ['account', auth()->check() ? route('account', ['locale' => $locale]) : route('login', ['locale' => $locale]), 'user', auth()->check() ? __('auth.account') : __('auth.login')],
+                    ] as [$action, $href, $icon, $label])
+                        <a data-header-action="{{ $action }}" href="{{ $href }}">
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 w-9 sm:h-10 sm:w-10 transition-all duration-500 relative overflow-hidden hover:scale-105 hover:shadow-lg hover:!text-white before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100"
+                                :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                                aria-label="{{ $label }}"
+                            >
+                                <x-icon :name="$icon" class="w-5 h-5 relative z-10" />
+                            </button>
+                        </a>
+                    @endforeach
 
                     <form
                         x-cloak
@@ -256,7 +241,7 @@
                             placeholder="{{ __('site.search_placeholder') }}"
                         >
                         <button type="submit" class="rounded-lg bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 text-white">
-                            <x-icon name="search" class="!h-4 !w-4" />
+                            <x-icon name="search" class="h-4 w-4" />
                         </button>
                     </form>
                 </div>
