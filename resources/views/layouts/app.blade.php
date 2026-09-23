@@ -31,7 +31,7 @@
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="pb-16 md:pb-0">
+<body>
 @php
     $contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com');
     $isHome = request()->routeIs('home');
@@ -139,7 +139,7 @@
                         height="120"
                         alt="KabulFit"
                         fetchpriority="high"
-                        class="h-16 w-auto object-contain sm:h-20 md:h-[5.5rem] lg:h-[6.25rem]"
+                        class="h-16 w-auto object-contain sm:h-20"
                     >
                 </a>
 
@@ -302,7 +302,7 @@
     </aside>
 </header>
 
-<main id="main-content" @class(['pt-[8.25rem] sm:pt-[9.25rem]' => ! $isHome])>
+<main id="main-content" class="flex-1 pt-32 sm:pt-36 md:pt-40 pb-16 md:pb-0">
     @yield('content')
 </main>
 
