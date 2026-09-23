@@ -31,7 +31,7 @@
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col bg-[#FDFBF7]">
+<body @class(['min-h-screen flex flex-col bg-[#FDFBF7]', 'kabulfit-live-home' => request()->routeIs('home')])>
 @php
     $contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com');
     $isHome = request()->routeIs('home');
