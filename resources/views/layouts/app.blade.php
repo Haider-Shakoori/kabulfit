@@ -311,7 +311,7 @@
         <div class="mb-8 grid grid-cols-1 gap-8 sm:mb-12 sm:gap-12 md:grid-cols-2 lg:grid-cols-5">
             <div class="lg:col-span-2">
                 <a href="{{ route('home', ['locale' => $locale]) }}" class="mb-4 inline-block sm:mb-6" aria-label="{{ __('site.kabulfit_home') }}">
-                    <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" width="310" height="120" alt="KabulFit" loading="lazy" class="h-16 w-auto object-contain sm:h-20 md:h-24">
+                    <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" width="1024" height="416" alt="KabulFit" class="h-16 w-auto object-contain sm:h-20 md:h-24">
                 </a>
 
                 <p class="mb-4 max-w-sm text-sm leading-relaxed text-gray-400 sm:mb-6 sm:text-base">{{ __('site.story_p1') }}</p>
