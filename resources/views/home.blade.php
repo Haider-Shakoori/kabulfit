@@ -316,7 +316,7 @@
         <section class="bg-[#FDFBF7] py-16" data-section="heritage-content" id="heritage-content" dir="{{ in_array($locale, ['fa', 'ps'], true) ? 'rtl' : 'ltr' }}">
         <div class="mx-auto max-w-4xl px-4">
             <h2 class="mb-6 text-center text-2xl font-bold text-gray-900 md:text-3xl">{{ __('site.seo_heading') }}</h2>
-            <div class="prose prose-lg max-w-none space-y-4 text-gray-700">
+            <div data-live-editorial class="prose prose-lg max-w-none space-y-4 text-gray-700">
                 <p>{{ __('site.seo_intro') }}</p>
 
                 <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
