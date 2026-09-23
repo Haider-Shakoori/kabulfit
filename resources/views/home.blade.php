@@ -214,7 +214,7 @@
         <div class="relative mx-auto max-w-7xl px-4">
             <div class="grid items-center gap-12 md:grid-cols-2">
                 <div>
-                    <span class="mb-6 inline-flex rounded-full bg-[#2A6867] px-3 py-1 text-sm font-semibold text-white">{{ __('site.our_story') }}</span>
+                    <div class="mb-6 inline-flex items-center rounded-md border border-transparent bg-[#2A6867] px-2.5 py-0.5 text-xs font-semibold text-white shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80">{{ __('site.our_story') }}</div>
                     <h2 class="mb-6 text-4xl font-bold text-white md:text-5xl">{{ __('site.afghan_culture') }}</h2>
                     <p class="mb-8 text-xl leading-relaxed text-white/80">{{ __('site.story_p1') }}</p>
                     <p class="mb-8 text-white/70">{{ __('site.story_p2') }}</p>
@@ -247,9 +247,9 @@
         <section class="bg-gradient-to-b from-[#FDF5E6] to-[#FDFBF7] py-20" data-section="best-sellers">
             <div class="mx-auto max-w-7xl px-4">
                 <div class="mb-12 text-center">
-                    <span class="mb-4 inline-flex items-center rounded-full bg-[#2A6867] px-3 py-1 text-sm font-semibold text-white">
-                        <span class="mr-1" aria-hidden="true">★</span>{{ __('site.top_rated') }}
-                    </span>
+                    <div class="mb-4 inline-flex items-center rounded-md border border-transparent bg-[#2A6867] px-2.5 py-0.5 text-xs font-semibold text-white shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80">
+                        <x-icon name="star" class="!mr-1 !h-4 !w-4 fill-current" />{{ __('site.top_rated') }}
+                    </div>
                     <h2 class="mb-4 text-4xl font-bold text-gray-900">{{ __('site.best_sellers') }}</h2>
                     <p class="text-gray-600">{{ __('site.customers_favorite') }}</p>
                 </div>
@@ -276,7 +276,7 @@
                         <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">{{ __('site.measurements_title') }}</h2>
                         <p class="mb-8 text-white/80">{{ __('site.measurements_text') }}</p>
                         <div class="flex flex-wrap gap-4">
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition-colors hover:opacity-90">
                                 {{ __('site.start_measuring') }} <x-icon name="arrow-right" class="!ml-2 !h-5 !w-5" />
                             </a>
                             <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition hover:bg-white hover:text-gray-900">
