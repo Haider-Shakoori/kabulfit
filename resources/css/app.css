@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "./auth.css";
 
+@theme {
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-gray-950: #030712;
+}
+
 :root {
     --brand-primary: #881c27;
     --brand-secondary: #2a6867;
@@ -32,7 +46,7 @@
     --container-wide: 88rem;
     --section-space: clamp(4.5rem, 8vw, 8rem);
     --font-display: Georgia, "Times New Roman", serif;
-    --font-ui: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-ui: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 *,
