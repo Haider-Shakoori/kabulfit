@@ -45,7 +45,7 @@ class CatalogFilteringTest extends TestCase
 
     public function test_price_sort_uses_integer_minor_unit_prices(): void
     {
-        $html = $this->get('/en/shop?sort=price_asc')->assertOk()->getContent();
+        $html = $this->get('/en/shop?sort=price_asc&per_page=48')->assertOk()->getContent();
 
         $kids = strpos($html, 'Kids Afghan Waistcoat Set');
         $shawl = strpos($html, 'Kuchi-Inspired Afghan Shawl');
