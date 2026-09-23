@@ -90,13 +90,24 @@ jobs:
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7619fd779_15.webp" "best-16-1.webp"
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b119a3407_32.webp" "best-16-2.webp"
 
+      - name: Download exact live storefront CSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/css
+          html="$(curl --fail --location --retry 3 https://kabulfit.com/)"
+          css_path="$(printf '%s' "$html" | grep -oE '/assets/index-[^"]+\.css' | head -n 1)"
+          test -n "$css_path"
+          curl --fail --location --retry 4 "https://kabulfit.com$css_path" -o public/css/kabulfit-live.css
+          test -s public/css/kabulfit-live.css
+
       - name: Commit synchronized media
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/images/kabulfit-live/exact
+          git add public/images/kabulfit-live/exact public/css/kabulfit-live.css
           if git diff --cached --quiet; then
             echo "Live assets already synchronized."
             exit 0
