@@ -138,6 +138,13 @@ jobs:
                   text: el.textContent.trim().replace(/\s+/g, ' '),
                   rect: rect(el),
                 })),
+                textBlocks: [...document.querySelectorAll('main p, main h3, main a, main button')].map((el, index) => ({
+                  index,
+                  tag: el.tagName,
+                  text: el.textContent.trim().replace(/\s+/g, ' '),
+                  className: el.className?.toString?.() || '',
+                  rect: rect(el),
+                })),
                 images: [...document.images].map((img, index) => ({
                   index,
                   src: img.currentSrc || img.src,
