@@ -50,7 +50,7 @@ jobs:
       - name: Start Laravel
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: \${{ github.workspace }}/database/database.sqlite
+          DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
         run: |
           php artisan serve --host=127.0.0.1 --port=8000 > /tmp/kabulfit-server.log 2>&1 &
           echo $! > /tmp/kabulfit-server.pid
