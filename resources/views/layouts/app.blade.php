@@ -226,7 +226,7 @@
                         :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         aria-label="{{ __('commerce.cart') }}"
                     >
-                        <x-icon name="cart" class="!h-5 !w-5 relative z-10" />
+                        <x-icon name="shopping-bag" class="!h-5 !w-5 relative z-10" />
                     </a>
 
                     <a
