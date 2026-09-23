@@ -212,8 +212,10 @@
 
     <section id="story" class="relative overflow-hidden py-20" data-section="story">
         <div class="absolute inset-0">
-            <img src="{{ asset('images/kabulfit-live/exact/story-bg.png') }}" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover">
-            <div class="absolute inset-0 bg-black/85"></div>
+            <div class="relative h-full w-full overflow-hidden">
+                <img src="{{ asset('images/kabulfit-live/exact/story-bg.png') }}" alt="{{ __('site.afghan_culture') }}" loading="lazy" decoding="async" class="h-full w-full object-cover opacity-100 transition-opacity duration-300">
+            </div>
+            <div class="absolute inset-0 bg-[#000000]/85"></div>
         </div>
 
         <div class="relative mx-auto max-w-7xl px-4">
@@ -223,14 +225,19 @@
                     <h2 class="mb-6 text-4xl font-bold text-white md:text-5xl">{{ __('site.afghan_culture') }}</h2>
                     <p class="mb-8 text-xl leading-relaxed text-white/80">{{ __('site.story_p1') }}</p>
                     <p class="mb-8 text-white/70">{{ __('site.story_p2') }}</p>
-                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-8 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-black">
-                        {{ __('site.learn_more') }} <x-icon name="arrow-right" class="!ml-2 !h-4 !w-4" />
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}">
+                        <button type="button" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-8 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-[#000000] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+                            {{ __('site.learn_more') }}
+                            <x-icon name="arrow-right" class="!ml-2 !h-4 !w-4" />
+                        </button>
                     </a>
                 </div>
 
                 <div class="relative">
                     <div class="aspect-square overflow-hidden rounded-[3rem]">
-                        <img src="{{ asset('images/kabulfit-live/exact/craftsmanship.jpg') }}" alt="{{ __('site.craftsmanship_alt') }}" loading="lazy" decoding="async" class="h-full w-full object-cover">
+                        <div class="relative h-full w-full overflow-hidden">
+                            <img src="{{ asset('images/kabulfit-live/exact/craftsmanship.jpg') }}" alt="{{ __('site.craftsmanship') }}" loading="lazy" decoding="async" class="h-full w-full object-cover opacity-100 transition-opacity duration-300">
+                        </div>
                     </div>
                     <div class="absolute -bottom-3 -left-3 rounded-xl bg-white p-3 shadow-xl sm:-bottom-4 sm:-left-4 sm:rounded-[1.5rem] sm:p-4 md:-bottom-6 md:-left-6 md:rounded-[2rem] md:p-6">
                         <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
@@ -272,61 +279,74 @@
 
     <section class="py-20" data-section="measurements" id="tailoring">
         <div class="mx-auto max-w-7xl px-4">
-            <div class="overflow-hidden rounded-xl border border-white/10 bg-gradient-to-r from-[#881C27] to-[#2A6867] shadow-sm">
-                <div class="grid gap-8 md:grid-cols-2">
-                    <div class="flex flex-col justify-center p-8 md:p-12">
-                        <span class="mb-6 inline-flex w-fit items-center rounded-md border border-transparent bg-white/20 px-2.5 py-0.5 text-xs font-semibold text-white shadow">
-                            <x-icon name="ruler" class="!mr-2 !h-4 !w-4" />{{ __('site.perfect_fit_technology') }}
-                        </span>
-                        <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">{{ __('site.measurements_title') }}</h2>
-                        <p class="mb-8 text-white/80">{{ __('site.measurements_text') }}</p>
-                        <div class="flex flex-wrap gap-4">
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition-colors hover:opacity-90">
-                                {{ __('site.start_measuring') }} <x-icon name="arrow-right" class="!ml-2 !h-5 !w-5" />
-                            </a>
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-gray-900">
-                                <x-icon name="play" class="!mr-2 !h-5 !w-5" />{{ __('site.watch_tutorial') }}
-                            </a>
+            <div class="overflow-hidden rounded-xl border bg-gradient-to-r from-[#881C27] to-[#2A6867] text-card-foreground shadow">
+                <div class="p-0">
+                    <div class="grid gap-8 md:grid-cols-2">
+                        <div class="flex flex-col justify-center p-8 md:p-12">
+                            <div class="mb-6 inline-flex w-fit items-center rounded-md border border-transparent bg-white/20 px-2.5 py-0.5 text-xs font-semibold text-white shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80">
+                                <x-icon name="ruler" class="!mr-2 !h-4 !w-4" />{{ __('site.perfect_fit_technology') }}
+                            </div>
+                            <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">{{ __('site.measurements_title') }}</h2>
+                            <p class="mb-8 text-white/80">{{ __('site.measurements_text') }}</p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}">
+                                    <button type="button" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+                                        {{ __('site.start_measuring') }}
+                                        <x-icon name="arrow-right" class="!ml-2 !h-5 !w-5" />
+                                    </button>
+                                </a>
+                                <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}">
+                                    <button type="button" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+                                        <x-icon name="play" class="!mr-2 !h-5 !w-5" />{{ __('site.watch_tutorial') }}
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="relative h-[400px] md:h-auto">
-                        <img src="{{ asset('images/kabulfit-live/exact/measurement-guide.png') }}" alt="{{ __('site.measurement_guide') }}" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent md:hidden"></div>
+                        <div class="relative h-[400px] md:h-auto">
+                            <div class="absolute inset-0 h-full w-full overflow-hidden">
+                                <img src="{{ asset('images/kabulfit-live/exact/measurement-guide.png') }}" alt="{{ __('site.measurement_guide') }}" loading="lazy" decoding="async" class="h-full w-full object-cover opacity-100 transition-opacity duration-300">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#000000] to-transparent md:hidden"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-[#FDFBF7] py-16" data-section="heritage-content" id="heritage-content">
+        <section class="bg-[#FDFBF7] py-16" data-section="heritage-content" id="heritage-content" dir="{{ in_array($locale, ['fa', 'ps'], true) ? 'rtl' : 'ltr' }}">
         <div class="mx-auto max-w-4xl px-4">
             <h2 class="mb-6 text-center text-2xl font-bold text-gray-900 md:text-3xl">{{ __('site.seo_heading') }}</h2>
             <div class="prose prose-lg max-w-none space-y-4 text-gray-700">
-                <p class="leading-6">{{ __('site.seo_intro') }}</p>
+                <p>{{ __('site.seo_intro') }}</p>
 
-                <h3 class="text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
-                <p class="leading-6">{{ __('site.gand_text') }}</p>
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
+                <p>{{ __('site.gand_text') }}</p>
 
-                <h3 class="text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
-                <p class="leading-6">{{ __('site.embroidery_text') }}</p>
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
+                <p>{{ __('site.embroidery_text') }}</p>
 
-                <h3 class="text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
-                <p class="leading-6">{{ __('site.tailoring_text') }}</p>
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
+                <p>{{ __('site.tailoring_text') }}</p>
 
-                <div class="flex flex-wrap gap-4">
-                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
-                        {{ __('site.shop_afghan_clothes') }}
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a href="{{ route('shop', ['locale' => $locale]) }}">
+                        <button type="button" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+                            {{ __('site.shop_afghan_clothes') }}
+                        </button>
                     </a>
-                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-gray-200 bg-white px-6 py-2 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100">
-                        {{ __('site.start_custom_tailoring') }}
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}">
+                        <button type="button" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-input bg-background px-6 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
+                            {{ __('site.start_custom_tailoring') }}
+                        </button>
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="bg-white py-20" data-section="testimonials" aria-labelledby="testimonials-title">
+        <section class="bg-white py-20" data-section="testimonials" aria-labelledby="testimonials-title">
         <div class="mx-auto max-w-7xl px-4">
             <div class="mb-12 text-center">
                 <h2 id="testimonials-title" class="mb-4 text-4xl font-bold text-gray-900">{{ __('site.testimonials_title') }}</h2>
@@ -339,20 +359,24 @@
                     ['Sarah M.', 'London, UK', __('site.review_2_quote')],
                     ['Farid A.', 'Toronto, Canada', __('site.review_3_quote')],
                 ] as [$name, $location, $quote])
-                    <div class="h-full rounded-xl border bg-card text-card-foreground shadow">
-                        <div class="p-6">
-                            <div class="mb-4 flex gap-1" aria-label="5 out of 5">
-                                @for ($star = 0; $star < 5; $star++)
-                                    <x-icon name="star" class="!h-5 !w-5 fill-[#2A6867] text-[#2A6867]" />
-                                @endfor
-                            </div>
-                            <p class="mb-6 italic text-gray-700">"{{ $quote }}"</p>
-                            <div class="flex items-center gap-3">
-                                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10 font-bold text-[#881C27]" aria-hidden="true">{{ mb_substr($name, 0, 1) }}</span>
-                                <span>
-                                    <strong class="block font-semibold text-gray-900">{{ $name }}</strong>
-                                    <small class="text-sm text-gray-500">{{ $location }}</small>
-                                </span>
+                    <div style="opacity: 1; transform: none;">
+                        <div class="h-full rounded-xl border bg-card text-card-foreground shadow">
+                            <div class="p-6">
+                                <div class="mb-4 flex gap-1" aria-label="5 out of 5">
+                                    @for ($star = 0; $star < 5; $star++)
+                                        <x-icon name="star" class="!h-5 !w-5 fill-[#2A6867] text-[#2A6867]" />
+                                    @endfor
+                                </div>
+                                <p class="mb-6 italic text-gray-700">"{{ $quote }}"</p>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10">
+                                        <span class="font-bold text-[#881C27]">{{ mb_substr($name, 0, 1) }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">{{ $name }}</p>
+                                        <p class="text-sm text-gray-500">{{ $location }}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
