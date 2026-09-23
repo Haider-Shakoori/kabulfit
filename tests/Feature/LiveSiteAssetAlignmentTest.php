@@ -23,9 +23,10 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $response
             ->assertSee('images/kabulfit-live/logo-header.png', false)
             ->assertSee('images/kabulfit-live/logo-footer.png', false)
-            ->assertSee('images/kabulfit-live/hero-heritage.png', false)
-            ->assertSee('images/kabulfit-live/craftsmanship.jpg', false)
-            ->assertSee('images/kabulfit-live/measurement-guide.png', false)
+            ->assertSee('images/kabulfit-live/exact/hero-01.webp', false)
+            ->assertSee('images/kabulfit-live/exact/craftsmanship.jpg', false)
+            ->assertSee('images/kabulfit-live/exact/measurement-guide.png', false)
+            ->assertSee('css/kabulfit-live.css', false)
             ->assertSee('Handcrafted')
             ->assertSee('Free Shipping', false);
 
