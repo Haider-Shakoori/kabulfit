@@ -108,7 +108,18 @@ jobs:
               () => [...document.images].every(img => img.complete),
               { timeout: 20000 }
             ).catch(() => {});
-            await page.waitForTimeout(1500);
+            await page.waitForTimeout(500);
+
+            await page.addStyleTag({
+              content: '* { animation: none !important; transition: none !important; }'
+            });
+
+            const heroButtons = page.locator('main section').first().locator('button');
+            const heroButtonCount = await heroButtons.count();
+            if (heroButtonCount >= 3) {
+              await heroButtons.nth(heroButtonCount - 2).click().catch(() => {});
+              await page.waitForTimeout(100);
+            }
 
             const data = await page.evaluate(() => {
               const rect = el => {
