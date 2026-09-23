@@ -112,6 +112,9 @@ jobs:
               () => [...document.images].every(img => img.complete),
               { timeout: 20000 }
             ).catch(() => {});
+            await page.evaluate(async () => {
+              await Promise.all([...document.images].map(img => img.decode?.().catch(() => {})));
+            });
             await page.waitForTimeout(500);
 
             await page.addStyleTag({
@@ -124,6 +127,8 @@ jobs:
               await heroButtons.nth(heroButtonCount - 2).click().catch(() => {});
               await page.waitForTimeout(100);
             }
+            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.waitForTimeout(100);
 
             const data = await page.evaluate(() => {
               const rect = el => {
