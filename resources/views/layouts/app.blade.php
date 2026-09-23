@@ -30,9 +30,6 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @if (request()->routeIs('home'))
-        <link rel="stylesheet" href="{{ asset('css/kabulfit-live-reference.css') }}">
-    @endif
 </head>
 <body class="min-h-screen flex flex-col bg-[#FDFBF7]">
 @php
@@ -388,8 +385,8 @@
                 <h4 class="font-semibold text-lg sm:text-xl mb-2 sm:mb-3">{{ __('site.newsletter') }}</h4>
                 <p class="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">{{ __('site.subscribe_text') }}</p>
                 <form class="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-md mx-auto" @submit.prevent="subscribed = true">
-                    <input type="email" required placeholder="your@email.com" class="flex w-full rounded-md border px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white/10 border-white/20 text-white placeholder:text-gray-400 h-10 sm:h-12 text-sm sm:text-base">
-                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-primary-foreground shadow hover:bg-primary/90 py-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] hover:opacity-90 px-4 sm:px-6 h-10 sm:h-12 text-sm sm:text-base whitespace-nowrap">
+                    <input type="email" required placeholder="your@email.com" data-live-newsletter-input class="flex w-full rounded-md border px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white/10 border-white/20 text-white placeholder:text-gray-400 h-10 sm:h-12 text-sm sm:text-base">
+                    <button type="submit" data-live-newsletter-button class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-primary-foreground shadow hover:bg-primary/90 py-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] hover:opacity-90 px-4 sm:px-6 h-10 sm:h-12 text-sm sm:text-base whitespace-nowrap">
                         <x-icon name="mail" class="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                         {{ __('site.subscribe') }}
                     </button>
