@@ -216,7 +216,7 @@
                     <h2 class="mb-6 text-4xl font-bold text-white md:text-5xl">{{ __('site.afghan_culture') }}</h2>
                     <p class="mb-8 text-xl leading-relaxed text-white/80">{{ __('site.story_p1') }}</p>
                     <p class="mb-8 text-white/70">{{ __('site.story_p2') }}</p>
-                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-8 py-3 font-semibold text-white transition hover:bg-white hover:text-black">
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-8 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-black">
                         {{ __('site.learn_more') }} <span class="ml-2" aria-hidden="true">→</span>
                     </a>
                 </div>
@@ -266,16 +266,16 @@
             <div class="overflow-hidden rounded-xl border border-white/10 bg-gradient-to-r from-[#881C27] to-[#2A6867] shadow-sm">
                 <div class="grid gap-8 md:grid-cols-2">
                     <div class="flex flex-col justify-center p-8 md:p-12">
-                        <span class="mb-6 inline-flex w-fit items-center rounded-full bg-white/20 px-3 py-1 text-sm font-semibold text-white">
+                        <span class="mb-6 inline-flex w-fit items-center rounded-md border border-transparent bg-white/20 px-2.5 py-0.5 text-xs font-semibold text-white shadow">
                             <x-icon name="ruler" class="!mr-2 !h-4 !w-4" />{{ __('site.perfect_fit_technology') }}
                         </span>
                         <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">{{ __('site.measurements_title') }}</h2>
                         <p class="mb-8 text-white/80">{{ __('site.measurements_text') }}</p>
                         <div class="flex flex-wrap gap-4">
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex items-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white ring-1 ring-white/20 transition hover:opacity-90">
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
                                 {{ __('site.start_measuring') }} <span class="ml-2" aria-hidden="true">→</span>
                             </a>
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-6 py-3 font-semibold text-white transition hover:bg-white hover:text-gray-900">
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition hover:bg-white hover:text-gray-900">
                                 <span class="mr-2" aria-hidden="true">▶</span>{{ __('site.watch_tutorial') }}
                             </a>
                         </div>
@@ -293,26 +293,26 @@
     <section class="bg-[#FDFBF7] py-16" data-section="heritage-content" id="heritage-content">
         <div class="mx-auto max-w-4xl px-4">
             <h2 class="mb-6 text-center text-2xl font-bold text-gray-900 md:text-3xl">{{ __('site.seo_heading') }}</h2>
-            <div class="text-gray-700">
-                <p class="mb-5 leading-7">{{ __('site.seo_intro') }}</p>
+            <div class="prose prose-lg max-w-none space-y-4 text-gray-700">
+                <p class="leading-6">{{ __('site.seo_intro') }}</p>
 
                 <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
-                <p class="leading-7">{{ __('site.gand_text') }}</p>
+                <p class="leading-6">{{ __('site.gand_text') }}</p>
 
                 <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
-                <p class="leading-7">{{ __('site.embroidery_text') }}</p>
+                <p class="leading-6">{{ __('site.embroidery_text') }}</p>
 
                 <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
-                <p class="leading-7">{{ __('site.tailoring_text') }}</p>
-            </div>
+                <p class="leading-6">{{ __('site.tailoring_text') }}</p>
 
-            <div class="mt-8 flex flex-wrap gap-4">
-                <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white transition hover:opacity-90">
-                    {{ __('site.shop_afghan_clothes') }}
-                </a>
-                <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex rounded-full border-2 border-[#881C27] px-6 py-3 font-semibold text-[#881C27] transition hover:bg-[#881C27] hover:text-white">
-                    {{ __('site.start_custom_tailoring') }}
-                </a>
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
+                        {{ __('site.shop_afghan_clothes') }}
+                    </a>
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full border-2 border-[#881C27] bg-transparent px-8 text-sm font-medium text-[#881C27] shadow transition hover:bg-[#881C27] hover:text-white">
+                        {{ __('site.start_custom_tailoring') }}
+                    </a>
+                </div>
             </div>
         </div>
     </section>
