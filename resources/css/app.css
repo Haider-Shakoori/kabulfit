@@ -75,7 +75,6 @@ body {
 }
 
 img, svg { display: block; max-width: 100%; }
-button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 
 [x-cloak] { display: none !important; }
@@ -1656,4 +1655,26 @@ button, a { -webkit-tap-highlight-color: transparent; }
         font-size: 1rem;
         line-height: 1.5rem;
     }
+}
+
+
+/* KabulFit exact live rendering defaults */
+.kabulfit-live-home {
+    text-rendering: auto;
+    -webkit-font-smoothing: auto;
+}
+
+:where(
+    .kabulfit-live-home *,
+    .kabulfit-live-home *::before,
+    .kabulfit-live-home *::after,
+    .kabulfit-live-home *::backdrop,
+    .kabulfit-live-home *::file-selector-button
+) {
+    border-color: #e5e5e5;
+}
+
+[data-live-editorial] > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1rem !important;
+    margin-bottom: 0 !important;
 }
