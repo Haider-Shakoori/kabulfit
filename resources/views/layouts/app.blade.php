@@ -313,7 +313,7 @@
             <div class="lg:col-span-2">
                 <a href="{{ route('home', ['locale' => $locale]) }}" class="mb-4 inline-block sm:mb-6" aria-label="{{ __('site.kabulfit_home') }}">
                     <div class="relative h-16 overflow-hidden sm:h-20 md:h-24">
-                        <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" width="1024" height="416" alt="KabulFit Logo" loading="lazy" decoding="async" class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20 md:h-24">
+                        <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" width="1024" height="416" alt="KabulFit Logo" decoding="async" class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20 md:h-24">
                     </div>
                 </a>
 
