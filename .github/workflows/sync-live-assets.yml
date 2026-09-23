@@ -92,6 +92,9 @@ jobs:
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7d8c94609_2.webp" "best-15-2.webp"
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7619fd779_15.webp" "best-16-1.webp"
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b119a3407_32.webp" "best-16-2.webp"
+          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png" "story-bg.png"
+          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg" "craftsmanship.jpg"
+          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/58f1df170_2.png" "measurement-guide.png"
 
       - name: Download exact live storefront CSS
         shell: bash
@@ -103,12 +106,6 @@ jobs:
           test -n "$css_path"
           curl --fail --location --retry 4 "https://kabulfit.com$css_path" -o public/css/kabulfit-live.css
           test -s public/css/kabulfit-live.css
-
-          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png" "story-bg.png"
-
-          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg" "craftsmanship.jpg"
-
-          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/58f1df170_2.png" "measurement-guide.png"
 
       - name: Commit synchronized media
         shell: bash
