@@ -110,6 +110,7 @@ class Product extends Model
 
         return $this->currency === 'USD' ? '$'.$amount : $amount.' '.$this->currency;
     }
+
     public function availableStock(): int
     {
         if ($this->relationLoaded('variants')) {
