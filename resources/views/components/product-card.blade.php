@@ -19,7 +19,7 @@
                         :media="$media"
                         :alt="$media->translation()?->alt_text"
                         sizes="(max-width: 767px) 50vw, 25vw"
-                        :loading="$loop->index ?? 'lazy'"
+                        loading="lazy"
                     />
                 </span>
 
