@@ -86,7 +86,6 @@
             scrolled = true;
         } else if (y < lastScrollY) {
             scrollDirection = 'up';
-            if (y < 100) scrolled = false;
         }
         lastScrollY = y;
     "
