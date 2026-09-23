@@ -1,0 +1,105 @@
+name: Sync exact KabulFit live assets
+
+on:
+  push:
+    branches:
+      - fix/live-site-pixel-parity
+    paths:
+      - .github/workflows/sync-live-assets.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/live-site-pixel-parity
+
+      - name: Download live storefront media
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/images/kabulfit-live/exact
+          cd public/images/kabulfit-live/exact
+
+          download() {
+            url="$1"
+            file="$2"
+            curl --fail --location --retry 4 --retry-delay 2 --connect-timeout 20 --max-time 120 "$url" -o "$file"
+            test -s "$file"
+          }
+
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/6b7f27f2f_H1.webp" "hero-01.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/f2989fdbd_H2.webp" "hero-02.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b6b455e59_H3.webp" "hero-03.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/2b37f3480_1.webp" "category-men.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/0d9b271e2_1.webp" "category-women.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/9a8998f13_5.png" "category-boys.png"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b31ec3a1c_1.webp" "category-girls.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/8d8d31b20_15.webp" "featured-01-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/fedfe538c_22.webp" "featured-01-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/8c9048b86_15.webp" "featured-02-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7b0ed75ac_22.webp" "featured-02-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/256587c47_1.webp" "featured-03-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/ed32efaf6_2.webp" "featured-03-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/47be67ffa_1.webp" "featured-04-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b21b57bc2_2.webp" "featured-04-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/839af2bcf_1.webp" "featured-05-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/3e86a1a17_2.webp" "featured-05-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/ee5ad9db7_1.webp" "featured-06-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/4caf6512b_2.webp" "featured-06-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/99067390d_1.webp" "featured-07-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/e541f129a_2.webp" "featured-07-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/16b328506_12.webp" "featured-08-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/7d1a5a1d1_22.webp" "featured-08-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/0dc40f06a_1.webp" "best-01-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/0121703f6_2.webp" "best-01-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/842cfed60_1.webp" "best-02-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/3fe9088ff_2.webp" "best-02-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/99ebdb1d3_1.webp" "best-03-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/d3b795932_2.webp" "best-03-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/f8a9c9441_1.webp" "best-04-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/public/6944d141c2878421ef544832/ac56b41f0_2.webp" "best-04-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7be4b873d_15.webp" "best-05-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/388ed02b4_22.webp" "best-05-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/dc19d7f63_15.webp" "best-06-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/502834324_22.webp" "best-06-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/311109041_1.webp" "best-07-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/38fcaea23_2.webp" "best-07-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/88537627e_15.webp" "best-08-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/e9fc610e0_22.webp" "best-08-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/667ba74c3_15.webp" "best-09-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/9d1323408_22.webp" "best-09-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7d6f634ae_15.webp" "best-10-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b5f18d2da_22.webp" "best-10-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/8d6e2b438_15.webp" "best-11-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/c650e8cb9_22.webp" "best-11-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/571b16f00_15.webp" "best-12-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/207c747c3_22.webp" "best-12-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/3988b2dc8_1.webp" "best-13-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/5b448f87a_2.webp" "best-13-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7d0f813da_1.webp" "best-14-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b5fd54787_2.webp" "best-14-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/0c0d075b3_1.webp" "best-15-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7d8c94609_2.webp" "best-15-2.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/7619fd779_15.webp" "best-16-1.webp"
+          download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b119a3407_32.webp" "best-16-2.webp"
+
+      - name: Commit synchronized media
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/kabulfit-live/exact
+          if git diff --cached --quiet; then
+            echo "Live assets already synchronized."
+            exit 0
+          fi
+          git commit -m "chore: sync exact live KabulFit media"
+          git push origin HEAD:fix/live-site-pixel-parity
