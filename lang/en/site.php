@@ -78,7 +78,7 @@ return [
 
     'discover' => 'Discover',
     'shop_by_category' => 'Shop by Category',
-    'category_intro' => 'Explore our collections of authentic Afghan attire for the whole family.',
+    'category_intro' => 'Explore our collections of authentic Afghan attire for the whole family',
     'explore_collection' => 'Explore Collection',
 
     'featured_label' => 'Featured',
