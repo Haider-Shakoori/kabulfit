@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'quick_look' => 'Quick Look',
     'home_title' => 'Authentic Afghan Clothes & Custom Tailoring | KabulFit',
     'home_description' => 'Discover authentic Afghan clothing, Perahan Tunban, embroidered dresses and made-to-measure tailoring from KabulFit.',
     'shop_title' => 'Shop Authentic Afghan Clothing | KabulFit',
