@@ -140,7 +140,7 @@
                         height="120"
                         alt="KabulFit"
                         fetchpriority="high"
-                        class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20 md:h-22 lg:h-25"
+                        class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20"
                     >
                 </a>
 
