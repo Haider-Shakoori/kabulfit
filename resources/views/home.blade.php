@@ -8,21 +8,21 @@
 
     $heroSlides = [
         [
-            'image' => 'images/kabulfit-live/hero-heritage.png',
+            'image' => 'images/kabulfit-live/exact/hero-01.webp',
             'title' => __('site.hero_title'),
             'subtitle' => __('site.hero_subtitle'),
             'cta' => __('site.shop_now'),
             'href' => route('shop', ['locale' => $locale]),
         ],
         [
-            'image' => 'images/kabulfit-live/measurement-guide.png',
+            'image' => 'images/kabulfit-live/exact/hero-02.webp',
             'title' => __('site.traditional_elegance'),
             'subtitle' => __('site.traditional_elegance_subtitle'),
             'cta' => __('site.explore_collection'),
             'href' => route('shop', ['locale' => $locale]),
         ],
         [
-            'image' => 'images/kabulfit-live/hero-heritage.png',
+            'image' => 'images/kabulfit-live/exact/hero-03.webp',
             'title' => __('site.custom_fit_guarantee'),
             'subtitle' => __('site.custom_fit_guarantee_subtitle'),
             'cta' => __('site.measurement_guide'),
@@ -30,11 +30,11 @@
         ],
     ];
 
-    $categoryImages = [
-        'images/kabulfit-live/catalog/category-3ed66ce35408.webp',
-        'images/kabulfit-live/catalog/category-861c19f93a16.webp',
-        'images/kabulfit-live/catalog/category-15e0668e6ecf.png',
-        'images/kabulfit-live/catalog/product-e3216ebea370.webp',
+    $liveCategories = [
+        ['name' => __('site.men'), 'query' => 'men', 'image' => 'images/kabulfit-live/exact/category-men.webp'],
+        ['name' => __('site.women'), 'query' => 'women', 'image' => 'images/kabulfit-live/exact/category-women.webp'],
+        ['name' => __('site.boys'), 'query' => 'boys', 'image' => 'images/kabulfit-live/exact/category-boys.png'],
+        ['name' => __('site.girls'), 'query' => 'girls', 'image' => 'images/kabulfit-live/exact/category-girls.webp'],
     ];
 @endphp
 
@@ -148,23 +148,21 @@
             </div>
 
             <div class="grid grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-                @foreach ($categories as $category)
-                    @php($translation = $category->translation())
-                    @php($image = $categoryImages[$loop->index] ?? $categoryImages[0])
+                @foreach ($liveCategories as $category)
                     <a
-                        href="{{ route('categories.show', ['locale' => $locale, 'slug' => $translation?->slug]) }}"
+                        href="{{ route('shop', ['locale' => $locale, 'category' => $category['query']]) }}"
                         class="group relative h-[300px] overflow-hidden rounded-2xl sm:h-[400px] sm:rounded-[2.5rem] md:h-[500px] md:rounded-[3rem]"
                     >
                         <img
-                            src="{{ asset($image) }}"
-                            alt="{{ $translation?->name }}"
+                            src="{{ asset($category['image']) }}"
+                            alt="{{ $category['name'] }}"
                             loading="lazy"
                             decoding="async"
                             class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                         >
                         <span class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" aria-hidden="true"></span>
                         <span class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
-                            <strong class="mb-1 block text-xl font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{{ $translation?->name }}</strong>
+                            <strong class="mb-1 block text-xl font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{{ $category['name'] }}</strong>
                             <span class="flex items-center text-sm font-medium text-white group-hover:underline sm:text-base">
                                 {{ __('site.explore_collection') }}
                                 <span class="ml-1 transition-transform group-hover:translate-x-1 sm:ml-2" aria-hidden="true">→</span>
