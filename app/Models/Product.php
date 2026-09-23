@@ -108,9 +108,8 @@ class Product extends Model
 
         $amount = number_format((int) $major).'.'.$minor;
 
-        return $this->currency === 'USD' ? '
+        return $this->currency === 'USD' ? '$'.$amount : $amount.' '.$this->currency;
     }
-
     public function availableStock(): int
     {
         if ($this->relationLoaded('variants')) {
