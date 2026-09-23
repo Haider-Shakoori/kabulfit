@@ -71,7 +71,7 @@
                     </span>
 
                     <h1
-                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl lg:leading-none"
+                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl"
                         x-text="slides[hero].title"
                     >{{ $heroSlides[0]['title'] }}</h1>
 
@@ -189,7 +189,9 @@
             @if ($featuredProducts->isNotEmpty())
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
                     @foreach ($featuredProducts as $product)
-                        <x-product-card :product="$product" :eager="$loop->first" />
+                        <div class="animate-fadeInUp" style="animation-delay: {{ $loop->index * 60 }}ms">
+                            <x-product-card :product="$product" :eager="$loop->first" />
+                        </div>
                     @endforeach
                 </div>
             @else
@@ -254,7 +256,9 @@
 
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
                     @foreach ($bestSellerProducts as $product)
-                        <x-product-card :product="$product" />
+                        <div class="animate-fadeInUp" style="animation-delay: {{ $loop->index * 60 }}ms">
+                            <x-product-card :product="$product" />
+                        </div>
                     @endforeach
                 </div>
             </div>
