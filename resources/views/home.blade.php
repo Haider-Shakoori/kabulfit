@@ -207,7 +207,7 @@
 
     <section id="story" class="relative overflow-hidden py-20" data-section="story">
         <div class="absolute inset-0">
-            <img src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover">
+            <img src="{{ asset('images/kabulfit-live/exact/story-bg.png') }}" alt="" loading="lazy" decoding="async" class="h-full w-full object-cover">
             <div class="absolute inset-0 bg-black/85"></div>
         </div>
 
@@ -225,7 +225,7 @@
 
                 <div class="relative">
                     <div class="aspect-square overflow-hidden rounded-[3rem]">
-                        <img src="{{ asset('images/kabulfit-live/craftsmanship.jpg') }}" alt="{{ __('site.craftsmanship_alt') }}" loading="lazy" decoding="async" class="h-full w-full object-cover">
+                        <img src="{{ asset('images/kabulfit-live/exact/craftsmanship.jpg') }}" alt="{{ __('site.craftsmanship_alt') }}" loading="lazy" decoding="async" class="h-full w-full object-cover">
                     </div>
                     <div class="absolute -bottom-3 -left-3 rounded-xl bg-white p-3 shadow-xl sm:-bottom-4 sm:-left-4 sm:rounded-[1.5rem] sm:p-4 md:-bottom-6 md:-left-6 md:rounded-[2rem] md:p-6">
                         <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
@@ -286,7 +286,7 @@
                     </div>
 
                     <div class="relative h-[400px] md:h-auto">
-                        <img src="{{ asset('images/kabulfit-live/measurement-guide.png') }}" alt="{{ __('site.measurement_guide') }}" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover">
+                        <img src="{{ asset('images/kabulfit-live/exact/measurement-guide.png') }}" alt="{{ __('site.measurement_guide') }}" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent md:hidden"></div>
                     </div>
                 </div>
