@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CatalogSeeder::class,
             CatalogDomainSeeder::class,
+            LiveCatalogSeeder::class,
             MeasurementSeeder::class,
             CommerceSeeder::class,
             AdminAuthorizationSeeder::class,
