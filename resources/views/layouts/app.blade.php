@@ -30,6 +30,9 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @if (request()->routeIs('home'))
+        <link rel="stylesheet" href="{{ asset('css/kabulfit-live.css') }}">
+    @endif
 </head>
 <body>
 @php
