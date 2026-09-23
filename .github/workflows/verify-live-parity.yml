@@ -79,13 +79,20 @@ jobs:
             });
             const page = await context.newPage();
 
-            // Freeze auto-advancing UI so both sites are compared on the same first carousel frame.
+            // Freeze only the 6-second hero carousel while preserving application timers/data loading.
             await page.addInitScript(() => {
-              window.setInterval = () => 0;
+              const nativeSetInterval = window.setInterval.bind(window);
+              window.setInterval = (callback, delay, ...args) => {
+                if (Number(delay) === 6000) {
+                  return 0;
+                }
+
+                return nativeSetInterval(callback, delay, ...args);
+              };
             });
 
             await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 120000 });
-            await page.waitForTimeout(2500);
+            await page.waitForTimeout(5000);
 
             await page.evaluate(async () => {
               const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
