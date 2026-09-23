@@ -354,10 +354,10 @@
                 <div>
                     <h4 class="mb-3 text-sm font-semibold text-white sm:mb-4 sm:text-base">{{ __('site.follow_us') }}</h4>
                     <div class="flex gap-2 sm:gap-3">
-                        <a href="https://www.facebook.com/KabulFitTailoring/" target="_blank" rel="noopener noreferrer" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="Facebook"><x-icon name="facebook" class="!h-5 !w-5" /></a>
-                        <a href="#" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="Instagram"><x-icon name="instagram" class="!h-5 !w-5" /></a>
+                        <a href="https://www.facebook.com/KabulFitTailoring/" target="_blank" rel="noopener noreferrer" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="Facebook"><x-icon name="facebook" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
+                        <a href="#" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="Instagram"><x-icon name="instagram" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="TikTok"><x-icon name="tiktok" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
-                        <a href="http://www.youtube.com/@Kabulfit" target="_blank" rel="noopener noreferrer" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="YouTube"><x-icon name="youtube" class="!h-5 !w-5" /></a>
+                        <a href="http://www.youtube.com/@Kabulfit" target="_blank" rel="noopener noreferrer" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="YouTube"><x-icon name="youtube" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
                     </div>
                 </div>
             </div>
