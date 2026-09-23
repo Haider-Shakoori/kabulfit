@@ -25,6 +25,11 @@ class CatalogQuery
             ->with(self::cardEagerLoads());
 
         $categorySlug ??= $filters['category'] ?? null;
+        $categorySlug = match ($categorySlug) {
+            'boys' => 'kids',
+            'girls' => 'accessories',
+            default => $categorySlug,
+        };
         $collectionSlug ??= $filters['collection'] ?? null;
 
         if ($search = trim((string) ($filters['q'] ?? ''))) {
