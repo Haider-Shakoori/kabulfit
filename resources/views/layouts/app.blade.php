@@ -89,7 +89,7 @@
         }
         lastScrollY = y;
     "
-    :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'" : "'bg-white shadow-lg'" }}"
+    :class="{{ $isHome ? "scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'" : "'bg-white shadow-lg'" }}"
     @keydown.escape.window="open = false; searchOpen = false"
 >
     <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm text-white">
@@ -123,7 +123,7 @@
                 <button
                     type="button"
                     class="inline-flex h-9 w-9 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground lg:hidden"
-                    :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                    :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     @click="open = true"
                     aria-controls="mobile-navigation"
                     :aria-expanded="open.toString()"
@@ -147,14 +147,14 @@
                     <a
                         href="{{ route('home', ['locale' => $locale]) }}"
                         class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     >{{ __('site.home') }}</a>
 
                     <div class="group relative">
                         <a
                             href="{{ route('shop', ['locale' => $locale]) }}"
                             class="relative flex items-center gap-1 overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                            :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                            :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         >
                             {{ __('site.shop') }}
                             <span class="text-xs transition-transform duration-300 group-hover:rotate-180" aria-hidden="true">⌄</span>
@@ -180,19 +180,19 @@
                     <a
                         href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['measurement']]) }}"
                         class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     >{{ __('site.measurement_guide') }}</a>
 
                     <a
                         href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['about']]) }}"
                         class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     >{{ __('site.about') }}</a>
 
                     <a
                         href="{{ $isHome ? '#contact' : route('home', ['locale' => $locale]).'#contact' }}"
                         class="relative overflow-hidden rounded-md px-4 py-2 font-medium transition-all duration-500 hover:scale-105 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:text-white hover:shadow-lg"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     >{{ __('site.contact') }}</a>
                 </nav>
 
@@ -201,7 +201,7 @@
                         type="button"
                         data-header-action="search"
                         class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         @click="searchOpen = !searchOpen"
                         aria-label="{{ __('site.search_products') }}"
                     >
@@ -212,7 +212,7 @@
                         data-header-action="wishlist"
                         href="{{ route('wishlist', ['locale' => $locale]) }}"
                         class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         aria-label="{{ __('commerce.wishlist') }}"
                     >
                         <x-icon name="heart" class="!h-5 !w-5 relative z-10" />
@@ -222,7 +222,7 @@
                         data-header-action="cart"
                         href="{{ route('cart', ['locale' => $locale]) }}"
                         class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         aria-label="{{ __('commerce.cart') }}"
                     >
                         <x-icon name="shopping-bag" class="!h-5 !w-5 relative z-10" />
@@ -232,7 +232,7 @@
                         data-header-action="account"
                         href="{{ auth()->check() ? route('account', ['locale' => $locale]) : route('login', ['locale' => $locale]) }}"
                         class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-md transition-all duration-500 before:absolute before:inset-0 before:bg-gradient-to-r before:from-[#881C27] before:to-[#2A6867] before:opacity-0 before:transition-opacity hover:scale-105 hover:text-white hover:shadow-lg hover:before:opacity-100 sm:h-10 sm:w-10"
-                        :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
+                        :class="{{ $isHome ? "scrolled ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                         aria-label="{{ auth()->check() ? __('auth.account') : __('auth.login') }}"
                     >
                         <x-icon name="user" class="!h-5 !w-5 relative z-10" />
