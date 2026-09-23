@@ -6,6 +6,7 @@ on:
       - fix/live-site-pixel-parity
     paths:
       - .github/workflows/verify-live-parity.yml
+      - app/**
       - resources/views/**
       - resources/css/**
       - resources/js/**
