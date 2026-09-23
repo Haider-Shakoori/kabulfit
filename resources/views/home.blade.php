@@ -71,7 +71,7 @@
                     </span>
 
                     <h1
-                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl lg:leading-none"
+                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl"
                         x-text="slides[hero].title"
                     >{{ $heroSlides[0]['title'] }}</h1>
 
@@ -84,7 +84,7 @@
                         <a
                             :href="slides[hero].href"
                             href="{{ $heroSlides[0]['href'] }}"
-                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-medium text-white shadow transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
                         >
                             <span x-text="slides[hero].cta">{{ $heroSlides[0]['cta'] }}</span>
                             <x-icon name="arrow-right" class="!ml-1 !h-4 !w-4 sm:!ml-2 sm:!h-5 sm:!w-5" />
@@ -92,7 +92,7 @@
 
                         <a
                             href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}"
-                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-medium text-white shadow transition hover:bg-white hover:text-black sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-[#000000] sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
                         >
                             <x-icon name="ruler" class="!mr-1 !h-4 !w-4 sm:!mr-2 sm:!h-5 sm:!w-5" />
                             {{ __('site.measurement_guide') }}
@@ -182,7 +182,7 @@
                     <p class="text-gray-600">{{ __('site.featured_title') }}</p>
                 </div>
                 <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90">
-                    {{ __('site.view_all') }} <x-icon name="arrow-right" class="!ml-2 !h-4 !w-4" />
+                    {{ __('site.view_all') }}
                 </a>
             </div>
 
