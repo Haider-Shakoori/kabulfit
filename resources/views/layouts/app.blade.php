@@ -294,112 +294,112 @@
     @yield('content')
 </main>
 
-<footer id="contact" class="bg-gradient-to-b from-gray-900 to-black pb-6 pt-12 text-white sm:pt-16">
-    <div class="mx-auto max-w-7xl px-4">
-        <div class="mb-8 grid grid-cols-1 gap-8 sm:mb-12 sm:gap-12 md:grid-cols-2 lg:grid-cols-5">
+<footer id="contact" class="bg-gradient-to-b from-gray-900 to-black text-white pt-12 sm:pt-16 pb-6" dir="{{ in_array($locale, config('kabulfit.rtl_locales'), true) ? 'rtl' : 'ltr' }}">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-12 mb-8 sm:mb-12">
             <div class="lg:col-span-2">
-                <a href="{{ route('home', ['locale' => $locale]) }}" class="mb-4 inline-block sm:mb-6" aria-label="{{ __('site.kabulfit_home') }}">
-                    <div class="relative h-16 overflow-hidden sm:h-20 md:h-24">
-                        <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" width="1024" height="416" alt="KabulFit Logo" decoding="async" class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20 md:h-24">
+                <a href="{{ route('home', ['locale' => $locale]) }}" class="inline-block mb-4 sm:mb-6" aria-label="{{ __('site.kabulfit_home') }}">
+                    <div class="overflow-hidden relative h-16 sm:h-20 md:h-24">
+                        <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" alt="KabulFit Logo" loading="lazy" decoding="async" class="h-16 sm:h-20 md:h-24 w-auto object-contain transition-opacity duration-300 opacity-100">
                     </div>
                 </a>
 
-                <p class="mb-4 max-w-sm text-sm leading-relaxed text-gray-400 sm:mb-6 sm:text-base">{{ __('site.story_p1') }}</p>
+                <p class="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6 max-w-sm leading-relaxed">{{ __('site.story_p1') }}</p>
 
-                <div class="mb-6 space-y-2 sm:mb-8 sm:space-y-3">
-                    <h4 class="mb-3 text-sm font-semibold text-white sm:mb-4 sm:text-base">{{ __('site.contact') }}</h4>
+                <div class="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                    <h4 class="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('site.contact') }}</h4>
 
-                    <a href="https://wa.me/93794120017" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-gray-400 transition-colors hover:text-white sm:gap-3">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition-all group-hover:scale-110 group-hover:bg-gradient-to-r group-hover:from-[#25D366] group-hover:to-[#128C7E] sm:h-8 sm:w-8">
-                            <x-icon name="whatsapp" class="!h-3 !w-3 sm:!h-4 sm:!w-4" />
-                        </span>
+                    <a href="https://wa.me/93794120017" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 sm:gap-3 text-gray-400 hover:text-white transition-colors group">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-[#25D366] group-hover:to-[#128C7E] group-hover:scale-110 transition-all">
+                            <x-icon name="whatsapp" class="w-3 h-3 sm:w-4 sm:h-4" />
+                        </div>
                         <span class="text-xs sm:text-sm">{{ __('site.whatsapp_contact') }}</span>
                     </a>
 
-                    <a href="mailto:{{ $contactEmail }}" class="group flex items-center gap-2 text-gray-400 transition-colors hover:text-white sm:gap-3">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 transition-all group-hover:scale-110 group-hover:bg-gradient-to-r group-hover:from-[#881C27] group-hover:to-[#2A6867] sm:h-8 sm:w-8">
-                            <x-icon name="mail" class="!h-3 !w-3 sm:!h-4 sm:!w-4" />
-                        </span>
+                    <a href="mailto:{{ $contactEmail }}" class="flex items-center gap-2 sm:gap-3 text-gray-400 hover:text-white transition-colors group">
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-[#881C27] group-hover:to-[#2A6867] group-hover:scale-110 transition-all">
+                            <x-icon name="mail" class="w-3 h-3 sm:w-4 sm:h-4" />
+                        </div>
                         <span class="text-xs sm:text-sm">{{ $contactEmail }}</span>
                     </a>
 
-                    <a href="https://www.google.com/maps/search/Kabul,+Afghanistan" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 text-gray-400 transition-colors hover:text-white">
-                        <span class="grid h-8 w-8 place-items-center rounded-full bg-white/10 transition-all group-hover:scale-110 group-hover:bg-gradient-to-r group-hover:from-[#881C27] group-hover:to-[#2A6867]">
-                            <x-icon name="map-pin" class="!h-4 !w-4" />
-                        </span>
+                    <a href="https://www.google.com/maps/search/Kabul,+Afghanistan" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors group cursor-pointer">
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-[#881C27] group-hover:to-[#2A6867] group-hover:scale-110 transition-all">
+                            <x-icon name="map-pin" class="w-4 h-4" />
+                        </div>
                         <span class="text-sm">{{ __('site.kabul_location') }}</span>
                     </a>
 
-                    <a href="https://www.google.com/maps/search/Dubai,+United+Arab+Emirates" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-3 text-gray-400 transition-colors hover:text-white">
-                        <span class="grid h-8 w-8 place-items-center rounded-full bg-white/10 transition-all group-hover:scale-110 group-hover:bg-gradient-to-r group-hover:from-[#881C27] group-hover:to-[#2A6867]">
-                            <x-icon name="map-pin" class="!h-4 !w-4" />
-                        </span>
+                    <a href="https://www.google.com/maps/search/Dubai,+United+Arab+Emirates" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 text-gray-400 hover:text-white transition-colors group cursor-pointer">
+                        <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-[#881C27] group-hover:to-[#2A6867] group-hover:scale-110 transition-all">
+                            <x-icon name="map-pin" class="w-4 h-4" />
+                        </div>
                         <span class="text-sm">{{ __('site.dubai_location') }}</span>
                     </a>
                 </div>
 
                 <div>
-                    <h4 class="mb-3 text-sm font-semibold text-white sm:mb-4 sm:text-base">{{ __('site.follow_us') }}</h4>
+                    <h4 class="font-semibold text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('site.follow_us') }}</h4>
                     <div class="flex gap-2 sm:gap-3">
-                        <a href="https://www.facebook.com/KabulFitTailoring/" target="_blank" rel="noopener noreferrer" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="Facebook"><x-icon name="facebook" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
-                        <a href="#" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="Instagram"><x-icon name="instagram" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="TikTok"><x-icon name="tiktok" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
-                        <a href="http://www.youtube.com/@Kabulfit" target="_blank" rel="noopener noreferrer" class="grid h-9 w-9 place-items-center rounded-full bg-white/10 transition-all hover:scale-110 hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] sm:h-10 sm:w-10" aria-label="YouTube"><x-icon name="youtube" class="!h-4 !w-4 sm:!h-5 sm:!w-5" /></a>
+                        <a href="https://www.facebook.com/KabulFitTailoring/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:scale-110 transition-all" aria-label="Facebook"><x-icon name="facebook" class="w-4 h-4 sm:w-5 sm:h-5" /></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:scale-110 transition-all" aria-label="Instagram"><x-icon name="instagram" class="w-4 h-4 sm:w-5 sm:h-5" /></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:scale-110 transition-all" aria-label="TikTok"><x-icon name="tiktok" class="w-4 h-4 sm:w-5 sm:h-5" /></a>
+                        <a href="http://www.youtube.com/@Kabulfit" target="_blank" rel="noopener noreferrer" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:scale-110 transition-all" aria-label="Youtube"><x-icon name="youtube" class="w-4 h-4 sm:w-5 sm:h-5" /></a>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h4 class="mb-3 text-base font-semibold sm:mb-4 sm:text-lg">{{ __('site.shop') }}</h4>
+                <h4 class="font-semibold text-base sm:text-lg mb-3 sm:mb-4">{{ __('site.shop') }}</h4>
                 <ul class="space-y-1 sm:space-y-2">
-                    <li><a class="text-xs text-gray-400 transition-colors hover:text-white sm:text-sm" href="{{ route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['men']]) }}">{{ __('site.men') }}</a></li>
-                    <li><a class="text-xs text-gray-400 transition-colors hover:text-white sm:text-sm" href="{{ route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['women']]) }}">{{ __('site.women') }}</a></li>
-                    <li><a class="text-xs text-gray-400 transition-colors hover:text-white sm:text-sm" href="{{ route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['boys']]) }}">{{ __('site.boys') }}</a></li>
-                    <li><a class="text-xs text-gray-400 transition-colors hover:text-white sm:text-sm" href="{{ route('categories.show', ['locale' => $locale, 'slug' => $categorySlugs['girls']]) }}">{{ __('site.girls') }}</a></li>
-                    <li><a class="text-xs text-gray-400 transition-colors hover:text-white sm:text-sm" href="{{ route('shop', ['locale' => $locale, 'sort' => 'newest']) }}">{{ __('site.new_arrivals') }}</a></li>
-                    <li><a class="text-xs text-gray-400 transition-colors hover:text-white sm:text-sm" href="{{ route('shop', ['locale' => $locale]) }}">{{ __('site.on_sale') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm" href="{{ route('shop', ['locale' => $locale, 'category' => 'men']) }}">{{ __('site.men') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm" href="{{ route('shop', ['locale' => $locale, 'category' => 'women']) }}">{{ __('site.women') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm" href="{{ route('shop', ['locale' => $locale, 'category' => 'boys']) }}">{{ __('site.boys') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm" href="{{ route('shop', ['locale' => $locale, 'category' => 'girls']) }}">{{ __('site.girls') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm" href="{{ route('shop', ['locale' => $locale, 'sort' => 'newest']) }}">{{ __('site.new_arrivals') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-xs sm:text-sm" href="{{ route('shop', ['locale' => $locale]) }}">{{ __('site.on_sale') }}</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="mb-3 text-base font-semibold sm:mb-4 sm:text-lg">{{ __('site.customer_service') }}</h4>
+                <h4 class="font-semibold text-base sm:text-lg mb-3 sm:mb-4">{{ __('site.customer_service') }}</h4>
                 <ul class="space-y-1 sm:space-y-2">
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['measurement']]) }}">{{ __('site.measurement_guide') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['shipping']]) }}">{{ __('site.shipping_policy') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['return']]) }}">{{ __('site.return_policy') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['faq']]) }}">{{ __('site.faq') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ $isHome ? '#contact' : route('home', ['locale' => $locale]).'#contact' }}">{{ __('site.contact') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['measurement']]) }}">{{ __('site.measurement_guide') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['shipping']]) }}">{{ __('site.shipping_policy') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['return']]) }}">{{ __('site.return_policy') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['faq']]) }}">{{ __('site.faq') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ $isHome ? '#contact' : route('home', ['locale' => $locale]).'#contact' }}">{{ __('site.contact') }}</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="mb-3 text-base font-semibold sm:mb-4 sm:text-lg">{{ __('site.company') }}</h4>
+                <h4 class="font-semibold text-base sm:text-lg mb-3 sm:mb-4">{{ __('site.company') }}</h4>
                 <ul class="space-y-2">
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['about']]) }}">{{ __('site.about_us') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('home', ['locale' => $locale]).'#story' }}">{{ __('site.our_story') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['privacy']]) }}">{{ __('site.privacy_policy') }}</a></li>
-                    <li><a class="text-sm text-gray-400 transition-colors hover:text-white" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['terms']]) }}">{{ __('site.terms_conditions') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['about']]) }}">{{ __('site.about_us') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('home', ['locale' => $locale]).'#story' }}">{{ __('site.our_story') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['privacy']]) }}">{{ __('site.privacy_policy') }}</a></li>
+                    <li><a class="text-gray-400 hover:text-white transition-colors text-sm" href="{{ route('content.page', ['locale' => $locale, 'slug' => $pageSlugs['terms']]) }}">{{ __('site.terms_conditions') }}</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="mb-8 border-t border-gray-800 pt-8 sm:mb-10 sm:pt-10">
-            <div class="mx-auto max-w-xl text-center" x-data="{ subscribed: false }">
-                <h4 class="mb-2 text-lg font-semibold sm:mb-3 sm:text-xl">{{ __('site.newsletter') }}</h4>
-                <p class="mb-4 text-sm text-gray-400 sm:mb-6 sm:text-base">{{ __('site.subscribe_text') }}</p>
-                <form class="mx-auto flex max-w-md flex-col gap-2 sm:flex-row sm:gap-3" @submit.prevent="subscribed = true">
-                    <input type="email" required placeholder="your@email.com" class="flex h-10 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-white shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm sm:h-12 sm:text-base">
-                    <button type="submit" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-primary-foreground text-white shadow transition-colors hover:bg-primary/90 hover:opacity-90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 sm:h-12 sm:px-6 sm:text-base">
-                        <x-icon name="mail" class="!mr-2 !h-4 !w-4 sm:!h-5 sm:!w-5" />
+        <div class="border-t border-gray-800 pt-8 sm:pt-10 mb-8 sm:mb-10">
+            <div class="max-w-xl mx-auto text-center" x-data="{ subscribed: false }">
+                <h4 class="font-semibold text-lg sm:text-xl mb-2 sm:mb-3">{{ __('site.newsletter') }}</h4>
+                <p class="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6">{{ __('site.subscribe_text') }}</p>
+                <form class="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-md mx-auto" @submit.prevent="subscribed = true">
+                    <input type="email" required placeholder="your@email.com" class="flex w-full rounded-md border px-3 py-1 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white/10 border-white/20 text-white placeholder:text-gray-400 h-10 sm:h-12 text-sm sm:text-base">
+                    <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-primary-foreground shadow hover:bg-primary/90 py-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] hover:opacity-90 px-4 sm:px-6 h-10 sm:h-12 text-sm sm:text-base whitespace-nowrap">
+                        <x-icon name="mail" class="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                         {{ __('site.subscribe') }}
                     </button>
                 </form>
             </div>
         </div>
 
-        <div class="flex flex-col items-center justify-between gap-2 border-t border-gray-800 pt-4 sm:gap-3 sm:pt-6 md:flex-row">
-            <p class="text-center text-xs text-gray-400 sm:text-sm md:text-left">© {{ date('Y') }} KabulFit. {{ __('site.rights') }}</p>
-            <p class="flex items-center gap-1 text-xs text-gray-400 sm:text-sm">{{ __('site.made_with') }} <x-icon name="heart" class="!h-3 !w-3 fill-current text-red-500 sm:!h-4 sm:!w-4" /> {{ __('site.in_afghanistan') }}</p>
+        <div class="border-t border-gray-800 pt-4 sm:pt-6 flex flex-col md:flex-row justify-between items-center gap-2 sm:gap-3">
+            <p class="text-gray-400 text-xs sm:text-sm text-center md:text-left">© {{ date('Y') }} KabulFit. {{ __('site.rights') }}</p>
+            <p class="text-gray-400 text-xs sm:text-sm flex items-center gap-1">{{ __('site.made_with') }} <x-icon name="heart" class="w-3 h-3 sm:w-4 sm:h-4 text-red-500 fill-current" /> {{ __('site.in_afghanistan') }}</p>
         </div>
     </div>
 </footer>
