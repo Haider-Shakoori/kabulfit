@@ -1,0 +1,46 @@
+name: Sync KabulFit live reference CSS
+
+on:
+  push:
+    branches:
+      - fix/live-site-pixel-parity
+    paths:
+      - .github/workflows/sync-live-reference-css.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/live-site-pixel-parity
+
+      - name: Download current live compiled stylesheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/css
+          html="$(curl --fail --location --retry 3 https://kabulfit.com/)"
+          css_path="$(printf '%s' "$html" | grep -oE '/assets/index-[A-Za-z0-9_-]+\.css' | head -n 1)"
+          test -n "$css_path"
+          curl --fail --location --retry 3 "https://kabulfit.com/${css_path#/}" -o public/css/kabulfit-live-reference.css
+          test -s public/css/kabulfit-live-reference.css
+
+      - name: Commit live reference stylesheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/css/kabulfit-live-reference.css
+          if git diff --cached --quiet; then
+            echo "Reference stylesheet already current."
+            exit 0
+          fi
+          git commit -m "chore: sync live KabulFit reference CSS"
+          git push origin HEAD:fix/live-site-pixel-parity
