@@ -14,7 +14,7 @@
                 <img
                     src="{{ $media->url() }}"
                     alt="{{ $media->translation()?->alt_text }}"
-                    class="h-full w-full scale-100 object-cover opacity-100 transition-transform duration-700"
+                    class="h-full w-full scale-100 object-cover opacity-100 transition-transform duration-700 group-hover:scale-110"
                     loading="{{ $eager ? 'eager' : 'lazy' }}"
                     decoding="async"
                     @if($eager) fetchpriority="high" @endif
