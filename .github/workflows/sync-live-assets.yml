@@ -34,6 +34,9 @@ jobs:
             test -s "$file"
           }
 
+          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/b6d3c7505_KabulFit_logo_white.png" "../logo-footer.png"
+          download "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/4ce74c49d_KabulFit_logo_shopify_header.png" "../logo-header.png"
+
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/6b7f27f2f_H1.webp" "hero-01.webp"
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/f2989fdbd_H2.webp" "hero-02.webp"
           download "https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b6b455e59_H3.webp" "hero-03.webp"
