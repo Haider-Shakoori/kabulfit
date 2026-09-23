@@ -84,15 +84,15 @@
                         <a
                             :href="slides[hero].href"
                             href="{{ $heroSlides[0]['href'] }}"
-                            class="inline-flex items-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-medium text-white shadow transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
                         >
                             <span x-text="slides[hero].cta">{{ $heroSlides[0]['cta'] }}</span>
-                            <span class="ml-1 text-lg leading-none sm:ml-2" aria-hidden="true">→</span>
+                            <x-icon name="arrow-right" class="!ml-1 !h-4 !w-4 sm:!ml-2" />
                         </a>
 
                         <a
                             href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}"
-                            class="inline-flex items-center rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
+                            class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-4 py-3 text-sm font-medium text-white shadow transition hover:bg-white hover:text-black sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
                         >
                             <x-icon name="ruler" class="!mr-1 !h-4 !w-4 sm:!mr-2 sm:!h-5 sm:!w-5" />
                             {{ __('site.measurement_guide') }}
@@ -165,7 +165,7 @@
                             <strong class="mb-1 block text-xl font-bold text-white sm:mb-2 sm:text-2xl md:text-3xl">{{ $category['name'] }}</strong>
                             <span class="flex items-center text-sm font-medium text-white group-hover:underline sm:text-base">
                                 {{ __('site.explore_collection') }}
-                                <span class="ml-1 transition-transform group-hover:translate-x-1 sm:ml-2" aria-hidden="true">→</span>
+                                <x-icon name="arrow-right" class="!ml-1 !h-3 !w-3 transition-transform group-hover:translate-x-1 sm:!ml-2 sm:!h-4 sm:!w-4" />
                             </span>
                         </span>
                     </a>
@@ -181,8 +181,8 @@
                     <h2 class="mb-2 text-4xl font-bold text-gray-900">{{ __('site.featured_label') }}</h2>
                     <p class="text-gray-600">{{ __('site.featured_title') }}</p>
                 </div>
-                <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex shrink-0 items-center rounded-full border-2 border-transparent bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 font-semibold text-white transition hover:opacity-90">
-                    {{ __('site.view_all') }} <span class="ml-2" aria-hidden="true">→</span>
+                <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90">
+                    {{ __('site.view_all') }}
                 </a>
             </div>
 
@@ -217,7 +217,7 @@
                     <p class="mb-8 text-xl leading-relaxed text-white/80">{{ __('site.story_p1') }}</p>
                     <p class="mb-8 text-white/70">{{ __('site.story_p2') }}</p>
                     <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-8 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-black">
-                        {{ __('site.learn_more') }} <span class="ml-2" aria-hidden="true">→</span>
+                        {{ __('site.learn_more') }} <x-icon name="arrow-right" class="!ml-2 !h-4 !w-4" />
                     </a>
                 </div>
 
@@ -272,11 +272,11 @@
                         <h2 class="mb-4 text-3xl font-bold text-white md:text-4xl">{{ __('site.measurements_title') }}</h2>
                         <p class="mb-8 text-white/80">{{ __('site.measurements_text') }}</p>
                         <div class="flex flex-wrap gap-4">
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
-                                {{ __('site.start_measuring') }} <span class="ml-2" aria-hidden="true">→</span>
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
+                                {{ __('site.start_measuring') }} <x-icon name="arrow-right" class="!ml-2 !h-5 !w-5" />
                             </a>
                             <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition hover:bg-white hover:text-gray-900">
-                                <span class="mr-2" aria-hidden="true">▶</span>{{ __('site.watch_tutorial') }}
+                                <x-icon name="play" class="!mr-2 !h-5 !w-5" />{{ __('site.watch_tutorial') }}
                             </a>
                         </div>
                     </div>
@@ -309,7 +309,7 @@
                     <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
                         {{ __('site.shop_afghan_clothes') }}
                     </a>
-                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full border-2 border-[#881C27] bg-transparent px-8 text-sm font-medium text-[#881C27] shadow transition hover:bg-[#881C27] hover:text-white">
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#881C27] bg-transparent px-6 py-2 text-sm font-medium text-[#881C27] shadow-sm transition hover:bg-[#881C27] hover:text-white">
                         {{ __('site.start_custom_tailoring') }}
                     </a>
                 </div>
