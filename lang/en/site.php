@@ -56,7 +56,7 @@ return [
     'traditional_elegance' => 'Traditional Elegance',
     'traditional_elegance_subtitle' => 'Handcrafted with love, worn with pride',
     'custom_fit_guarantee' => 'Custom Fit Guarantee',
-    'custom_fit_guarantee_subtitle' => 'Measure once and let KabulFit tailor the perfect fit.',
+    'custom_fit_guarantee_subtitle' => 'Perfect measurements, perfect outfit',
     'hero_slide' => 'Hero slide :number',
     'shop_now' => 'Shop Now',
     'measurement_guide' => 'Measurement Guide',
@@ -125,7 +125,7 @@ return [
 
     'customer_stories' => 'Customer Stories',
     'testimonials_title' => 'What Our Customers Say',
-    'testimonials_intro' => 'Real reviews from satisfied customers worldwide.',
+    'testimonials_intro' => 'Real reviews from satisfied customers worldwide',
     'review_1_quote' => 'The quality is exceptional. The kameez fits perfectly thanks to their measurement system.',
     'review_2_quote' => 'Beautiful embroidery work! I received so many compliments at my wedding.',
     'review_3_quote' => 'Fast shipping and excellent customer service. Will definitely order again!',
