@@ -218,7 +218,7 @@
                     <h2 class="mb-6 text-4xl font-bold text-white md:text-5xl">{{ __('site.afghan_culture') }}</h2>
                     <p class="mb-8 text-xl leading-relaxed text-white/80">{{ __('site.story_p1') }}</p>
                     <p class="mb-8 text-white/70">{{ __('site.story_p2') }}</p>
-                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 rounded-full border-2 border-white bg-transparent px-8 py-2 text-sm font-medium text-white transition hover:bg-white hover:text-black">
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $aboutSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-8 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-black">
                         {{ __('site.learn_more') }} <x-icon name="arrow-right" class="!ml-2 !h-4 !w-4" />
                     </a>
                 </div>
@@ -279,7 +279,7 @@
                             <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition-colors hover:opacity-90">
                                 {{ __('site.start_measuring') }} <x-icon name="arrow-right" class="!ml-2 !h-5 !w-5" />
                             </a>
-                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition hover:bg-white hover:text-gray-900">
+                            <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white bg-transparent px-8 text-sm font-medium text-white shadow transition-colors hover:bg-white hover:text-gray-900">
                                 <x-icon name="play" class="!mr-2 !h-5 !w-5" />{{ __('site.watch_tutorial') }}
                             </a>
                         </div>
@@ -313,7 +313,7 @@
                     <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
                         {{ __('site.shop_afghan_clothes') }}
                     </a>
-                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#881C27] bg-transparent px-6 py-2 text-sm font-medium text-[#881C27] shadow-sm transition hover:bg-[#881C27] hover:text-white">
+                    <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-gray-200 bg-white px-6 py-2 text-sm font-medium text-gray-900 shadow-sm transition-colors hover:bg-gray-100">
                         {{ __('site.start_custom_tailoring') }}
                     </a>
                 </div>
