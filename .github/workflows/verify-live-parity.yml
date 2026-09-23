@@ -129,7 +129,13 @@ jobs:
               await heroButtons.nth(heroButtonCount - 2).click().catch(() => {});
               await page.waitForTimeout(100);
             }
-            await page.evaluate(() => window.scrollTo(0, 0));
+            await page.evaluate(() => {
+              document.activeElement?.blur?.();
+              window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+              document.documentElement.scrollTop = 0;
+              document.body.scrollTop = 0;
+            });
+            await page.waitForFunction(() => window.scrollY === 0, { timeout: 3000 }).catch(() => {});
             await page.waitForTimeout(100);
 
             const data = await page.evaluate(() => {
@@ -160,6 +166,8 @@ jobs:
                   bodyScrollHeight: document.body.scrollHeight,
                   documentScrollWidth: document.documentElement.scrollWidth,
                   documentScrollHeight: document.documentElement.scrollHeight,
+                  scrollX: window.scrollX,
+                  scrollY: window.scrollY,
                 },
                 title: document.title,
                 bodyClasses: document.body.className,
@@ -271,9 +279,24 @@ jobs:
             // measure the UI/chrome/layout itself while retaining the raw visual score.
             const uiA = PNG.sync.read(PNG.sync.write(aa));
             const uiB = PNG.sync.read(PNG.sync.write(bb));
-            for (const image of [...(liveData.images || []), ...(laravelData.images || [])]) {
-              fillRect(uiA, image.rect);
-              fillRect(uiB, image.rect);
+            const liveScrollY = liveData.viewport?.scrollY || 0;
+            const liveScrollX = liveData.viewport?.scrollX || 0;
+            const laravelScrollY = laravelData.viewport?.scrollY || 0;
+            const laravelScrollX = laravelData.viewport?.scrollX || 0;
+
+            for (const image of (liveData.images || [])) {
+              fillRect(uiA, image.rect ? {
+                ...image.rect,
+                x: image.rect.x + liveScrollX,
+                y: image.rect.y + liveScrollY,
+              } : null);
+            }
+            for (const image of (laravelData.images || [])) {
+              fillRect(uiB, image.rect ? {
+                ...image.rect,
+                x: image.rect.x + laravelScrollX,
+                y: image.rect.y + laravelScrollY,
+              } : null);
             }
 
             const uiDiff = new PNG({ width, height });
