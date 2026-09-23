@@ -182,7 +182,7 @@
                     <p class="text-gray-600">{{ __('site.featured_title') }}</p>
                 </div>
                 <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90">
-                    {{ __('site.view_all') }}
+                    {{ __('site.view_all') }} <x-icon name="arrow-right" class="!ml-2 !h-4 !w-4" />
                 </a>
             </div>
 
@@ -300,17 +300,17 @@
             <div class="prose prose-lg max-w-none space-y-4 text-gray-700">
                 <p class="leading-6">{{ __('site.seo_intro') }}</p>
 
-                <h3 class="mb-4 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
                 <p class="leading-6">{{ __('site.gand_text') }}</p>
 
-                <h3 class="mb-4 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
                 <p class="leading-6">{{ __('site.embroidery_text') }}</p>
 
-                <h3 class="mb-4 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
+                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
                 <p class="leading-6">{{ __('site.tailoring_text') }}</p>
 
                 <div class="flex flex-wrap gap-4">
-                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
+                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
                         {{ __('site.shop_afghan_clothes') }}
                     </a>
                     <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#881C27] bg-transparent px-6 py-2 text-sm font-medium text-[#881C27] shadow-sm transition hover:bg-[#881C27] hover:text-white">
