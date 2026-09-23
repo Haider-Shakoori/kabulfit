@@ -106,7 +106,39 @@ class Product extends Model
     {
         [$major, $minor] = explode('.', $this->decimalPrice($minorUnits), 2);
 
-        return number_format((int) $major).'.'.$minor.' '.$this->currency;
+        $amount = number_format((int) $major).'.'.$minor;
+
+        return $this->currency === 'USD' ? '
+    }
+
+    public function availableStock(): int
+    {
+        if ($this->relationLoaded('variants')) {
+            return (int) $this->variants
+                ->where('is_active', true)
+                ->sum(fn (ProductVariant $variant): int => $variant->availableQuantity());
+        }
+
+        $variantCount = $this->variants()->where('is_active', true)->count();
+
+        if ($variantCount === 0) {
+            return $this->stock_quantity;
+        }
+
+        return (int) InventoryItem::query()
+            ->whereHas('variant', fn ($query) => $query
+                ->where('product_id', $this->id)
+                ->where('is_active', true))
+            ->get()
+            ->sum(fn (InventoryItem $inventory): int => $inventory->availableQuantity());
+    }
+
+    public function isInStock(): bool
+    {
+        return $this->availableStock() > 0;
+    }
+}
+.$amount : $amount.' '.$this->currency;
     }
 
     public function availableStock(): int
