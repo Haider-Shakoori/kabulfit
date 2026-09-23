@@ -155,8 +155,15 @@ jobs:
                   fontSize: style.fontSize,
                   fontWeight: style.fontWeight,
                   lineHeight: style.lineHeight,
+                  fontFamily: style.fontFamily,
+                  letterSpacing: style.letterSpacing,
+                  textRendering: style.textRendering,
+                  webkitFontSmoothing: style.webkitFontSmoothing,
                   color: style.color,
                   backgroundColor: style.backgroundColor,
+                  borderColor: style.borderColor,
+                  borderRadius: style.borderRadius,
+                  boxShadow: style.boxShadow,
                 };
               };
 
