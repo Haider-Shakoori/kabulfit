@@ -64,14 +64,14 @@
 
         <div class="absolute inset-0 z-20 flex items-center">
             <div class="mx-auto w-full max-w-7xl px-4">
-                <div class="mt-16 max-w-2xl sm:mt-20">
+                <div class="mt-16 max-w-2xl translate-y-[18px] sm:mt-20">
                     <span class="mb-4 inline-flex items-center rounded-md border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80 sm:mb-6 sm:text-sm">
                         <x-icon name="sparkles" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
                         {{ __('site.featured_label') }}
                     </span>
 
                     <h1
-                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl"
+                        class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl lg:leading-none"
                         x-text="slides[hero].title"
                     >{{ $heroSlides[0]['title'] }}</h1>
 
