@@ -310,7 +310,7 @@
                 <p class="leading-6">{{ __('site.tailoring_text') }}</p>
 
                 <div class="flex flex-wrap gap-4">
-                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
+                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
                         {{ __('site.shop_afghan_clothes') }}
                     </a>
                     <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#881C27] bg-transparent px-6 py-2 text-sm font-medium text-[#881C27] shadow-sm transition hover:bg-[#881C27] hover:text-white">
