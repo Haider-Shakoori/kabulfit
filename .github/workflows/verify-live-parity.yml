@@ -113,7 +113,9 @@ jobs:
               { timeout: 20000 }
             ).catch(() => {});
             await page.evaluate(async () => {
-              await Promise.all([...document.images].map(img => img.decode?.().catch(() => {})));
+              const decodeAll = Promise.all([...document.images].map(img => img.decode?.().catch(() => {})));
+              const timeout = new Promise(resolve => setTimeout(resolve, 5000));
+              await Promise.race([decodeAll, timeout]);
             });
             await page.waitForTimeout(500);
 
