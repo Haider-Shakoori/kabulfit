@@ -1,3 +1,4 @@
+@props(['product', 'eager' => false])
 @php($translation = $product->translation())
 @php($media = $product->primaryMedia)
 @php($secondaryMedia = $product->relationLoaded('media') ? $product->media->firstWhere('is_primary', false) : null)
@@ -19,7 +20,8 @@
                         :media="$media"
                         :alt="$media->translation()?->alt_text"
                         sizes="(max-width: 767px) 50vw, 25vw"
-                        loading="lazy"
+                        :loading="$eager ? 'eager' : 'lazy'"
+                        :fetchpriority="$eager ? 'high' : null"
                     />
                 </span>
 
@@ -64,7 +66,7 @@
         <div class="absolute inset-x-0 bottom-0 z-20 translate-y-4 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             <a
                 href="{{ $productUrl }}"
-                class="flex w-full items-center justify-center rounded-full bg-black/90 px-4 py-3 text-sm font-medium text-white shadow transition hover:bg-black"
+                class="flex w-full items-center justify-center rounded-full bg-black/90 px-4 py-5 text-sm font-medium text-white shadow transition hover:bg-black"
             >
                 <x-icon name="eye" class="!mr-2 !h-5 !w-5" />
                 {{ __('site.quick_look') }}
