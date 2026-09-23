@@ -31,7 +31,7 @@
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-[#FDFBF7]">
 @php
     $contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com');
     $isHome = request()->routeIs('home');
@@ -95,7 +95,7 @@
 >
     <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm text-white">
         <div class="mx-auto flex max-w-7xl items-center justify-between">
-            <p class="hidden md:block">{{ __('site.announcement') }}</p>
+            <p class="hidden md:block animate-blink">{{ __('site.announcement') }}</p>
             <div class="mx-auto flex items-center gap-1 md:mx-0" aria-label="{{ __('site.language') }}">
                 @foreach (($seo->alternates ?? []) as $alternateLocale => $href)
                     <a
@@ -123,7 +123,7 @@
             <div class="flex items-center justify-between gap-2">
                 <button
                     type="button"
-                    class="grid h-10 w-10 place-items-center rounded-md lg:hidden"
+                    class="inline-flex h-9 w-9 items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground lg:hidden"
                     :class="{{ $isHome ? "(scrolled && scrollDirection === 'down') ? 'text-gray-700' : 'text-white'" : "'text-gray-700'" }}"
                     @click="open = true"
                     aria-controls="mobile-navigation"
@@ -140,7 +140,7 @@
                         height="120"
                         alt="KabulFit"
                         fetchpriority="high"
-                        class="h-16 w-auto object-contain sm:h-20"
+                        class="h-16 w-auto object-contain opacity-100 transition-opacity duration-300 sm:h-20 md:h-22 lg:h-25"
                     >
                 </a>
 
@@ -417,7 +417,7 @@
     </div>
 </footer>
 
-<nav class="safe-bottom fixed inset-x-0 bottom-0 z-50 flex border-t border-gray-200 bg-white md:hidden" style="padding-bottom:max(env(safe-area-inset-bottom),0px)" aria-label="{{ __('site.mobile_navigation') }}">
+<nav class="safe-bottom fixed bottom-0 left-0 right-0 z-50 flex border-t border-gray-200 bg-white md:hidden" style="padding-bottom:max(env(safe-area-inset-bottom),0px)" aria-label="{{ __('site.mobile_navigation') }}">
     <a href="{{ route('home', ['locale' => $locale]) }}" class="relative flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[#881C27] transition-colors">
         <div class="relative"><x-icon name="home" class="!h-5 !w-5" /></div>
         <span class="text-[10px] font-medium">{{ __('site.home') }}</span>
