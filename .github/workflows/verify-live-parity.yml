@@ -200,6 +200,20 @@ jobs:
                   className: section.className,
                   rect: rect(section),
                 })),
+                headerBlocks: [...document.querySelectorAll('header a, header button, header img, header p')].map((el, index) => ({
+                  index,
+                  tag: el.tagName,
+                  text: el.textContent.trim().replace(/\s+/g, ' '),
+                  className: el.className?.toString?.() || '',
+                  rect: rect(el),
+                })),
+                footerBlocks: [...document.querySelectorAll('footer a, footer h4, footer p, footer form, footer input, footer button, footer img')].map((el, index) => ({
+                  index,
+                  tag: el.tagName,
+                  text: el.textContent.trim().replace(/\s+/g, ' '),
+                  className: el.className?.toString?.() || '',
+                  rect: rect(el),
+                })),
                 overflowing: [...document.querySelectorAll('body *')]
                   .map((el, index) => ({ index, tag: el.tagName, className: el.className?.toString?.() || '', rect: rect(el) }))
                   .filter(item => item.rect && (item.rect.x < -0.5 || item.rect.x + item.rect.width > window.innerWidth + 0.5)),
