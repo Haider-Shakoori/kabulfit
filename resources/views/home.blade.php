@@ -296,17 +296,17 @@
             <div class="prose prose-lg max-w-none space-y-4 text-gray-700">
                 <p class="leading-6">{{ __('site.seo_intro') }}</p>
 
-                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
+                <h3 class="mb-4 text-xl font-bold text-gray-900">{{ __('site.gand_heading') }}</h3>
                 <p class="leading-6">{{ __('site.gand_text') }}</p>
 
-                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
+                <h3 class="mb-4 text-xl font-bold text-gray-900">{{ __('site.embroidery_heading') }}</h3>
                 <p class="leading-6">{{ __('site.embroidery_text') }}</p>
 
-                <h3 class="mb-3 mt-8 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
+                <h3 class="mb-4 text-xl font-bold text-gray-900">{{ __('site.tailoring_heading') }}</h3>
                 <p class="leading-6">{{ __('site.tailoring_text') }}</p>
 
-                <div class="mt-8 flex flex-wrap gap-4">
-                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-10 items-center justify-center rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-8 text-sm font-medium text-white shadow transition hover:opacity-90">
+                <div class="flex flex-wrap gap-4">
+                    <a href="{{ route('shop', ['locale' => $locale]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-2 text-sm font-medium text-white shadow transition hover:opacity-90">
                         {{ __('site.shop_afghan_clothes') }}
                     </a>
                     <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $measurementSlug]) }}" class="inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-[#881C27] bg-transparent px-6 py-2 text-sm font-medium text-[#881C27] shadow-sm transition hover:bg-[#881C27] hover:text-white">
@@ -330,23 +330,23 @@
                     ['Sarah M.', 'London, UK', __('site.review_2_quote')],
                     ['Farid A.', 'Toronto, Canada', __('site.review_3_quote')],
                 ] as [$name, $location, $quote])
-                    <figure class="h-full rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div class="h-full rounded-xl border bg-card text-card-foreground shadow">
                         <div class="p-6">
                             <div class="mb-4 flex gap-1" aria-label="5 out of 5">
                                 @for ($star = 0; $star < 5; $star++)
                                     <x-icon name="star" class="!h-5 !w-5 fill-[#2A6867] text-[#2A6867]" />
                                 @endfor
                             </div>
-                            <blockquote class="mb-6 italic text-gray-700">“{{ $quote }}”</blockquote>
-                            <figcaption class="flex items-center gap-3">
+                            <p class="mb-6 italic text-gray-700">"{{ $quote }}"</p>
+                            <div class="flex items-center gap-3">
                                 <span class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#881C27]/10 to-[#2A6867]/10 font-bold text-[#881C27]" aria-hidden="true">{{ mb_substr($name, 0, 1) }}</span>
                                 <span>
                                     <strong class="block font-semibold text-gray-900">{{ $name }}</strong>
                                     <small class="text-sm text-gray-500">{{ $location }}</small>
                                 </span>
-                            </figcaption>
+                            </div>
                         </div>
-                    </figure>
+                    </div>
                 @endforeach
             </div>
         </div>
