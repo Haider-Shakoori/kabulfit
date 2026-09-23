@@ -65,7 +65,7 @@
         <div class="absolute inset-0 z-20 flex items-center">
             <div class="mx-auto w-full max-w-7xl px-4">
                 <div class="mt-16 max-w-2xl sm:mt-20">
-                    <span class="mb-4 inline-flex items-center rounded-full border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white sm:mb-6 sm:text-sm">
+                    <span class="mb-4 inline-flex items-center rounded-md border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white shadow transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80 sm:mb-6 sm:text-sm">
                         <x-icon name="sparkles" class="!mr-1 !h-3 !w-3 sm:!mr-2 sm:!h-4 sm:!w-4" />
                         {{ __('site.featured_label') }}
                     </span>
@@ -87,7 +87,7 @@
                             class="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm font-medium text-white shadow transition hover:opacity-90 sm:px-6 sm:py-5 sm:text-base md:px-8 md:py-6 md:text-lg"
                         >
                             <span x-text="slides[hero].cta">{{ $heroSlides[0]['cta'] }}</span>
-                            <x-icon name="arrow-right" class="!ml-1 !h-4 !w-4 sm:!ml-2" />
+                            <x-icon name="arrow-right" class="!ml-1 !h-4 !w-4 sm:!ml-2 sm:!h-5 sm:!w-5" />
                         </a>
 
                         <a
