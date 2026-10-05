@@ -103,6 +103,10 @@
     }'
 >
     <div class="mx-auto max-w-7xl px-4 py-8">
+        @if(session('status'))
+            <div class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{{ session('status') }}</div>
+        @endif
+        <x-form-errors />
         <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}" class="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-[#881C27] hover:text-[#881C27]">
             <span class="rtl:rotate-180">←</span>
             {{ $backLabel }}
@@ -179,6 +183,14 @@
                 <div>
                     <p class="mb-2 text-sm font-medium uppercase tracking-[0.16em] text-[#2A6867]">{{ $categoryTranslation?->name }}</p>
                     <h1 class="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">{{ $translation?->name }}</h1>
+
+                    @if($ratingAverage !== null)
+                        <div class="mt-4 flex items-center gap-2">
+                            <span class="text-[#D4AF37]">{{ str_repeat('★', (int) round($ratingAverage)) }}<span class="text-gray-200">{{ str_repeat('★', 5 - (int) round($ratingAverage)) }}</span></span>
+                            <span class="text-sm font-semibold text-gray-800">{{ number_format($ratingAverage, 1) }}</span>
+                            <button type="button" class="text-sm text-gray-500 hover:text-[#881C27]" @click="document.querySelector('[data-product-tabs]')?.scrollIntoView({behavior: 'smooth'}); setTimeout(() => document.querySelector('[data-reviews-tab]')?.click(), 350)">({{ $reviews->count() }} {{ $reviewsLabel }})</button>
+                        </div>
+                    @endif
 
                     <div class="mt-4 flex items-baseline gap-3">
                         <span class="text-3xl font-bold text-[#881C27]" x-text="selectedVariant?.price_display || @js($product->formattedPrice())"></span>
@@ -317,11 +329,11 @@
             </div>
         </div>
 
-        <section class="mt-16" x-data="{ tab: 'description' }">
+        <section class="mt-16" x-data="{ tab: 'description' }" data-product-tabs>
             <div class="flex overflow-x-auto border-b border-gray-200">
                 <button type="button" class="shrink-0 border-b-2 px-6 py-4 text-sm font-medium" :class="tab === 'description' ? 'border-[#881C27] text-[#881C27]' : 'border-transparent text-gray-500'" @click="tab = 'description'">{{ $descriptionLabel }}</button>
                 <button type="button" class="shrink-0 border-b-2 px-6 py-4 text-sm font-medium" :class="tab === 'details' ? 'border-[#881C27] text-[#881C27]' : 'border-transparent text-gray-500'" @click="tab = 'details'">{{ $detailsLabel }}</button>
-                <button type="button" class="shrink-0 border-b-2 px-6 py-4 text-sm font-medium" :class="tab === 'reviews' ? 'border-[#881C27] text-[#881C27]' : 'border-transparent text-gray-500'" @click="tab = 'reviews'">{{ $reviewsLabel }} (0)</button>
+                <button type="button" data-reviews-tab class="shrink-0 border-b-2 px-6 py-4 text-sm font-medium" :class="tab === 'reviews' ? 'border-[#881C27] text-[#881C27]' : 'border-transparent text-gray-500'" @click="tab = 'reviews'">{{ $reviewsLabel }} ({{ $reviews->count() }})</button>
             </div>
             <div class="py-8">
                 <div x-show="tab === 'description'" class="max-w-4xl whitespace-pre-line leading-8 text-gray-700">{{ $translation?->description }}</div>
@@ -339,9 +351,67 @@
                         <p class="mt-4 leading-7 text-gray-600">{{ __('site.measurement_ready_text') }}</p>
                     </div>
                 </div>
-                <div x-show="tab === 'reviews'" class="py-8 text-center">
-                    <x-icon name="star" class="mx-auto h-12 w-12 text-gray-300" />
-                    <p class="mt-4 text-gray-500">{{ $locale === 'ps' ? 'تر اوسه نظر نشته' : ($locale === 'fa' ? 'هنوز نظری ثبت نشده است' : 'No reviews yet') }}</p>
+                <div x-show="tab === 'reviews'" class="py-8">
+                    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+                        <div>
+                            @if($reviews->isNotEmpty())
+                                <div class="space-y-4">
+                                    @foreach($reviews as $review)
+                                        <article class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                                            <div class="flex flex-wrap items-start justify-between gap-3">
+                                                <div>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="grid h-10 w-10 place-items-center rounded-full bg-[#881C27]/10 font-bold text-[#881C27]">{{ mb_strtoupper(mb_substr($review->user?->name ?: 'C', 0, 1)) }}</span>
+                                                        <div>
+                                                            <p class="font-semibold text-gray-900">{{ $review->user?->name ?: 'Customer' }}</p>
+                                                            <div class="mt-0.5 flex items-center gap-2">
+                                                                <span class="text-sm text-[#D4AF37]">{{ str_repeat('★', $review->rating) }}<span class="text-gray-200">{{ str_repeat('★', 5 - $review->rating) }}</span></span>
+                                                                @if($review->is_verified_purchase)
+                                                                    <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">{{ __('commerce.verified_purchase') }}</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <time class="text-xs text-gray-400">{{ $review->created_at?->translatedFormat('M j, Y') }}</time>
+                                            </div>
+                                            @if($review->title)<h3 class="mt-4 font-semibold text-gray-900">{{ $review->title }}</h3>@endif
+                                            @if($review->comment)<p class="mt-2 whitespace-pre-line text-sm leading-7 text-gray-600">{{ $review->comment }}</p>@endif
+                                        </article>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="rounded-xl border border-dashed border-gray-300 bg-white py-12 text-center">
+                                    <x-icon name="star" class="mx-auto h-12 w-12 text-gray-300" />
+                                    <p class="mt-4 text-gray-500">{{ __('commerce.no_reviews') }}</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <aside class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+                            @auth
+                                <h3 class="text-lg font-semibold text-gray-900">{{ __('commerce.write_review') }}</h3>
+                                <form method="POST" action="{{ route('reviews.store', ['locale' => $locale, 'product' => $product->sku]) }}" class="mt-5 space-y-4">
+                                    @csrf
+                                    <label class="grid gap-1.5">
+                                        <span class="text-sm font-medium text-gray-700">{{ $reviewsLabel }}</span>
+                                        <select name="rating" required class="rounded-md border border-gray-200 bg-white px-3 py-2.5">
+                                            @for($rating = 5; $rating >= 1; $rating--)
+                                                <option value="{{ $rating }}" @selected((int) old('rating', $existingReview?->rating ?? 5) === $rating)>{{ str_repeat('★', $rating) }} ({{ $rating }}/5)</option>
+                                            @endfor
+                                        </select>
+                                    </label>
+                                    <label class="grid gap-1.5"><span class="text-sm font-medium text-gray-700">{{ __('commerce.review_title') }}</span><input name="title" maxlength="160" value="{{ old('title', $existingReview?->title) }}" class="rounded-md border border-gray-200 px-3 py-2.5"></label>
+                                    <label class="grid gap-1.5"><span class="text-sm font-medium text-gray-700">{{ __('commerce.review_comment') }}</span><textarea name="comment" rows="5" maxlength="4000" class="rounded-md border border-gray-200 px-3 py-2.5">{{ old('comment', $existingReview?->comment) }}</textarea></label>
+                                    <button type="submit" class="w-full rounded-md bg-[#881C27] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#6d102c]">{{ $existingReview ? __('commerce.review_saved') : __('commerce.write_review') }}</button>
+                                </form>
+                            @else
+                                <h3 class="text-lg font-semibold text-gray-900">{{ __('commerce.write_review') }}</h3>
+                                <p class="mt-2 text-sm leading-6 text-gray-500">{{ __('commerce.sign_in_to_buy') }}</p>
+                                <a href="{{ route('login', ['locale' => $locale]) }}" class="mt-5 flex w-full justify-center rounded-md bg-[#881C27] px-5 py-2.5 text-sm font-semibold text-white">{{ __('auth.login') }}</a>
+                            @endauth
+                        </aside>
+                    </div>
                 </div>
             </div>
         </section>
