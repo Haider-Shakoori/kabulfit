@@ -58,7 +58,7 @@
 
 <div
     class="min-h-screen"
-    x-data='{
+    x-data="{
         images: @js($imageData),
         variants: @js($variantData),
         selectedImage: 0,
@@ -70,7 +70,7 @@
         sizeGuideOpen: false,
         sizeGuideIndex: 0,
         sizeGuides: @js($sizeGuideData),
-        tab: "description",
+        tab: 'description',
         get selectedVariant() {
             return this.variants.find(v => v.sku === this.selectedSku) || this.variants[0] || null;
         },
@@ -98,9 +98,9 @@
         },
         total() {
             const unit = this.selectedVariant?.price_minor ?? {{ $product->currentPriceMinor() }};
-            return ((unit * this.quantity) / 100).toFixed(2) + " {{ $product->currency }}";
+            return ((unit * this.quantity) / 100).toFixed(2) + ' {{ $product->currency }}';
         }
-    }'
+    }"
 >
     <div class="mx-auto max-w-7xl px-4 py-8">
         @if(session('status'))
