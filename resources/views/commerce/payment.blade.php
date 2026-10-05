@@ -175,4 +175,23 @@
         </div>
     </div>
 </div>
+@if($order->payment_status === 'succeeded')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const storageKey = 'kabulfit-purchase-' + @json($order->uuid);
+        if (window.localStorage && window.localStorage.getItem(storageKey)) return;
+
+        window.kabulFitTrack?.('Purchase', {
+            content_ids: @json($order->items()->pluck('sku')->values()),
+            content_type: 'product',
+            num_items: {{ (int) $order->items()->sum('quantity') }},
+            value: {{ number_format($order->total_minor / 100, 2, '.', '') }},
+            currency: @json($order->currency),
+            order_id: @json($order->number)
+        });
+
+        window.localStorage?.setItem(storageKey, '1');
+    }, { once: true });
+</script>
+@endif
 @endsection
