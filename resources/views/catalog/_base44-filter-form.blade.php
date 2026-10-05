@@ -36,7 +36,7 @@
     @endif
 
     <div>
-        <p class="mb-3 text-sm font-semibold">{{ __('site.price') }}</p>
+        <p class="mb-3 text-sm font-semibold">{{ $priceLabel }}</p>
         <div class="grid grid-cols-2 gap-2">
             <label>
                 <span class="sr-only">{{ __('site.min_price') }}</span>
