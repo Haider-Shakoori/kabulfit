@@ -2,38 +2,39 @@
 
 namespace Tests\Feature;
 
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class TranslationParityTest extends TestCase
 {
-    public static function translationFiles(): array
+    public function test_dari_and_pashto_have_the_same_translation_keys_as_english(): void
     {
         $files = glob(base_path('lang/en/*.php')) ?: [];
 
-        return collect($files)
-            ->map(fn (string $path): array => [basename($path)])
-            ->values()
-            ->all();
-    }
+        $this->assertNotEmpty($files);
 
-    #[DataProvider('translationFiles')]
-    public function test_dari_and_pashto_have_the_same_translation_keys_as_english(string $file): void
-    {
-        $english = require base_path('lang/en/'.$file);
-        $dari = require base_path('lang/fa/'.$file);
-        $pashto = require base_path('lang/ps/'.$file);
+        foreach ($files as $englishPath) {
+            $file = basename($englishPath);
+            $dariPath = base_path('lang/fa/'.$file);
+            $pashtoPath = base_path('lang/ps/'.$file);
 
-        $englishKeys = $this->flattenKeys($english);
-        $dariKeys = $this->flattenKeys($dari);
-        $pashtoKeys = $this->flattenKeys($pashto);
+            $this->assertFileExists($dariPath, 'Missing Dari language file: '.$file);
+            $this->assertFileExists($pashtoPath, 'Missing Pashto language file: '.$file);
 
-        sort($englishKeys);
-        sort($dariKeys);
-        sort($pashtoKeys);
+            $english = require $englishPath;
+            $dari = require $dariPath;
+            $pashto = require $pashtoPath;
 
-        $this->assertSame($englishKeys, $dariKeys, $file.' has English/Dari translation-key drift.');
-        $this->assertSame($englishKeys, $pashtoKeys, $file.' has English/Pashto translation-key drift.');
+            $englishKeys = $this->flattenKeys($english);
+            $dariKeys = $this->flattenKeys($dari);
+            $pashtoKeys = $this->flattenKeys($pashto);
+
+            sort($englishKeys);
+            sort($dariKeys);
+            sort($pashtoKeys);
+
+            $this->assertSame($englishKeys, $dariKeys, $file.' has English/Dari translation-key drift.');
+            $this->assertSame($englishKeys, $pashtoKeys, $file.' has English/Pashto translation-key drift.');
+        }
     }
 
     public function test_base44_customer_facing_options_are_localized_in_all_supported_languages(): void
