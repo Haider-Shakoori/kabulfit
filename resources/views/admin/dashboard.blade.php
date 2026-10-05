@@ -1,94 +1,163 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 @php
-    $metricMeta = [
-        'users' => ['label' => 'Users', 'tone' => 'bg-blue-100 text-blue-600'],
-        'products' => ['label' => 'Products', 'tone' => 'bg-purple-100 text-purple-600'],
-        'orders' => ['label' => 'Orders', 'tone' => 'bg-amber-100 text-amber-600'],
-        'payments' => ['label' => 'Payments', 'tone' => 'bg-emerald-100 text-emerald-600'],
-        'tailoring' => ['label' => 'Tailoring', 'tone' => 'bg-cyan-100 text-cyan-600'],
+    $currency = $recentOrders->first()?->currency ?? 'USD';
+    $statCards = [
+        [
+            'title' => 'Total Revenue',
+            'value' => number_format(($metrics['revenue_minor'] ?? 0) / 100, 2).' '.$currency,
+            'icon' => 'chart',
+            'tone' => 'bg-green-500',
+            'hint' => 'Paid & fulfilled orders',
+        ],
+        [
+            'title' => 'Total Orders',
+            'value' => number_format($metrics['orders'] ?? 0),
+            'icon' => 'bag',
+            'tone' => 'bg-blue-500',
+            'hint' => number_format($metrics['pending_orders'] ?? 0).' pending',
+        ],
+        [
+            'title' => 'Products',
+            'value' => number_format($metrics['products'] ?? 0),
+            'icon' => 'package',
+            'tone' => 'bg-purple-500',
+            'hint' => 'Catalog items',
+        ],
+        [
+            'title' => 'Customers',
+            'value' => number_format($metrics['customers'] ?? 0),
+            'icon' => 'users',
+            'tone' => 'bg-orange-500',
+            'hint' => 'Registered accounts',
+        ],
     ];
 @endphp
 
-<div class="min-h-screen bg-[#FDFBF7]">
-    <section class="bg-gradient-to-r from-[#881C27] to-[#2A6867] py-10 text-white">
-        <div class="mx-auto max-w-7xl px-4">
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">KabulFit Administration</p>
-            <h1 class="mt-2 text-3xl font-bold sm:text-4xl">Dashboard</h1>
-            <p class="mt-2 max-w-2xl text-white/80">Operational overview for the commerce platform.</p>
-        </div>
-    </section>
+<div class="p-4 sm:p-6 lg:p-8">
+    <div class="mb-6 sm:mb-8">
+        <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">Dashboard</h1>
+        <p class="mt-1 text-sm text-gray-500">Welcome back, {{ auth()->user()->name ?: 'Admin' }}</p>
+        @if(auth()->user()->hasPermission('products.manage'))
+            <a href="{{ route('admin.products.index', ['locale' => app()->getLocale()]) }}" class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#D91E36] via-[#00A651] to-black px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:w-auto">
+                <x-icon name="plus" class="h-4 w-4" />
+                Add Product
+            </a>
+        @endif
+    </div>
 
-    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-8 lg:grid-cols-[260px_1fr]">
-        @include('admin._nav')
-
-        <main class="min-w-0 space-y-8">
-            <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                @foreach($metrics as $label => $value)
-                    @php($meta = $metricMeta[$label] ?? ['label' => str($label)->replace('_', ' ')->title(), 'tone' => 'bg-gray-100 text-gray-600'])
-                    <article class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <span class="grid h-11 w-11 place-items-center rounded-full {{ $meta['tone'] }}">●</span>
-                            <span class="text-xs font-semibold uppercase tracking-[0.12em] text-gray-400">{{ $meta['label'] }}</span>
+    <div class="mb-6 grid grid-cols-1 gap-4 sm:mb-8 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+        @foreach($statCards as $stat)
+            <article class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-lg sm:p-6">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                        <p class="truncate text-xs text-gray-500 sm:text-sm">{{ $stat['title'] }}</p>
+                        <p class="mt-1 truncate text-2xl font-bold text-gray-900 sm:mt-2 sm:text-3xl">{{ $stat['value'] }}</p>
+                        <div class="mt-1 flex items-center gap-1 text-xs text-green-600 sm:mt-2 sm:text-sm">
+                            <span>↗</span>
+                            <span>{{ $stat['hint'] }}</span>
                         </div>
-                        <p class="mt-5 text-3xl font-bold text-gray-900">{{ number_format($value) }}</p>
-                    </article>
-                @endforeach
-            </section>
+                    </div>
+                    <div class="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-white sm:h-12 sm:w-12 {{ $stat['tone'] }}">
+                        <x-icon :name="$stat['icon']" class="h-5 w-5 sm:h-6 sm:w-6" />
+                    </div>
+                </div>
+            </article>
+        @endforeach
+    </div>
 
-            <div class="grid gap-6 xl:grid-cols-2">
-                <section class="rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-gray-100 p-5">
-                        <div>
-                            <h2 class="text-lg font-semibold text-gray-900">Recent orders</h2>
-                            <p class="mt-1 text-sm text-gray-500">Latest commerce activity</p>
-                        </div>
-                        @if(auth()->user()->hasPermission('orders.manage'))
-                            <a href="{{ route('admin.orders.index', ['locale' => app()->getLocale()]) }}" class="text-sm font-semibold text-[#881C27]">View all</a>
-                        @endif
-                    </div>
-                    <div class="divide-y divide-gray-100">
-                        @forelse($recentOrders as $order)
-                            <a href="{{ route('admin.orders.show', ['locale' => app()->getLocale(), 'order' => $order]) }}" class="flex items-center justify-between gap-4 p-5 transition hover:bg-gray-50">
-                                <div class="min-w-0">
-                                    <p class="font-semibold text-gray-900">{{ $order->number }}</p>
-                                    <p class="mt-1 truncate text-sm text-gray-500">{{ $order->user->email }}</p>
-                                </div>
-                                <div class="text-end">
-                                    <span class="inline-flex rounded-full bg-gray-100 px-2.5 py-1 text-xs capitalize text-gray-600">{{ str($order->status)->replace('_', ' ') }}</span>
-                                    <p class="mt-2 text-xs text-gray-400">{{ $order->created_at?->diffForHumans() }}</p>
-                                </div>
-                            </a>
-                        @empty
-                            <div class="p-8 text-center text-sm text-gray-500">No orders yet.</div>
-                        @endforelse
-                    </div>
-                </section>
-
-                <section class="rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div class="border-b border-gray-100 p-5">
-                        <h2 class="text-lg font-semibold text-gray-900">Recent audit activity</h2>
-                        <p class="mt-1 text-sm text-gray-500">Latest administrative actions</p>
-                    </div>
-                    <div class="divide-y divide-gray-100">
-                        @forelse($recentAudit as $entry)
-                            <div class="p-5">
-                                <div class="flex items-start justify-between gap-4">
-                                    <div>
-                                        <p class="font-medium text-gray-900">{{ str($entry->action)->replace('_', ' ')->title() }}</p>
-                                        <p class="mt-1 text-sm text-gray-500">{{ $entry->actor?->email ?? 'system' }}</p>
-                                    </div>
-                                    <span class="text-xs text-gray-400">{{ $entry->created_at?->diffForHumans() }}</span>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="p-8 text-center text-sm text-gray-500">No recent audit activity.</div>
-                        @endforelse
-                    </div>
-                </section>
+    <div class="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-2 lg:gap-8">
+        <section class="rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div class="flex items-center justify-between border-b border-gray-100 p-4 sm:p-6">
+                <h2 class="text-base font-semibold text-gray-900 sm:text-lg">Recent Orders</h2>
+                @if(auth()->user()->hasPermission('orders.manage'))
+                    <a href="{{ route('admin.orders.index', ['locale' => app()->getLocale()]) }}" class="inline-flex items-center gap-1 rounded-md px-3 py-2 text-xs font-medium text-gray-600 transition hover:bg-gray-50 sm:text-sm">
+                        View All <span>›</span>
+                    </a>
+                @endif
             </div>
-        </main>
+            <div class="p-4 sm:p-6">
+                @forelse($recentOrders->take(5) as $order)
+                    <a href="{{ route('admin.orders.show', ['locale' => app()->getLocale(), 'order' => $order]) }}" class="mb-3 flex items-center justify-between gap-4 rounded-lg bg-gray-50 p-3 transition-colors last:mb-0 hover:bg-gray-100 sm:p-4">
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-semibold sm:text-base">{{ $order->number }}</p>
+                            <p class="text-xs text-gray-500 sm:text-sm">{{ $order->created_at?->translatedFormat('M j, Y') }}</p>
+                        </div>
+                        <div class="shrink-0 text-end">
+                            <p class="text-sm font-bold sm:text-base">{{ number_format($order->total_minor / 100, 2) }} {{ $order->currency }}</p>
+                            <span @class([
+                                'mt-1 inline-flex rounded-full px-2 py-0.5 text-xs capitalize',
+                                'bg-green-100 text-green-700' => in_array($order->status, ['delivered', 'paid'], true),
+                                'bg-blue-100 text-blue-700' => in_array($order->status, ['shipped', 'ready'], true),
+                                'border border-gray-200 text-gray-600' => ! in_array($order->status, ['delivered', 'paid', 'shipped', 'ready'], true),
+                            ])>{{ str($order->status)->replace('_', ' ') }}</span>
+                        </div>
+                    </a>
+                @empty
+                    <p class="py-8 text-center text-sm text-gray-500">No orders yet</p>
+                @endforelse
+            </div>
+        </section>
+
+        <section class="rounded-xl border border-gray-200 bg-white shadow-sm">
+            <div class="border-b border-gray-100 p-4 sm:p-6">
+                <h2 class="text-base font-semibold text-gray-900 sm:text-lg">Quick Actions</h2>
+            </div>
+            <div class="space-y-3 p-4 sm:p-6">
+                @if(auth()->user()->hasPermission('products.manage'))
+                    <a href="{{ route('admin.products.index', ['locale' => app()->getLocale()]) }}" class="flex items-center justify-between gap-3 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100 sm:p-4">
+                        <span class="flex min-w-0 flex-1 items-center gap-3">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-purple-100 text-purple-600 sm:h-10 sm:w-10"><x-icon name="package" class="h-4 w-4 sm:h-5 sm:w-5" /></span>
+                            <span class="min-w-0">
+                                <strong class="block truncate text-sm sm:text-base">Manage Products</strong>
+                                <span class="block truncate text-xs text-gray-500 sm:text-sm">Add, edit or remove</span>
+                            </span>
+                        </span>
+                        <span class="text-gray-400">›</span>
+                    </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('orders.manage'))
+                    <a href="{{ route('admin.orders.index', ['locale' => app()->getLocale()]) }}" class="flex items-center justify-between gap-3 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100 sm:p-4">
+                        <span class="flex min-w-0 flex-1 items-center gap-3">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-blue-100 text-blue-600 sm:h-10 sm:w-10"><x-icon name="bag" class="h-4 w-4 sm:h-5 sm:w-5" /></span>
+                            <span class="min-w-0">
+                                <strong class="block truncate text-sm sm:text-base">Process Orders</strong>
+                                <span class="block truncate text-xs text-gray-500 sm:text-sm">{{ number_format($metrics['pending_orders'] ?? 0) }} pending</span>
+                            </span>
+                        </span>
+                        <span class="text-gray-400">›</span>
+                    </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('content.manage'))
+                    <a href="{{ route('admin.content.index', ['locale' => app()->getLocale()]) }}" class="flex items-center justify-between gap-3 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100 sm:p-4">
+                        <span class="flex min-w-0 flex-1 items-center gap-3">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-green-100 text-green-600 sm:h-10 sm:w-10"><x-icon name="tag" class="h-4 w-4 sm:h-5 sm:w-5" /></span>
+                            <span class="min-w-0">
+                                <strong class="block truncate text-sm sm:text-base">Manage Categories</strong>
+                                <span class="block truncate text-xs text-gray-500 sm:text-sm">Organize storefront content</span>
+                            </span>
+                        </span>
+                        <span class="text-gray-400">›</span>
+                    </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('customers.manage'))
+                    <a href="{{ route('admin.customers.index', ['locale' => app()->getLocale()]) }}" class="flex items-center justify-between gap-3 rounded-lg bg-gray-50 p-3 transition-colors hover:bg-gray-100 sm:p-4">
+                        <span class="flex min-w-0 flex-1 items-center gap-3">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-orange-100 text-orange-600 sm:h-10 sm:w-10"><x-icon name="users" class="h-4 w-4 sm:h-5 sm:w-5" /></span>
+                            <span class="min-w-0">
+                                <strong class="block truncate text-sm sm:text-base">View Customers</strong>
+                                <span class="block truncate text-xs text-gray-500 sm:text-sm">{{ number_format($metrics['customers'] ?? 0) }} total</span>
+                            </span>
+                        </span>
+                        <span class="text-gray-400">›</span>
+                    </a>
+                @endif
+            </div>
+        </section>
     </div>
 </div>
 @endsection
