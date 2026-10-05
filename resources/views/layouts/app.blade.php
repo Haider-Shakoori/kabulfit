@@ -154,7 +154,7 @@
             </nav>
 
             <div class="flex items-center gap-1 sm:gap-2">
-                <button type="button" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/10" @click="searchOpen = !searchOpen" aria-label="Search">
+                <button type="button" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/10" @click="searchOpen = !searchOpen" aria-label="{{ __('site.search_products') }}">
                     <x-icon name="search" class="h-5 w-5 base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
                 </button>
                 <a href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-white/10 sm:grid" aria-label="{{ __('commerce.wishlist') }}">
@@ -171,14 +171,14 @@
 
         <form x-show="searchOpen" x-transition class="pb-4" method="GET" action="{{ route('shop', ['locale' => app()->getLocale()]) }}">
             <div class="relative mx-auto max-w-2xl">
-                <input name="q" type="search" placeholder="Search KabulFit..." class="w-full rounded-full border border-gray-200 bg-white px-5 py-3 pe-12 text-gray-900 shadow-lg outline-none focus:border-[#881C27]">
+                <input name="q" type="search" placeholder="{{ __('site.search_placeholder') }}" class="w-full rounded-full border border-gray-200 bg-white px-5 py-3 pe-12 text-gray-900 shadow-lg outline-none focus:border-[#881C27]">
                 <button type="submit" class="absolute inset-y-0 end-1 grid w-11 place-items-center text-gray-600"><x-icon name="search" class="h-5 w-5" /></button>
             </div>
         </form>
     </div>
 
     <div x-show="open" x-cloak class="fixed inset-0 z-[70] lg:hidden">
-        <button class="absolute inset-0 bg-black/40" @click="open = false" aria-label="Close navigation"></button>
+        <button class="absolute inset-0 bg-black/40" @click="open = false" aria-label="{{ __('site.menu') }}"></button>
         <aside id="mobile-navigation" x-transition class="absolute inset-y-0 start-0 w-[84%] max-w-sm overflow-y-auto bg-white p-6 shadow-2xl">
             <div class="flex items-center justify-between">
                 <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" alt="KabulFit" class="h-24 w-auto object-contain">
