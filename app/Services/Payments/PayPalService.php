@@ -124,7 +124,11 @@ class PayPalService
         $captureId = (string) ($capture['id'] ?? '');
 
         return DB::transaction(function () use ($order, $payment, $payload, $captureId, $paypalOrderId): Payment {
-            $locked = Payment::query()->whereKey($payment->id)->lockForUpdate()->firstOrFail();
+            $locked = Payment::query()
+                ->with('order.items')
+                ->whereKey($payment->id)
+                ->lockForUpdate()
+                ->firstOrFail();
 
             if ($locked->status === 'succeeded') {
                 return $locked;
@@ -147,16 +151,17 @@ class PayPalService
                 ],
             );
 
-            $locked->order->update([
+            $order = $locked->order;
+            $order->update([
                 'payment_status' => 'succeeded',
                 'paid_at' => now(),
             ]);
 
-            if ($locked->order->status !== 'paid') {
-                $this->orders->transition($locked->order, 'paid', 'paypal');
+            if ($order->status !== 'paid') {
+                $this->orders->transition($order, 'paid', 'paypal');
             }
 
-            $this->checkout->captureReservations($locked->order->load('items'));
+            $this->checkout->captureReservations($order);
 
             return $locked->fresh('order');
         }, 3);
