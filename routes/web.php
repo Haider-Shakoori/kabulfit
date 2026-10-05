@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
+use App\Http\Controllers\Admin\EngagementController as AdminEngagementController;
 use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -163,6 +164,10 @@ Route::prefix('{locale}')
 
                     Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
                     Route::get('/customers/{customer:uuid}', [AdminCustomerController::class, 'show'])->name('customers.show');
+
+                    Route::get('/engagement', [AdminEngagementController::class, 'index'])->name('engagement.index');
+                    Route::post('/engagement/messages/{contactMessage}/status', [AdminEngagementController::class, 'messageStatus'])->name('engagement.messages.status');
+                    Route::post('/engagement/subscribers/{subscriber}/toggle', [AdminEngagementController::class, 'subscriberToggle'])->name('engagement.subscribers.toggle');
                     Route::put('/customers/{customer:uuid}', [AdminCustomerController::class, 'update'])->name('customers.update');
                     Route::put('/customers/{customer:uuid}/roles', [AdminCustomerController::class, 'roles'])->name('customers.roles');
 
