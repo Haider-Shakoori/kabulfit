@@ -27,12 +27,14 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DefaultLocaleRedirectController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyPageRedirectController;
 use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
@@ -59,6 +61,9 @@ Route::prefix('{locale}')
         Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/blog', [ContentController::class, 'blog'])->name('blog.index');
         Route::get('/blog/{slug}', [ContentController::class, 'post'])->name('blog.show');
+        Route::post('/contact', [ContactMessageController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+        Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->middleware('throttle:10,1')->name('newsletter.subscribe');
+        Route::get('/newsletter/unsubscribe/{subscriber}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
         Route::middleware('guest')->group(function (): void {
             Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
