@@ -90,7 +90,7 @@
                                 @foreach($profile->values->take(6) as $value)
                                     <div class="rounded-xl bg-gray-50 p-3">
                                         <span class="block truncate text-[11px] text-gray-500">{{ $value->definition->translation()?->name }}</span>
-                                        <strong class="mt-1 block text-sm text-gray-900">{{ \\App\\Support\\Measurements\\MeasurementConverter::fromCm($value->value_cm, $profile->display_unit) }} {{ $profile->display_unit }}</strong>
+                                        <strong class="mt-1 block text-sm text-gray-900">{{ \App\Support\Measurements\MeasurementConverter::fromCm($value->value_cm, $profile->display_unit) }} {{ $profile->display_unit }}</strong>
                                     </div>
                                 @endforeach
                             </div>
