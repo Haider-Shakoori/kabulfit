@@ -30,4 +30,10 @@ return [
     'payment_status' => 'وضعیت پرداخت',
     'pay_now' => 'پرداخت امن',
     'payment_error' => 'پرداخت تکمیل نشد. دوباره تلاش کنید.',
+    'review_saved' => 'نظر شما ذخیره شد.',
+    'write_review' => 'ثبت نظر',
+    'review_title' => 'عنوان نظر',
+    'review_comment' => 'نظر شما',
+    'verified_purchase' => 'خرید تأییدشده',
+    'no_reviews' => 'هنوز نظری ثبت نشده است. اولین نظر را شما بنویسید!',
 ];
