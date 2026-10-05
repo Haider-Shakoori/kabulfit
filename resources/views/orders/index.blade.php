@@ -55,7 +55,7 @@
     ];
 @endphp
 
-<div class="min-h-screen bg-[#FDFBF7]" x-data='{ orders: @js($orderData), selected: @js($orderData[0] ?? null) }'>
+<div class="min-h-screen bg-[#FDFBF7]" x-data="{ orders: @js($orderData), selected: @js($orderData[0] ?? null) }">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:py-8">
         <h1 class="mb-8 text-3xl font-bold text-gray-900">{{ __('orders.orders') }}</h1>
 
