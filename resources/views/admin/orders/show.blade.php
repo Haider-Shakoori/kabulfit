@@ -16,6 +16,7 @@
             <p class="mt-1 text-sm text-gray-500">{{ $order->user->email }}</p>
         </div>
         <div class="flex flex-wrap gap-2">
+            <a href="{{ route('admin.orders.document', ['locale' => app()->getLocale(), 'order' => $order]) }}" target="_blank" class="rounded-md border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50">Print / PDF</a>
             <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold capitalize text-gray-700">{{ str($order->status)->replace('_', ' ') }}</span>
             <span class="rounded-full bg-[#2A6867]/10 px-3 py-1 text-xs font-semibold capitalize text-[#2A6867]">{{ str($order->payment_status)->replace('_', ' ') }}</span>
         </div>
