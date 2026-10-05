@@ -45,7 +45,21 @@ class CommerceController extends Controller
         $variant = isset($data['variant_sku']) ? $product->variants->firstWhere('sku', $data['variant_sku']) : null;
         $this->carts->add($this->carts->forUser($request->user()), $product, $variant, $data['quantity']);
 
-        return redirect()->route('cart', ['locale' => app()->getLocale()]);
+        $unitPriceMinor = $product->sale_price_minor ?? $product->price_minor;
+
+        return redirect()
+            ->route('cart', ['locale' => app()->getLocale()])
+            ->with('pixel_event', [
+                'name' => 'AddToCart',
+                'payload' => [
+                    'content_ids' => [$product->sku],
+                    'content_name' => $product->translation()?->name ?? $product->sku,
+                    'content_type' => 'product',
+                    'value' => round(($unitPriceMinor * (int) $data['quantity']) / 100, 2),
+                    'currency' => $product->currency,
+                    'num_items' => (int) $data['quantity'],
+                ],
+            ]);
     }
 
     public function update(Request $request, CartItem $item): RedirectResponse
