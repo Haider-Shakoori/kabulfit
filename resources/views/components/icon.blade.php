@@ -81,6 +81,32 @@
         @case('trash')
             <path d="M4 7h16M9 7V4h6v3m-8 0 1 14h8l1-14M10 11v6m4-6v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
             @break
+        @case('dashboard')
+            <path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            @break
+        @case('package')
+            <path d="m4 7 8-4 8 4-8 4-8-4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M4 7v10l8 4 8-4V7M12 11v10" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            @break
+        @case('users')
+            <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M3.5 20a5.5 5.5 0 0 1 11 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M15 6.5a3 3 0 0 1 0 5.5M16 15a5 5 0 0 1 4.5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('tag')
+            <path d="M4 4h6l10 10-6 6L4 10V4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <circle cx="8" cy="8" r="1" fill="currentColor"/>
+            @break
+        @case('settings')
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M19 12a7 7 0 0 0-.1-1.1l2-1.6-2-3.4-2.5 1a7 7 0 0 0-1.9-1.1L14 3h-4l-.5 2.8A7 7 0 0 0 7.6 7l-2.5-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .7.1 1.1l-2 1.6 2 3.4 2.5-1a7 7 0 0 0 1.9 1.1L10 21h4l.5-2.8a7 7 0 0 0 1.9-1.1l2.5 1 2-3.4-2-1.6c.1-.4.1-.7.1-1.1Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+            @break
+        @case('chart')
+            <path d="M5 20V10m7 10V4m7 16v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            @break
+        @case('logout')
+            <path d="M10 4H5v16h5M14 8l4 4-4 4m4-4H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            @break
         @default
             <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/>
     @endswitch
