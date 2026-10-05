@@ -27,6 +27,12 @@ class SettingsController extends Controller
                 'whatsapp_url' => $settings->get('social.whatsapp', 'https://wa.me/93794120017'),
                 'meta_pixel_id' => $settings->get('analytics.meta_pixel_id', (string) config('services.meta.pixel_id')),
                 'ga_measurement_id' => $settings->get('analytics.ga_measurement_id', (string) config('services.analytics.measurement_id')),
+                'payment_integrations' => [
+                    'stripe' => filled(config('services.stripe.key')) && filled(config('services.stripe.secret')),
+                    'paypal' => filled(config('services.paypal.client_id')) && filled(config('services.paypal.secret')),
+                    'paypal_mode' => (string) config('services.paypal.mode', 'sandbox'),
+                    'paypal_currencies' => config('services.paypal.supported_currencies', ['USD']),
+                ],
                 'titles' => collect(config('kabulfit.supported_locales'))->mapWithKeys(fn ($locale) => [$locale => $settings->get('seo.home.title.'.$locale, '')])->all(),
                 'descriptions' => collect(config('kabulfit.supported_locales'))->mapWithKeys(fn ($locale) => [$locale => $settings->get('seo.home.description.'.$locale, '')])->all(),
             ],
