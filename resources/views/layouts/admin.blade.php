@@ -21,7 +21,7 @@
         ['icon' => 'users', 'label' => 'Customers', 'route' => 'admin.customers.index', 'permission' => 'customers.manage', 'match' => 'admin.customers.*'],
         ['icon' => 'ruler', 'label' => 'Measurement Guides', 'route' => 'admin.measurements.index', 'permission' => 'measurements.manage', 'match' => 'admin.measurement-guides.*'],
         ['icon' => 'ruler', 'label' => 'Size Guides', 'route' => 'admin.content.index', 'permission' => 'content.manage', 'match' => 'admin.size-guides.*'],
-        ['icon' => 'truck', 'label' => 'Shipping Rates', 'route' => 'admin.settings.index', 'permission' => 'settings.manage', 'match' => 'admin.shipping-rates.*'],
+        ['icon' => 'truck', 'label' => 'Shipping Rates', 'route' => 'admin.shipping-rates.index', 'permission' => 'settings.manage', 'match' => 'admin.shipping-rates.*'],
         ['icon' => 'settings', 'label' => 'Settings', 'route' => 'admin.settings.index', 'permission' => 'settings.manage', 'match' => 'admin.settings.*'],
     ];
 @endphp
