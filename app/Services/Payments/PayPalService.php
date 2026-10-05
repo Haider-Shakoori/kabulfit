@@ -200,6 +200,14 @@ class PayPalService
         return filled(config('services.paypal.client_id')) && filled(config('services.paypal.secret'));
     }
 
+    public function enabledForCurrency(string $currency): bool
+    {
+        $supported = collect(config('services.paypal.supported_currencies', ['USD']))
+            ->map(fn ($value): string => strtoupper((string) $value));
+
+        return $this->enabled() && $supported->contains(strtoupper($currency));
+    }
+
     private function request()
     {
         return Http::acceptJson()
