@@ -53,13 +53,13 @@ class SettingsController extends Controller
         ]);
 
         $settings->put('general', 'site.contact_email', $data['contact_email']);
-        $settings->put('social', 'social.facebook', $data['facebook_url'] ?? null);
-        $settings->put('social', 'social.instagram', $data['instagram_url'] ?? null);
-        $settings->put('social', 'social.tiktok', $data['tiktok_url'] ?? null);
-        $settings->put('social', 'social.youtube', $data['youtube_url'] ?? null);
-        $settings->put('social', 'social.whatsapp', $data['whatsapp_url'] ?? null);
-        $settings->put('analytics', 'analytics.meta_pixel_id', $data['meta_pixel_id'] ?? null);
-        $settings->put('analytics', 'analytics.ga_measurement_id', $data['ga_measurement_id'] ?? null);
+        $settings->put('social', 'social.facebook', $data['facebook_url'] ?? '');
+        $settings->put('social', 'social.instagram', $data['instagram_url'] ?? '');
+        $settings->put('social', 'social.tiktok', $data['tiktok_url'] ?? '');
+        $settings->put('social', 'social.youtube', $data['youtube_url'] ?? '');
+        $settings->put('social', 'social.whatsapp', $data['whatsapp_url'] ?? '');
+        $settings->put('analytics', 'analytics.meta_pixel_id', $data['meta_pixel_id'] ?? '');
+        $settings->put('analytics', 'analytics.ga_measurement_id', $data['ga_measurement_id'] ?? '');
 
         foreach (config('kabulfit.supported_locales') as $locale) {
             $settings->put('seo', 'seo.home.title.'.$locale, $data['titles'][$locale] ?? '');
