@@ -78,6 +78,9 @@
             <circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.6"/>
             <path d="m8.3 10.9 7.4-4.6M8.3 13.1l7.4 4.6" stroke="currentColor" stroke-width="1.6"/>
             @break
+        @case('trash')
+            <path d="M4 7h16M9 7V4h6v3m-8 0 1 14h8l1-14M10 11v6m4-6v6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            @break
         @default
             <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/>
     @endswitch
