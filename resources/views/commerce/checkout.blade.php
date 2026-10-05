@@ -304,4 +304,15 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.kabulFitTrack?.('InitiateCheckout', {
+            content_ids: @json($cart->items->map(fn ($item) => $item->product->sku)->values()),
+            content_type: 'product',
+            num_items: {{ (int) $cart->items->sum('quantity') }},
+            value: {{ number_format($subtotalMinor / 100, 2, '.', '') }},
+            currency: @json($currency)
+        });
+    }, { once: true });
+</script>
 @endsection
