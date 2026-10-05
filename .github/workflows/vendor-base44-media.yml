@@ -1,4 +1,5 @@
 name: Vendor Base44 source media
+# Source media are vendored once from the Base44 export manifest.
 
 on:
   push:
