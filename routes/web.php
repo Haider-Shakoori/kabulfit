@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
+use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\LegacyUrlController as AdminLegacyUrlController;
@@ -33,6 +34,7 @@ use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\TailoringController;
 use App\Http\Controllers\TailorWorkspaceController;
@@ -126,6 +128,7 @@ Route::prefix('{locale}')
             Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
             Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('orders.show');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
+            Route::post('/products/{product:sku}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
             Route::prefix('admin')
                 ->name('admin.')
@@ -182,6 +185,11 @@ Route::prefix('{locale}')
 
                     Route::get('/legacy-urls', [AdminLegacyUrlController::class, 'index'])->name('legacy.index');
                     Route::put('/legacy-urls/{legacyUrl:uuid}', [AdminLegacyUrlController::class, 'update'])->name('legacy.update');
+
+                    Route::get('/coupons', [AdminCouponController::class, 'index'])->name('coupons.index');
+                    Route::post('/coupons', [AdminCouponController::class, 'store'])->name('coupons.store');
+                    Route::put('/coupons/{coupon}', [AdminCouponController::class, 'update'])->name('coupons.update');
+                    Route::delete('/coupons/{coupon}', [AdminCouponController::class, 'destroy'])->name('coupons.destroy');
 
                     Route::get('/shipping-rates', [AdminShippingRateController::class, 'index'])->name('shipping-rates.index');
                     Route::post('/shipping-rates', [AdminShippingRateController::class, 'store'])->name('shipping-rates.store');
