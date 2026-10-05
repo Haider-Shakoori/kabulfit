@@ -7,7 +7,8 @@
         'shipping' => $locale === 'ps' ? 'د لېږد ادرس' : ($locale === 'fa' ? 'آدرس ارسال' : 'Shipping Address'),
         'review' => $locale === 'ps' ? 'بیاکتنه' : ($locale === 'fa' ? 'بازبینی' : 'Review'),
         'payment' => $locale === 'ps' ? 'د تادیې طریقه' : ($locale === 'fa' ? 'روش پرداخت' : 'Payment Method'),
-        'card' => $locale === 'ps' ? 'کریډیټ / ډیبیټ کارت' : ($locale === 'fa' ? 'کارت اعتباری / بانکی' : 'Credit / Debit Card'),
+        'card' => __('commerce.pay_with_card'),
+        'paypal' => __('commerce.pay_with_paypal'),
         'protected' => $locale === 'ps' ? 'ستاسو تادیه په خوندي ډول پروسس کېږي.' : ($locale === 'fa' ? 'پرداخت شما به‌صورت امن پردازش می‌شود.' : 'Your payment is processed securely.'),
         'summary' => $locale === 'ps' ? 'د فرمایش لنډیز' : ($locale === 'fa' ? 'خلاصه سفارش' : 'Order Summary'),
         'back_orders' => $locale === 'ps' ? 'فرمایشونه وګورئ' : ($locale === 'fa' ? 'مشاهده سفارش‌ها' : 'View Orders'),
@@ -47,7 +48,7 @@
                             </span>
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#2A6867]">{{ __('commerce.secure_payment') }}</p>
-                                <h1 class="text-xl font-semibold text-gray-900">{{ $labels['card'] }}</h1>
+                                <h1 class="text-xl font-semibold text-gray-900">{{ $paymentMethod === 'paypal' ? $labels['paypal'] : $labels['card'] }}</h1>
                             </div>
                         </div>
                     </div>
@@ -63,7 +64,7 @@
                             </div>
                         </div>
 
-                        @if($clientSecret && $stripeKey)
+                        @if($paymentMethod === 'stripe' && $clientSecret && $stripeKey)
                             <form id="stripe-payment-form" class="space-y-5">
                                 <div id="stripe-payment-element" class="min-h-20"></div>
                                 <p id="stripe-payment-message" role="alert" class="text-sm text-red-600"></p>
@@ -109,6 +110,94 @@
                                             button.disabled = false;
                                         }
                                     });
+                                })();
+                            </script>
+                        @elseif($paymentMethod === 'paypal' && $paypalClientId)
+                            <div class="rounded-xl border border-blue-100 bg-blue-50/50 p-4">
+                                <p class="text-sm text-gray-600">{{ __('commerce.paypal_description') }}</p>
+                                <div id="paypal-button-container" class="mt-4"></div>
+                                <p id="paypal-payment-message" role="alert" class="mt-3 text-sm text-red-600"></p>
+                                <div class="mt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
+                                    <x-icon name="shield" class="h-4 w-4 text-[#0070ba]" />
+                                    {{ __('commerce.secured_by_paypal') }}
+                                </div>
+                            </div>
+
+                            <script src="https://www.paypal.com/sdk/js?client-id={{ urlencode($paypalClientId) }}&currency={{ urlencode(strtoupper($order->currency)) }}&components=buttons"></script>
+                            <script>
+                                (() => {
+                                    const message = document.getElementById('paypal-payment-message');
+                                    const csrf = @json(csrf_token());
+                                    const createUrl = @json(route('paypal.create', ['locale' => $locale, 'order' => $order]));
+                                    const captureUrl = @json(route('paypal.capture', ['locale' => $locale, 'order' => $order]));
+                                    const contentIds = @json($order->items->pluck('sku')->values());
+                                    const numItems = {{ (int) $order->items->sum('quantity') }};
+                                    const value = {{ number_format($order->total_minor / 100, 2, '.', '') }};
+                                    const currency = @json($order->currency);
+                                    const orderNumber = @json($order->number);
+                                    const purchaseKey = 'kabulfit-purchase-' + @json($order->uuid);
+
+                                    if (!window.paypal) {
+                                        message.textContent = @json(__('commerce.paypal_error'));
+                                        return;
+                                    }
+
+                                    window.paypal.Buttons({
+                                        style: { layout: 'vertical', shape: 'rect' },
+                                        createOrder: async () => {
+                                            message.textContent = '';
+                                            const response = await fetch(createUrl, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': csrf,
+                                                },
+                                                body: JSON.stringify({}),
+                                            });
+                                            const payload = await response.json();
+                                            if (!response.ok || !payload.id) {
+                                                throw new Error(payload.message || @json(__('commerce.paypal_error')));
+                                            }
+                                            return payload.id;
+                                        },
+                                        onApprove: async (data) => {
+                                            message.textContent = '';
+                                            const response = await fetch(captureUrl, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Accept': 'application/json',
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': csrf,
+                                                },
+                                                body: JSON.stringify({ paypal_order_id: data.orderID }),
+                                            });
+                                            const payload = await response.json();
+                                            if (!response.ok || !payload.success) {
+                                                throw new Error(payload.message || @json(__('commerce.paypal_capture_error')));
+                                            }
+
+                                            if (!window.localStorage?.getItem(purchaseKey)) {
+                                                window.kabulFitTrack?.('Purchase', {
+                                                    content_ids: contentIds,
+                                                    content_type: 'product',
+                                                    num_items: numItems,
+                                                    value,
+                                                    currency,
+                                                    order_id: orderNumber,
+                                                });
+                                                window.localStorage?.setItem(purchaseKey, '1');
+                                            }
+
+                                            window.location.assign(payload.redirect);
+                                        },
+                                        onError: (error) => {
+                                            message.textContent = error?.message || @json(__('commerce.paypal_error'));
+                                        },
+                                        onCancel: () => {
+                                            message.textContent = @json(__('commerce.payment_pending'));
+                                        },
+                                    }).render('#paypal-button-container');
                                 })();
                             </script>
                         @else
