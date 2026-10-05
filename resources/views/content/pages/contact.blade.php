@@ -1,4 +1,10 @@
 @php
+    $contactSettings = app(\App\Services\Settings\SiteSettings::class);
+    $whatsappUrl = $contactSettings->get('social.whatsapp', 'https://wa.me/93794120017');
+    $facebookUrl = $contactSettings->get('social.facebook', 'https://www.facebook.com/KabulFitTailoring/');
+    $instagramUrl = $contactSettings->get('social.instagram', '');
+    $tiktokUrl = $contactSettings->get('social.tiktok', '');
+    $youtubeUrl = $contactSettings->get('social.youtube', 'http://www.youtube.com/@Kabulfit');
     $faqSlug = match ($locale) {
         'fa' => 'پرسش-های-متداول',
         'ps' => 'ډېرې-پوښتل-شوې-پوښتنې',
@@ -24,7 +30,7 @@
             <div class="space-y-5">
                 <h2 class="text-2xl font-bold text-gray-900">{{ __('site.get_in_touch') }}</h2>
 
-                <a href="https://wa.me/93794120017" target="_blank" rel="noopener noreferrer" class="flex items-start gap-4 rounded-xl p-4 transition hover:bg-white hover:shadow-sm">
+                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="flex items-start gap-4 rounded-xl p-4 transition hover:bg-white hover:shadow-sm">
                     <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#25D366]/10 text-[#128C7E]">◉</span>
                     <span><span class="block text-sm text-gray-500">WhatsApp</span><strong class="mt-1 block text-gray-900">{{ $locale === 'ps' ? 'په واټساپ کې راسره اړیکه ونیسئ' : ($locale === 'fa' ? 'با ما در واتساپ تماس بگیرید' : 'Chat with us on WhatsApp') }}</strong></span>
                 </a>
@@ -51,8 +57,10 @@
                 <div class="border-t border-gray-200 pt-6">
                     <p class="font-semibold text-gray-900">{{ __('site.follow_us_social') }}</p>
                     <div class="mt-4 flex flex-wrap gap-3">
-                        <a href="https://www.facebook.com/KabulFitTailoring/" target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-sm font-bold text-gray-600 transition hover:bg-[#881C27] hover:text-white">f</a>
-                        <a href="http://www.youtube.com/@Kabulfit" target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 transition hover:bg-[#881C27] hover:text-white">▶</a>
+                        @if($facebookUrl)<a href="{{ $facebookUrl }}" target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-sm font-bold text-gray-600 transition hover:bg-[#881C27] hover:text-white">f</a>@endif
+                        @if($instagramUrl)<a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 transition hover:bg-[#881C27] hover:text-white">◎</a>@endif
+                        @if($tiktokUrl)<a href="{{ $tiktokUrl }}" target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 transition hover:bg-[#881C27] hover:text-white">♪</a>@endif
+                        @if($youtubeUrl)<a href="{{ $youtubeUrl }}" target="_blank" rel="noopener noreferrer" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-xs font-bold text-gray-600 transition hover:bg-[#881C27] hover:text-white">▶</a>@endif
                     </div>
                 </div>
             </div>
