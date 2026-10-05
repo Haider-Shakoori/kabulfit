@@ -28,22 +28,22 @@
 
 <div
     class="p-4 sm:p-6 lg:p-8"
-    x-data='{
+    x-data="{
         open: false,
         editing: false,
         form: {
             id: null,
-            name: "",
-            name_pashto: "",
-            name_dari: "",
-            slug: "",
-            slug_pashto: "",
-            slug_dari: "",
-            description: "",
-            description_pashto: "",
-            description_dari: "",
-            image_url: "",
-            parent_id: "",
+            name: '',
+            name_pashto: '',
+            name_dari: '',
+            slug: '',
+            slug_pashto: '',
+            slug_dari: '',
+            description: '',
+            description_pashto: '',
+            description_dari: '',
+            image_url: '',
+            parent_id: '',
             sort_order: 0,
             is_active: true
         },
@@ -52,17 +52,17 @@
             this.editing = false;
             this.form = {
                 id: null,
-                name: "",
-                name_pashto: "",
-                name_dari: "",
-                slug: "",
-                slug_pashto: "",
-                slug_dari: "",
-                description: "",
-                description_pashto: "",
-                description_dari: "",
-                image_url: "",
-                parent_id: "",
+                name: '',
+                name_pashto: '',
+                name_dari: '',
+                slug: '',
+                slug_pashto: '',
+                slug_dari: '',
+                description: '',
+                description_pashto: '',
+                description_dari: '',
+                image_url: '',
+                parent_id: '',
                 sort_order: 0,
                 is_active: true
             };
@@ -73,15 +73,15 @@
         },
         edit(category) {
             this.editing = true;
-            this.form = { ...category, parent_id: category.parent_id ?? "" };
+            this.form = { ...category, parent_id: category.parent_id ?? '' };
             this.open = true;
         },
         action() {
             return this.editing
-                ? @js(url('/'.$locale.'/admin/categories')).replace(/\/$/, "") + "/" + this.form.id
+                ? @js(url('/'.$locale.'/admin/categories')).replace(/\/$/, '') + '/' + this.form.id
                 : @js(route('admin.categories.store', ['locale' => $locale]));
         }
-    }'
+    }"
     @keydown.escape.window="open = false"
 >
     <x-form-errors />
