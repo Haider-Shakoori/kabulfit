@@ -21,6 +21,9 @@
     $categoriesLabel = $locale === 'ps' ? 'کټګورۍ' : ($locale === 'fa' ? 'دسته‌بندی‌ها' : 'Categories');
     $sizesLabel = $locale === 'ps' ? 'اندازې' : ($locale === 'fa' ? 'اندازه‌ها' : 'Sizes');
     $productsLabel = $locale === 'ps' ? 'محصولات' : ($locale === 'fa' ? 'محصولات' : 'products');
+    $filterLabel = $locale === 'ps' ? 'فلټر' : ($locale === 'fa' ? 'فیلتر' : 'Filter');
+    $priceLabel = $locale === 'ps' ? 'بیه' : ($locale === 'fa' ? 'قیمت' : 'Price');
+    $noResultsLabel = $locale === 'ps' ? 'هیڅ پایله ونه موندل شوه' : ($locale === 'fa' ? 'نتیجه‌ای یافت نشد' : 'No results found');
     $clearLabel = $locale === 'ps' ? 'ټول فلټرونه پاک کړئ' : ($locale === 'fa' ? 'پاک کردن همه فیلترها' : 'Clear All Filters');
 @endphp
 
@@ -44,7 +47,7 @@
         <aside class="hidden w-72 shrink-0 lg:block">
             <div class="sticky top-36 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                 <div class="mb-6 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold">{{ __('site.filter') }}</h2>
+                    <h2 class="text-lg font-semibold">{{ $filterLabel }}</h2>
                     @if($activeFilterCount > 0)
                         <span class="rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-2.5 py-1 text-xs font-semibold text-white">{{ $activeFilterCount }}</span>
                     @endif
@@ -62,7 +65,7 @@
                         @click="filtersOpen = true"
                     >
                         <span aria-hidden="true">☰</span>
-                        {{ __('site.filter') }}
+                        {{ $filterLabel }}
                         @if($activeFilterCount > 0)
                             <span class="rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-2 py-0.5 text-[11px] text-white">{{ $activeFilterCount }}</span>
                         @endif
@@ -129,7 +132,7 @@
             @else
                 <div class="rounded-3xl bg-white py-20 text-center shadow-sm">
                     <div class="mx-auto grid h-24 w-24 place-items-center rounded-full bg-gray-100 text-4xl text-gray-400">⌕</div>
-                    <h3 class="mt-6 text-xl font-semibold text-gray-900">{{ __('site.no_results') }}</h3>
+                    <h3 class="mt-6 text-xl font-semibold text-gray-900">{{ $noResultsLabel }}</h3>
                     <p class="mt-2 text-gray-500">{{ $locale === 'ps' ? 'خپل فلټرونه یا د لټون شرایط تنظیم کړئ' : ($locale === 'fa' ? 'فیلترها یا عبارات جستجو را تنظیم کنید' : 'Try adjusting your filters or search terms') }}</p>
                     <a href="{{ $action }}" class="mt-6 inline-flex rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white">{{ $clearLabel }}</a>
                 </div>
@@ -145,7 +148,7 @@
         <button type="button" class="absolute inset-0 bg-black/40" @click="filtersOpen = false" aria-label="Close filters"></button>
         <aside x-transition class="absolute inset-y-0 start-0 w-[88%] max-w-sm overflow-y-auto bg-white p-6 shadow-2xl">
             <div class="mb-6 flex items-center justify-between">
-                <h2 class="text-xl font-semibold">{{ __('site.filter') }}</h2>
+                <h2 class="text-xl font-semibold">{{ $filterLabel }}</h2>
                 <button type="button" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100" @click="filtersOpen = false">×</button>
             </div>
             @include('catalog._base44-filter-form')
