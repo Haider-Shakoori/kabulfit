@@ -73,7 +73,7 @@
             <button type="button"
                     class="grid h-11 w-11 place-items-center rounded-full lg:hidden"
                     @click="open = true"
-                    aria-label="{{ __('site.menu') }}">
+                    aria-label="{{ __('site.menu') }}" aria-controls="mobile-navigation" :aria-expanded="open.toString()">
                 <x-icon name="menu" class="h-6 w-6 {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
             </button>
 
@@ -81,7 +81,7 @@
                 <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" width="310" height="120" alt="KabulFit" class="h-20 w-auto object-contain sm:h-24">
             </a>
 
-            <nav class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
+            <nav id="primary-nav" class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
                 <a class="transition hover:text-[#D91E36] {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('home', ['locale' => app()->getLocale()]) }}">{{ __('site.home') }}</a>
                 <div class="group relative">
                     <a class="inline-flex items-center gap-1 transition hover:text-[#D91E36] {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
@@ -126,7 +126,7 @@
 
     <div x-show="open" x-cloak class="fixed inset-0 z-[70] lg:hidden">
         <button class="absolute inset-0 bg-black/40" @click="open = false" aria-label="Close navigation"></button>
-        <aside x-transition class="absolute inset-y-0 start-0 w-[84%] max-w-sm overflow-y-auto bg-white p-6 shadow-2xl">
+        <aside id="mobile-navigation" x-transition class="absolute inset-y-0 start-0 w-[84%] max-w-sm overflow-y-auto bg-white p-6 shadow-2xl">
             <div class="flex items-center justify-between">
                 <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" alt="KabulFit" class="h-24 w-auto object-contain">
                 <button class="grid h-10 w-10 place-items-center rounded-full bg-gray-100" @click="open = false"><x-icon name="close" class="h-5 w-5" /></button>
