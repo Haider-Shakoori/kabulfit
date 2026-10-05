@@ -9,6 +9,7 @@ use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CouponController extends Controller
@@ -74,7 +75,9 @@ class CouponController extends Controller
         ]);
 
         if ($data['type'] === 'percent' && (float) $data['value'] > 100) {
-            return back()->withErrors(['value' => 'Percentage discounts cannot exceed 100%.'])->withInput()->throwResponse();
+            throw ValidationException::withMessages([
+                'value' => 'Percentage discounts cannot exceed 100%.',
+            ]);
         }
 
         return [
