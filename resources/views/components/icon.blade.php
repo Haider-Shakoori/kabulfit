@@ -54,6 +54,30 @@
             <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
             <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/>
             @break
+        @case('truck')
+            <path d="M3 6h11v11H3V6Zm11 4h4l3 3v4h-7v-7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="1.7"/>
+            <circle cx="18" cy="18" r="2" stroke="currentColor" stroke-width="1.7"/>
+            @break
+        @case('shield')
+            <path d="M12 3 19 6v5c0 4.7-2.9 8-7 10-4.1-2-7-5.3-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            @break
+        @case('star')
+            <path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            @break
+        @case('plus')
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            @break
+        @case('minus')
+            <path d="M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            @break
+        @case('share')
+            <circle cx="18" cy="5" r="2.5" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="6" cy="12" r="2.5" stroke="currentColor" stroke-width="1.6"/>
+            <circle cx="18" cy="19" r="2.5" stroke="currentColor" stroke-width="1.6"/>
+            <path d="m8.3 10.9 7.4-4.6M8.3 13.1l7.4 4.6" stroke="currentColor" stroke-width="1.6"/>
+            @break
         @default
             <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/>
     @endswitch
