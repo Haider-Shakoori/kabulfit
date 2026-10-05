@@ -171,8 +171,8 @@
 
                 <div x-data="{ expanded: false }" class="text-gray-600 leading-relaxed">
                     <p x-show="expanded">{{ $translation?->description }}</p>
-                    <p x-show="!expanded">{{ IlluminateSupportStr::limit($translation?->description, 200) }}</p>
-                    @if(IlluminateSupportStr::length($translation?->description ?? '') > 200)
+                    <p x-show="!expanded">{{ str($translation?->description)->limit(200) }}</p>
+                    @if(str($translation?->description ?? '')->length() > 200)
                         <button type="button" class="mt-2 text-sm font-semibold text-[#881C27] hover:underline" @click="expanded = !expanded" x-text="expanded ? 'See Less' : 'See More'"></button>
                     @endif
                 </div>
