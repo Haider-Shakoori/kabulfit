@@ -52,7 +52,7 @@
 
 <div
     class="min-h-screen bg-[#FDFBF7]"
-    x-data='{
+    x-data="{
         step: 1,
         addAddress: false,
         terms: false,
@@ -70,12 +70,12 @@
             return this.shippingMethods.find(s => s.code === this.shippingCode) || null;
         },
         money(minor) {
-            return (minor / 100).toFixed(2) + " " + this.currency;
+            return (minor / 100).toFixed(2) + ' ' + this.currency;
         },
         totalMinor() {
             return this.subtotalMinor + (this.selectedShipping?.price_minor || 0);
         }
-    }'
+    }"
 >
     <div class="mx-auto max-w-7xl px-4 py-6 sm:py-8">
         <a href="{{ route('cart', ['locale' => $locale]) }}" class="mb-6 inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-[#881C27] hover:text-[#881C27]">
