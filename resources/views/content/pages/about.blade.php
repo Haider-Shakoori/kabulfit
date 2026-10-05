@@ -37,7 +37,7 @@
                 ['f065351e6_bn.jpg', 'Afghan Heritage'],
             ] as [$image, $title])
                 <article class="rounded-xl border border-gray-200 bg-white p-5 text-center shadow-sm transition hover:shadow-lg">
-                    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/{{ $image }}" alt="{{ $title }}" class="mx-auto h-24 w-24 rounded-full object-cover">
+                    <img src="{{ asset('images/kabulfit-base44/source/'.$image) }}" alt="{{ $title }}" class="mx-auto h-24 w-24 rounded-full object-cover">
                     <h3 class="mt-4 font-semibold text-gray-900">{{ $title }}</h3>
                 </article>
             @endforeach
