@@ -30,10 +30,12 @@
             <div class="space-y-5">
                 <h2 class="text-2xl font-bold text-gray-900">{{ __('site.get_in_touch') }}</h2>
 
-                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="flex items-start gap-4 rounded-xl p-4 transition hover:bg-white hover:shadow-sm">
-                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#25D366]/10 text-[#128C7E]">◉</span>
-                    <span><span class="block text-sm text-gray-500">WhatsApp</span><strong class="mt-1 block text-gray-900">{{ $locale === 'ps' ? 'په واټساپ کې راسره اړیکه ونیسئ' : ($locale === 'fa' ? 'با ما در واتساپ تماس بگیرید' : 'Chat with us on WhatsApp') }}</strong></span>
-                </a>
+                @if($whatsappUrl)
+                    <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="flex items-start gap-4 rounded-xl p-4 transition hover:bg-white hover:shadow-sm">
+                        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#25D366]/10 text-[#128C7E]">◉</span>
+                        <span><span class="block text-sm text-gray-500">WhatsApp</span><strong class="mt-1 block text-gray-900">{{ $locale === 'ps' ? 'په واټساپ کې راسره اړیکه ونیسئ' : ($locale === 'fa' ? 'با ما در واتساپ تماس بگیرید' : 'Chat with us on WhatsApp') }}</strong></span>
+                    </a>
+                @endif
 
                 <a href="mailto:{{ $contactEmail }}" class="flex items-start gap-4 rounded-xl p-4 transition hover:bg-white hover:shadow-sm">
                     <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#881C27]/10 text-[#881C27]">✉</span>
