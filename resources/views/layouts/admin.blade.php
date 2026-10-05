@@ -19,6 +19,7 @@
         ['icon' => 'ruler', 'label' => 'Measurements', 'route' => 'admin.measurements.index', 'permission' => 'measurements.manage', 'match' => 'admin.measurements.*'],
         ['icon' => 'tag', 'label' => 'Categories', 'route' => 'admin.categories.index', 'permission' => 'products.manage', 'match' => 'admin.categories.*'],
         ['icon' => 'users', 'label' => 'Customers', 'route' => 'admin.customers.index', 'permission' => 'customers.manage', 'match' => 'admin.customers.*'],
+        ['icon' => 'users', 'label' => 'Engagement', 'route' => 'admin.engagement.index', 'permission' => 'customers.manage', 'match' => 'admin.engagement.*'],
         ['icon' => 'ruler', 'label' => 'Measurement Guides', 'route' => 'admin.measurement-guides.index', 'permission' => 'measurements.manage', 'match' => 'admin.measurement-guides.*'],
         ['icon' => 'ruler', 'label' => 'Size Guides', 'route' => 'admin.size-guides.index', 'permission' => 'products.manage', 'match' => 'admin.size-guides.*'],
         ['icon' => 'star', 'label' => 'Reviews', 'route' => 'admin.reviews.index', 'permission' => 'products.manage', 'match' => 'admin.reviews.*'],
