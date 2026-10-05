@@ -196,7 +196,7 @@
                 <div class="mt-4 grid gap-3 text-sm text-white/65">
                     <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.about') }}</a>
                     <a class="hover:text-white" href="{{ route('blog.index', ['locale' => app()->getLocale()]) }}">{{ __('content.blog') }}</a>
-                    <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'privacy-policy' : (app()->getLocale() === 'fa' ? 'سیاست-حریم-خصوصی' : 'د-محرمیت-تګلاره')]) }}">{{ __('site.privacy_policy') ?? 'Privacy Policy' }}</a>
+                    <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'privacy-policy' : (app()->getLocale() === 'fa' ? 'سیاست-حریم-خصوصی' : 'د-محرمیت-تګلاره')]) }}">{{ __('site.privacy_policy') }}</a>
                 </div>
             </div>
         </div>
