@@ -49,6 +49,11 @@
     $descriptionLabel = $locale === 'ps' ? 'تفصیل' : ($locale === 'fa' ? 'توضیحات' : 'Description');
     $detailsLabel = $locale === 'ps' ? 'ټوکر او پاملرنه' : ($locale === 'fa' ? 'پارچه و نگهداری' : 'Fabric & Care');
     $reviewsLabel = $locale === 'ps' ? 'نظرونه' : ($locale === 'fa' ? 'نظرات' : 'Reviews');
+    $sizeGuideData = $sizeGuides->map(fn ($guide) => [
+        'title' => $guide->localizedTitle($locale),
+        'image' => $guide->localizedImageUrl($locale),
+        'description' => $guide->localizedDescription($locale),
+    ])->values()->all();
 @endphp
 
 <div
@@ -62,6 +67,9 @@
         selectedSize: @js($initialVariant["size"] ?? ""),
         quantity: 1,
         fullscreen: false,
+        sizeGuideOpen: false,
+        sizeGuideIndex: 0,
+        sizeGuides: @js($sizeGuideData),
         tab: "description",
         get selectedVariant() {
             return this.variants.find(v => v.sku === this.selectedSku) || this.variants[0] || null;
@@ -213,10 +221,17 @@
                     <div>
                         <div class="mb-3 flex items-center justify-between gap-4">
                             <p class="text-sm font-semibold">{{ $selectSizeLabel }}</p>
-                            <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring" class="inline-flex items-center gap-1 text-sm font-bold text-[#881C27] hover:underline">
-                                <x-icon name="ruler" class="h-4 w-4" />
-                                {{ $sizeGuideLabel }}
-                            </a>
+                            @if($sizeGuides->isNotEmpty())
+                                <button type="button" @click="sizeGuideOpen = true; sizeGuideIndex = 0" class="inline-flex items-center gap-1 text-sm font-bold text-[#881C27] hover:underline">
+                                    <x-icon name="ruler" class="h-4 w-4" />
+                                    {{ $sizeGuideLabel }}
+                                </button>
+                            @else
+                                <a href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring" class="inline-flex items-center gap-1 text-sm font-bold text-[#881C27] hover:underline">
+                                    <x-icon name="ruler" class="h-4 w-4" />
+                                    {{ $sizeGuideLabel }}
+                                </a>
+                            @endif
                         </div>
                         <div class="flex flex-wrap gap-2">
                             @foreach($sizes as $size)
@@ -355,6 +370,31 @@
                 </div>
             </section>
         @endif
+    </div>
+
+    <div x-show="sizeGuideOpen" x-cloak class="fixed inset-0 z-[105] grid place-items-center p-4" @keydown.escape.window="sizeGuideOpen = false">
+        <button type="button" class="absolute inset-0 bg-black/55" @click="sizeGuideOpen = false" aria-label="Close size guide"></button>
+        <div x-transition class="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6">
+            <div class="mb-5 flex items-center justify-between gap-4">
+                <h2 class="text-2xl font-bold text-gray-900">{{ $sizeGuideLabel }}</h2>
+                <button type="button" @click="sizeGuideOpen = false" class="grid h-10 w-10 place-items-center rounded-full bg-gray-100"><x-icon name="close" class="h-5 w-5" /></button>
+            </div>
+
+            <template x-if="sizeGuides.length > 1">
+                <div class="mb-5 flex flex-wrap gap-2">
+                    <template x-for="(guide, index) in sizeGuides" :key="'guide-tab-' + index">
+                        <button type="button" class="rounded-lg px-4 py-2 text-sm font-medium transition" :class="sizeGuideIndex === index ? 'bg-[#881C27] text-white' : 'bg-gray-100 text-gray-600'" @click="sizeGuideIndex = index" x-text="guide.title"></button>
+                    </template>
+                </div>
+            </template>
+
+            <template x-if="sizeGuides[sizeGuideIndex]">
+                <div>
+                    <img :src="sizeGuides[sizeGuideIndex].image" :alt="sizeGuides[sizeGuideIndex].title" class="w-full rounded-xl border border-gray-100 bg-gray-50 object-contain">
+                    <p x-show="sizeGuides[sizeGuideIndex].description" class="mt-5 leading-7 text-gray-600" x-text="sizeGuides[sizeGuideIndex].description"></p>
+                </div>
+            </template>
+        </div>
     </div>
 
     <div x-show="fullscreen" x-cloak class="fixed inset-0 z-[100] grid place-items-center bg-black/95 p-4" @keydown.escape.window="fullscreen = false">
