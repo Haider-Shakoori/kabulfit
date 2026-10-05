@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -131,6 +132,11 @@ Route::prefix('{locale}')
 
                     Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
                     Route::put('/products/{product:sku}', [AdminProductController::class, 'update'])->name('products.update');
+
+                    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+                    Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+                    Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+                    Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
 
                     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
                     Route::get('/orders/{order:uuid}', [AdminOrderController::class, 'show'])->name('orders.show');
