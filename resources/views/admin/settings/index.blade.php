@@ -40,6 +40,29 @@
 
         <section class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
             <div class="mb-5 flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-600"><x-icon name="shield" class="h-5 w-5" /></span>
+                <div><h2 class="font-semibold text-gray-900">Payment Integrations</h2><p class="text-sm text-gray-500">Credential status only. Secrets remain in the server environment.</p></div>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2">
+                <div class="rounded-lg bg-gray-50 p-4">
+                    <div class="flex items-center justify-between gap-3">
+                        <strong class="text-gray-900">Stripe</strong>
+                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $values['payment_integrations']['stripe'] ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">{{ $values['payment_integrations']['stripe'] ? 'Configured' : 'Not configured' }}</span>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500">PaymentIntent + verified webhook flow</p>
+                </div>
+                <div class="rounded-lg bg-gray-50 p-4">
+                    <div class="flex items-center justify-between gap-3">
+                        <strong class="text-gray-900">PayPal</strong>
+                        <span class="rounded-full px-2.5 py-1 text-xs font-semibold {{ $values['payment_integrations']['paypal'] ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' }}">{{ $values['payment_integrations']['paypal'] ? 'Configured' : 'Not configured' }}</span>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500">Mode: {{ strtoupper($values['payment_integrations']['paypal_mode']) }} · Currencies: {{ implode(', ', $values['payment_integrations']['paypal_currencies']) }}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+            <div class="mb-5 flex items-center gap-3">
                 <span class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-600"><x-icon name="chart" class="h-5 w-5" /></span>
                 <div><h2 class="font-semibold text-gray-900">Analytics</h2><p class="text-sm text-gray-500">Optional Meta Pixel and Google Analytics identifiers. No secret keys are stored here.</p></div>
             </div>
