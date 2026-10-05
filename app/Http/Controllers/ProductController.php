@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\SizeGuide;
 use App\Services\Catalog\CatalogQuery;
 use App\Services\Catalog\RecentlyViewedProducts;
 use App\Support\Seo\CatalogSchema;
@@ -24,8 +25,31 @@ class ProductController extends Controller
             ->with(CatalogQuery::detailEagerLoads())
             ->firstOrFail();
 
+        $product->loadMissing('category.parent.translations');
+
         $translation = $product->translation($locale);
         $categoryTranslation = $product->category->translation($locale);
+        $categoryEnglish = $product->category->translation('en')?->name;
+        $parentEnglish = $product->category->parent?->translation('en')?->name;
+        $sizeGuideCategory = $parentEnglish ?: $categoryEnglish;
+        $sizeGuideSubcategory = $parentEnglish ? $categoryEnglish : null;
+
+        $sizeGuides = SizeGuide::query()
+            ->where('is_active', true)
+            ->orderByDesc('display_order')
+            ->get()
+            ->filter(function (SizeGuide $guide) use ($sizeGuideCategory, $sizeGuideSubcategory): bool {
+                if ($guide->category && strcasecmp($guide->category, (string) $sizeGuideCategory) !== 0) {
+                    return false;
+                }
+
+                if ($sizeGuideSubcategory) {
+                    return $guide->subcategory && strcasecmp($guide->subcategory, $sizeGuideSubcategory) === 0;
+                }
+
+                return blank($guide->subcategory);
+            })
+            ->values();
         $canonical = route('products.show', ['locale' => $locale, 'slug' => $translation?->slug]);
 
         $relatedProducts = $product->relatedProducts()
@@ -63,6 +87,6 @@ class ProductController extends Controller
             ),
         );
 
-        return view('catalog.product', compact('product', 'relatedProducts', 'recentlyViewed', 'seo'));
+        return view('catalog.product', compact('product', 'relatedProducts', 'recentlyViewed', 'sizeGuides', 'seo'));
     }
 }
