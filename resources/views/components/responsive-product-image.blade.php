@@ -15,6 +15,7 @@
         <source type="image/webp" srcset="{{ $sources['webp'] }}" sizes="{{ $sizes }}">
     @endif
     <img
+        {{ $attributes }}
         src="{{ $media->url() }}"
         width="{{ $media->width }}"
         height="{{ $media->height }}"
