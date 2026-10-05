@@ -166,4 +166,6 @@ return [
     'newsletter_email_subject' => 'Welcome to the KabulFit Newsletter!',
     'newsletter_email_body' => "Thank you for subscribing to the KabulFit newsletter!\n\nYou are now part of our community and will be the first to know about new collections, exclusive offers, and special promotions.\n\nUnsubscribe: :url\n\nWarm regards,\nThe KabulFit Team",
     'contact_sent' => "Message sent! We'll get back to you soon.",
+    'privacy_policy' => 'Privacy Policy',
+    'terms_conditions' => 'Terms & Conditions',
 ];
