@@ -36,6 +36,7 @@ use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SeoController;
@@ -135,6 +136,8 @@ Route::prefix('{locale}')
             Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('orders.show');
             Route::get('/orders/{order:uuid}/document', [OrderController::class, 'document'])->name('orders.document');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
+            Route::post('/orders/{order:uuid}/paypal/create', [PayPalController::class, 'create'])->middleware('throttle:20,1')->name('paypal.create');
+            Route::post('/orders/{order:uuid}/paypal/capture', [PayPalController::class, 'capture'])->middleware('throttle:20,1')->name('paypal.capture');
             Route::post('/products/{product:sku}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
             Route::prefix('admin')
