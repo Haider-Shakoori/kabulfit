@@ -36,4 +36,12 @@ return [
     'review_comment' => 'ستاسو نظر',
     'verified_purchase' => 'تایید شوی پېر',
     'no_reviews' => 'تر اوسه نظر نشته. لومړی نظر تاسو ولیکئ!',
+    'payment_method' => 'د تادیې طریقه',
+    'pay_with_card' => 'کریډیټ / ډیبیټ کارت',
+    'pay_with_paypal' => 'PayPal',
+    'paypal_description' => 'د خپل PayPal حساب له لارې په خوندي ډول تادیه وکړئ.',
+    'secured_by_paypal' => 'د PayPal له خوا خوندي',
+    'paypal_error' => 'PayPal تادیه جوړه نه کړه. بیا هڅه وکړئ.',
+    'paypal_capture_error' => 'د PayPal تادیې بشپړول ناکام شول. بیا هڅه وکړئ.',
+    'paypal_not_configured' => 'PayPal د دې پلورنځي لپاره نه دی تنظیم شوی.',
 ];
