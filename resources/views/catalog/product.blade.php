@@ -474,4 +474,15 @@
         <button type="button" class="absolute end-5 top-1/2 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-2xl text-gray-900" @click="selectedImage = selectedImage === images.length - 1 ? 0 : selectedImage + 1">›</button>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.kabulFitTrack?.('ViewContent', {
+            content_ids: [@json($product->sku)],
+            content_name: @json($product->translation()?->name ?? $product->sku),
+            content_type: 'product',
+            value: {{ number_format(($product->sale_price_minor ?? $product->price_minor) / 100, 2, '.', '') }},
+            currency: @json($product->currency)
+        });
+    }, { once: true });
+</script>
 @endsection
