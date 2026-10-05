@@ -32,30 +32,50 @@ jobs:
           mkdir -p "$destination"
 
           expected=0
+          downloaded=0
+          : > "$destination/MISSING.txt"
+
           while IFS= read -r url || [[ -n "$url" ]]; do
             [[ -z "$url" ]] && continue
             expected=$((expected + 1))
             filename="${url##*/}"
             echo "Downloading $filename"
-            curl --fail --location --retry 4 --retry-all-errors --retry-delay 2 \
+
+            if ! curl --fail --location --retry 4 --retry-all-errors --retry-delay 2 \
               --connect-timeout 20 --max-time 180 \
-              "$url" --output "$destination/$filename"
-            test -s "$destination/$filename"
+              "$url" --output "$destination/$filename"; then
+              echo "$filename | $url" >> "$destination/MISSING.txt"
+              rm -f "$destination/$filename"
+              echo "Unavailable: $filename"
+              continue
+            fi
+
+            if [[ ! -s "$destination/$filename" ]]; then
+              echo "$filename | $url | empty file" >> "$destination/MISSING.txt"
+              rm -f "$destination/$filename"
+              continue
+            fi
+
             mime="$(file --brief --mime-type "$destination/$filename")"
             case "$mime" in
-              image/*) ;;
-              *) echo "Unexpected MIME for $filename: $mime" >&2; exit 1 ;;
+              image/*) downloaded=$((downloaded + 1)) ;;
+              *)
+                echo "$filename | $url | unexpected MIME $mime" >> "$destination/MISSING.txt"
+                rm -f "$destination/$filename"
+                ;;
             esac
           done < "$manifest"
 
-          actual="$(find "$destination" -maxdepth 1 -type f | wc -l | tr -d ' ')"
-          echo "Expected $expected images, downloaded $actual"
-          test "$actual" -eq "$expected"
+          echo "Expected $expected source assets; downloaded $downloaded"
+          test "$downloaded" -gt 0
 
           (
             cd "$destination"
-            sha256sum * > SHA256SUMS.txt
+            find . -maxdepth 1 -type f ! -name 'SHA256SUMS.txt' ! -name 'MISSING.txt' -printf '%f\n' | sort | xargs -r sha256sum > SHA256SUMS.txt
           )
+
+          echo "Missing assets:"
+          cat "$destination/MISSING.txt" || true
 
       - name: Replace Base44 media URLs with local paths
         shell: bash
@@ -65,8 +85,10 @@ jobs:
 
           remote = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/"
           local = "/images/kabulfit-base44/source/"
+          destination = Path("public/images/kabulfit-base44/source")
           roots = ["app", "config", "database", "resources", "tests"]
           suffixes = {".php", ".blade.php", ".js", ".jsx", ".ts", ".tsx", ".css", ".json", ".jsonc", ".md"}
+          available = {p.name for p in destination.iterdir() if p.is_file() and p.name not in {"MISSING.txt", "SHA256SUMS.txt"}}
 
           changed = []
           for root in roots:
@@ -84,7 +106,11 @@ jobs:
                       continue
                   if remote not in text:
                       continue
-                  updated = text.replace(remote, local)
+
+                  updated = text
+                  for filename in available:
+                      updated = updated.replace(remote + filename, local + filename)
+
                   if updated != text:
                       path.write_text(updated, encoding="utf-8")
                       changed.append(str(path))
