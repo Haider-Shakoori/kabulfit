@@ -11,8 +11,8 @@ use App\Models\ShippingMethod;
 use App\Models\Wishlist;
 use App\Services\Commerce\CartService;
 use App\Services\Commerce\CheckoutService;
-use App\Services\Payments\PayPalService;
 use App\Services\Payments\PaymentService;
+use App\Services\Payments\PayPalService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,9 +21,7 @@ use Illuminate\View\View;
 
 class CommerceController extends Controller
 {
-    public function __construct(private readonly CartService $carts)
-    {
-    }
+    public function __construct(private readonly CartService $carts) {}
 
     public function cart(Request $request): View
     {
