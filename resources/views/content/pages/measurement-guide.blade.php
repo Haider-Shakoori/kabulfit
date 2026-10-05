@@ -7,6 +7,58 @@
         @endif
     </div>
 </section>
+<section id="guide-section" class="bg-white py-16 sm:py-20">
+    <div class="mx-auto max-w-7xl px-4">
+        <div class="mb-10 text-center">
+            <h2 class="text-3xl font-bold text-gray-900">{{ $locale === 'ps' ? 'ویډیويي لارښوونې' : ($locale === 'fa' ? 'راهنماهای ویدیویی' : 'Video Guides') }}</h2>
+            <p class="mx-auto mt-3 max-w-2xl text-gray-500">{{ $locale === 'ps' ? 'د هرې اندازې لپاره د اخیستلو لارښوونه وګورئ.' : ($locale === 'fa' ? 'راهنمای اندازه‌گیری هر بخش را مشاهده کنید.' : 'Watch the correct technique for each body measurement.') }}</p>
+        </div>
+
+        @if(($measurementGuideVideos ?? collect())->isNotEmpty())
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                @foreach($measurementGuideVideos as $guide)
+                    @php
+                        $videoUrl = $guide->localizedVideoUrl($locale);
+                        $isYoutube = str_contains($videoUrl, 'youtube.com') || str_contains($videoUrl, 'youtu.be');
+                        $embedUrl = $videoUrl;
+
+                        if ($isYoutube) {
+                            if (str_contains($embedUrl, 'watch?v=')) {
+                                $embedUrl = str_replace('watch?v=', 'embed/', $embedUrl);
+                            } elseif (str_contains($embedUrl, 'youtu.be/')) {
+                                $embedUrl = str_replace('youtu.be/', 'youtube.com/embed/', $embedUrl);
+                            }
+                        }
+                    @endphp
+                    <article class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <div class="aspect-video bg-gray-950">
+                            @if($isYoutube)
+                                <iframe src="{{ $embedUrl }}" title="{{ $guide->title ?: str($guide->measurement_field)->replace('_', ' ')->title() }}" class="h-full w-full" loading="lazy" allowfullscreen></iframe>
+                            @else
+                                <video src="{{ $videoUrl }}" controls preload="metadata" class="h-full w-full bg-black"></video>
+                            @endif
+                        </div>
+                        <div class="p-5">
+                            <div class="flex flex-wrap gap-2">
+                                <span class="rounded-full bg-[#881C27]/10 px-2.5 py-1 text-xs font-semibold text-[#881C27]">{{ str($guide->category)->title() }}</span>
+                                <span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600">{{ str($guide->measurement_field)->replace('_', ' ')->title() }}</span>
+                            </div>
+                            <h3 class="mt-3 text-lg font-semibold text-gray-900">{{ $guide->title ?: str($guide->measurement_field)->replace('_', ' ')->title() }}</h3>
+                            @if($guide->description)
+                                <p class="mt-2 text-sm leading-6 text-gray-600">{{ $guide->description }}</p>
+                            @endif
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        @else
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-[#FDFBF7] py-12 text-center text-gray-500">
+                {{ $locale === 'ps' ? 'ویډیويي لارښوونې به ژر اضافه شي.' : ($locale === 'fa' ? 'راهنماهای ویدیویی به‌زودی اضافه می‌شوند.' : 'Video guides will be added soon.') }}
+            </div>
+        @endif
+    </div>
+</section>
+
 <section class="py-16 sm:py-20">
     <div class="mx-auto grid max-w-6xl items-start gap-8 px-4 lg:grid-cols-2">
         <div class="overflow-hidden rounded-3xl bg-white shadow-xl"><img src="{{ asset('images/kabulfit-live/measurement-guide.png') }}" alt="{{ $translation->title }}" class="w-full object-cover"></div>
