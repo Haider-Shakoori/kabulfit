@@ -9,11 +9,13 @@ use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\LegacyUrlController as AdminLegacyUrlController;
 use App\Http\Controllers\Admin\MeasurementController as AdminMeasurementController;
+use App\Http\Controllers\Admin\MeasurementGuideController as AdminMeasurementGuideController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\SizeGuideController as AdminSizeGuideController;
 use App\Http\Controllers\Admin\ShippingRateController as AdminShippingRateController;
 use App\Http\Controllers\Admin\TailoringController as AdminTailoringController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -152,6 +154,16 @@ Route::prefix('{locale}')
 
                     Route::get('/measurements', [AdminMeasurementController::class, 'index'])->name('measurements.index');
                     Route::put('/measurements/{definition:uuid}', [AdminMeasurementController::class, 'update'])->name('measurements.update');
+
+                    Route::get('/measurement-guides', [AdminMeasurementGuideController::class, 'index'])->name('measurement-guides.index');
+                    Route::post('/measurement-guides', [AdminMeasurementGuideController::class, 'store'])->name('measurement-guides.store');
+                    Route::put('/measurement-guides/{measurementGuide}', [AdminMeasurementGuideController::class, 'update'])->name('measurement-guides.update');
+                    Route::delete('/measurement-guides/{measurementGuide}', [AdminMeasurementGuideController::class, 'destroy'])->name('measurement-guides.destroy');
+
+                    Route::get('/size-guides', [AdminSizeGuideController::class, 'index'])->name('size-guides.index');
+                    Route::post('/size-guides', [AdminSizeGuideController::class, 'store'])->name('size-guides.store');
+                    Route::put('/size-guides/{sizeGuide}', [AdminSizeGuideController::class, 'update'])->name('size-guides.update');
+                    Route::delete('/size-guides/{sizeGuide}', [AdminSizeGuideController::class, 'destroy'])->name('size-guides.destroy');
 
                     Route::get('/tailoring', [AdminTailoringController::class, 'index'])->name('tailoring.index');
                     Route::get('/tailoring/{tailoring:uuid}', [AdminTailoringController::class, 'show'])->name('tailoring.show');
