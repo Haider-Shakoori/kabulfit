@@ -24,6 +24,31 @@
             <label class="grid gap-1.5 max-w-xl"><span class="text-sm font-medium">Contact email</span><input type="email" name="contact_email" value="{{ $values['contact_email'] }}" required class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
         </section>
 
+        <section class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-600"><x-icon name="users" class="h-5 w-5" /></span>
+                <div><h2 class="font-semibold text-gray-900">Social Links</h2><p class="text-sm text-gray-500">Base44 footer and contact social destinations</p></div>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2">
+                <label class="grid gap-1.5"><span class="text-sm font-medium">Facebook URL</span><input type="url" name="facebook_url" value="{{ $values['facebook_url'] }}" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
+                <label class="grid gap-1.5"><span class="text-sm font-medium">Instagram URL</span><input type="url" name="instagram_url" value="{{ $values['instagram_url'] }}" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
+                <label class="grid gap-1.5"><span class="text-sm font-medium">TikTok URL</span><input type="url" name="tiktok_url" value="{{ $values['tiktok_url'] }}" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
+                <label class="grid gap-1.5"><span class="text-sm font-medium">YouTube URL</span><input type="url" name="youtube_url" value="{{ $values['youtube_url'] }}" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
+                <label class="grid gap-1.5 md:col-span-2"><span class="text-sm font-medium">WhatsApp URL</span><input type="url" name="whatsapp_url" value="{{ $values['whatsapp_url'] }}" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
+            </div>
+        </section>
+
+        <section class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
+            <div class="mb-5 flex items-center gap-3">
+                <span class="grid h-10 w-10 place-items-center rounded-lg bg-gray-100 text-gray-600"><x-icon name="chart" class="h-5 w-5" /></span>
+                <div><h2 class="font-semibold text-gray-900">Analytics</h2><p class="text-sm text-gray-500">Optional Meta Pixel and Google Analytics identifiers. No secret keys are stored here.</p></div>
+            </div>
+            <div class="grid gap-4 md:grid-cols-2">
+                <label class="grid gap-1.5"><span class="text-sm font-medium">Meta Pixel ID</span><input name="meta_pixel_id" value="{{ $values['meta_pixel_id'] }}" placeholder="2203881733746506" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#8B1538]"></label>
+                <label class="grid gap-1.5"><span class="text-sm font-medium">GA4 Measurement ID</span><input name="ga_measurement_id" value="{{ $values['ga_measurement_id'] }}" placeholder="G-XXXXXXXXXX" class="rounded-md border border-gray-200 px-3 py-2.5 uppercase outline-none focus:border-[#8B1538]"></label>
+            </div>
+        </section>
+
         @foreach(config('kabulfit.supported_locales') as $loc)
             <section class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm sm:p-6">
                 <div class="mb-5 flex items-center justify-between">
