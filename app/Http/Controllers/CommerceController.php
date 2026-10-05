@@ -166,10 +166,11 @@ class CommerceController extends Controller
     {
         abort_unless($order->user_id === $request->user()->id, 404);
 
+        $order->loadMissing(['payment', 'items']);
         $paymentMethod = $order->payment?->provider ?: 'stripe';
 
         return view('commerce.payment', [
-            'order' => $order->load('items'),
+            'order' => $order,
             'clientSecret' => null,
             'stripeKey' => config('services.stripe.key'),
             'paypalClientId' => config('services.paypal.client_id'),
