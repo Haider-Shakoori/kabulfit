@@ -22,6 +22,38 @@
             <path d="M7 5.5h10l-1.2 13h-7.6L7 5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
             <path d="M8 9h8m-7.4 4h6.8M9 3h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             @break
+        @case('home')
+            <path d="m3 11 9-8 9 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.5 9.5V21h13V9.5M9.5 21v-6h5v6" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            @break
+        @case('bag')
+            <path d="M5 8h14l-1 13H6L5 8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <path d="M9 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('heart')
+            <path d="M20.8 5.9c-1.7-2-4.9-2.2-6.8-.4L12 7.4 10 5.5C8.1 3.7 4.9 3.9 3.2 5.9c-1.8 2.1-1.5 5.2.4 7.1L12 21l8.4-8c1.9-1.9 2.2-5 .4-7.1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            @break
+        @case('user')
+            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M4.5 21a7.5 7.5 0 0 1 15 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('search')
+            <circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="1.7"/>
+            <path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('menu')
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('close')
+            <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            @break
+        @case('arrow-right')
+            <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            @break
+        @case('eye')
+            <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.7"/>
+            @break
         @default
             <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.7"/>
     @endswitch
