@@ -44,7 +44,7 @@
         @if($colors->isNotEmpty())
             <div class="mb-3 flex gap-1">
                 @foreach($colors as $color)
-                    <span class="h-4 w-4 rounded-full border-2 border-white shadow-sm" style="background-color: {{ $color->hex ?? '#d1d5db' }}" title="{{ $color->translation()?->name }}"></span>
+                    <span class="h-4 w-4 rounded-full border-2 border-white shadow-sm" style="background-color: {{ $color->hex_value ?? '#d1d5db' }}" title="{{ $color->translation()?->name }}"></span>
                 @endforeach
             </div>
         @endif
