@@ -81,6 +81,7 @@ Route::prefix('{locale}')
                 ->name('verification.send');
 
             Route::get('/account', AccountController::class)->name('account');
+            Route::put('/account', [AccountController::class, 'update'])->name('account.update');
             Route::post('/account/addresses', [AddressController::class, 'store'])->name('addresses.store');
             Route::put('/account/addresses/{address:uuid}', [AddressController::class, 'update'])->name('addresses.update');
             Route::delete('/account/addresses/{address:uuid}', [AddressController::class, 'destroy'])->name('addresses.destroy');
