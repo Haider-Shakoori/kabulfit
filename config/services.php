@@ -14,6 +14,10 @@ return [
         'base_url' => env('PAYPAL_MODE', 'sandbox') === 'live'
             ? 'https://api-m.paypal.com'
             : 'https://api-m.sandbox.paypal.com',
+        'supported_currencies' => array_values(array_filter(array_map(
+            fn (string $currency): string => strtoupper(trim($currency)),
+            explode(',', (string) env('PAYPAL_SUPPORTED_CURRENCIES', 'USD')),
+        ))),
     ],
 
     'meta' => [
