@@ -21,6 +21,7 @@
         ['icon' => 'users', 'label' => 'Customers', 'route' => 'admin.customers.index', 'permission' => 'customers.manage', 'match' => 'admin.customers.*'],
         ['icon' => 'ruler', 'label' => 'Measurement Guides', 'route' => 'admin.measurement-guides.index', 'permission' => 'measurements.manage', 'match' => 'admin.measurement-guides.*'],
         ['icon' => 'ruler', 'label' => 'Size Guides', 'route' => 'admin.size-guides.index', 'permission' => 'products.manage', 'match' => 'admin.size-guides.*'],
+        ['icon' => 'star', 'label' => 'Reviews', 'route' => 'admin.reviews.index', 'permission' => 'products.manage', 'match' => 'admin.reviews.*'],
         ['icon' => 'tag', 'label' => 'Discount Codes', 'route' => 'admin.coupons.index', 'permission' => 'settings.manage', 'match' => 'admin.coupons.*'],
         ['icon' => 'truck', 'label' => 'Shipping Rates', 'route' => 'admin.shipping-rates.index', 'permission' => 'settings.manage', 'match' => 'admin.shipping-rates.*'],
         ['icon' => 'settings', 'label' => 'Settings', 'route' => 'admin.settings.index', 'permission' => 'settings.manage', 'match' => 'admin.settings.*'],
