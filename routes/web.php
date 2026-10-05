@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\MeasurementGuideController as AdminMeasurementGui
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\Admin\ShippingRateController as AdminShippingRateController;
@@ -187,6 +188,10 @@ Route::prefix('{locale}')
 
                     Route::get('/legacy-urls', [AdminLegacyUrlController::class, 'index'])->name('legacy.index');
                     Route::put('/legacy-urls/{legacyUrl:uuid}', [AdminLegacyUrlController::class, 'update'])->name('legacy.update');
+
+                    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+                    Route::post('/reviews/{review}/toggle', [AdminReviewController::class, 'toggle'])->name('reviews.toggle');
+                    Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
 
                     Route::get('/coupons', [AdminCouponController::class, 'index'])->name('coupons.index');
                     Route::post('/coupons', [AdminCouponController::class, 'store'])->name('coupons.store');
