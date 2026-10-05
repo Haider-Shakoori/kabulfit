@@ -34,7 +34,7 @@
 @endphp
 
 <section class="relative h-screen overflow-hidden" data-section="hero"
-    x-data='{ slides: @js($heroSlides), slide: 0 }'
+    x-data="{ slides: @js($heroSlides), slide: 0 }"
     x-init="setInterval(() => slide = (slide + 1) % slides.length, 6000)">
     <template x-for="(item, index) in slides" :key="index">
         <div class="absolute inset-0 transition-opacity duration-1000" :class="slide === index ? 'opacity-100' : 'opacity-0'">
