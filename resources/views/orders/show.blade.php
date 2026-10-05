@@ -36,11 +36,16 @@
                 <p class="text-sm font-medium text-[#2A6867]">{{ $labels['placed'] }} {{ $order->created_at?->translatedFormat('F j, Y') }}</p>
                 <h1 class="mt-1 text-3xl font-bold text-gray-900">{{ __('orders.order_number', ['number' => $order->number]) }}</h1>
             </div>
-            <span class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold {{ $statusClass }}">
-                @if($order->status === 'shipped')<x-icon name="truck" class="h-4 w-4" />@endif
-                @if($order->status === 'delivered')<span>✓</span>@endif
-                {{ __('orders.status_'.$order->status) }}
-            </span>
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('orders.document', ['locale' => $locale, 'order' => $order]) }}" target="_blank" class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:border-[#881C27] hover:text-[#881C27]">
+                    <span>🖨</span> Print / PDF
+                </a>
+                <span class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold {{ $statusClass }}">
+                    @if($order->status === 'shipped')<x-icon name="truck" class="h-4 w-4" />@endif
+                    @if($order->status === 'delivered')<span>✓</span>@endif
+                    {{ __('orders.status_'.$order->status) }}
+                </span>
+            </div>
         </div>
 
         <div class="grid gap-6 sm:gap-8 lg:grid-cols-3">
