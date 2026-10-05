@@ -8,6 +8,7 @@ use App\Services\Admin\AuditService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class ShippingRateController extends Controller
@@ -64,14 +65,24 @@ class ShippingRateController extends Controller
 
     private function validated(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'ranges' => ['required', 'array', 'min:1', 'max:20'],
             'ranges.*.min_kg' => ['required', 'numeric', 'min:0', 'max:1000'],
-            'ranges.*.max_kg' => ['required', 'numeric', 'gt:ranges.*.min_kg', 'max:1000'],
+            'ranges.*.max_kg' => ['required', 'numeric', 'min:0.01', 'max:1000'],
             'ranges.*.price' => ['required', 'numeric', 'min:0', 'max:100000'],
             'effective_date' => ['nullable', 'date'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
+
+        foreach ($data['ranges'] as $index => $range) {
+            if ((float) $range['max_kg'] <= (float) $range['min_kg']) {
+                throw ValidationException::withMessages([
+                    "ranges.{$index}.max_kg" => 'Maximum weight must be greater than minimum weight.',
+                ]);
+            }
+        }
+
+        return $data;
     }
 
     private function ranges(array $ranges): array
