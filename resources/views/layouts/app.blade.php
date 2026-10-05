@@ -27,8 +27,54 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php($metaPixelId = config('services.meta.pixel_id'))
+    @php($gaMeasurementId = config('services.analytics.measurement_id'))
+    @if($metaPixelId)
+        <script>
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+            (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', @json($metaPixelId));
+            fbq('track', 'PageView');
+        </script>
+    @endif
+    @if($gaMeasurementId)
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ urlencode($gaMeasurementId) }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', @json($gaMeasurementId));
+        </script>
+    @endif
+    <script>
+        window.kabulFitTrack = function (eventName, payload) {
+            payload = payload || {};
+            if (typeof window.fbq === 'function') {
+                window.fbq('track', eventName, payload);
+            }
+            if (typeof window.gtag === 'function') {
+                const gaNames = {
+                    ViewContent: 'view_item',
+                    AddToCart: 'add_to_cart',
+                    InitiateCheckout: 'begin_checkout',
+                    Purchase: 'purchase'
+                };
+                window.gtag('event', gaNames[eventName] || eventName, payload);
+            }
+        };
+    </script>
 </head>
 <body class="min-h-screen bg-[#FDFBF7] text-gray-900">
+@if(session('pixel_event'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            window.kabulFitTrack?.(@json(session('pixel_event.name')), @json(session('pixel_event.payload')));
+        }, { once: true });
+    </script>
+@endif
 @php($contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com'))
 @php($isHome = request()->routeIs('home'))
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
