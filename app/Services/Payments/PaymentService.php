@@ -18,6 +18,7 @@ class PaymentService
 {
     public function __construct(
         private readonly PaymentGateway $gateway,
+        private readonly PayPalService $paypal,
         private readonly CheckoutService $checkout,
         private readonly OrderLifecycleService $orders,
         private readonly AuditService $audit,
@@ -42,7 +43,9 @@ class PaymentService
             ]);
         }
 
-        $result = $this->gateway->refund($payment);
+        $result = $payment->provider === 'paypal'
+            ? $this->paypal->refund($payment)
+            : $this->gateway->refund($payment);
 
         DB::transaction(function () use ($payment, $actor, $reason, $result): void {
             $payment = Payment::query()->with('order')->whereKey($payment->id)->lockForUpdate()->firstOrFail();
