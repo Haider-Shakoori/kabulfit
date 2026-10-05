@@ -213,7 +213,9 @@
                 <p class="mt-4 max-w-sm text-sm leading-7 text-white/65">{{ __('site.footer_intro') }}</p>
 
                 <div class="mt-5 space-y-3 text-sm text-white/75">
+                    @if($whatsappUrl)
                     <a class="block hover:text-white" href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.whatsapp_contact') }}</a>
+                @endif
                     <a class="block hover:text-white" href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
                     <span class="block">{{ __('site.locations') }}</span>
                 </div>
