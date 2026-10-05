@@ -113,17 +113,28 @@
         <div class="grid gap-10 lg:grid-cols-2 lg:gap-12">
             <div class="min-w-0 space-y-4">
                 <div class="relative aspect-square overflow-hidden rounded-2xl bg-gray-100">
-                    <template x-for="(image, index) in images" :key="image.url">
+                    @forelse($mediaItems as $index => $media)
                         <button
                             type="button"
                             class="absolute inset-0 h-full w-full"
-                            x-show="selectedImage === index"
+                            x-show="selectedImage === {{ $index }}"
                             x-transition.opacity
                             @click="fullscreen = true"
                         >
-                            <img :src="image.url" :alt="image.alt" class="h-full w-full object-contain" :loading="index === 0 ? 'eager' : 'lazy'">
+                            <x-responsive-product-image
+                                :media="$media"
+                                :alt="$media->translation()?->alt_text ?: $translation?->name"
+                                :loading="$index === 0 ? 'eager' : 'lazy'"
+                                :fetchpriority="$index === 0 ? 'high' : null"
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                class="h-full w-full object-contain"
+                            />
                         </button>
-                    </template>
+                    @empty
+                        <button type="button" class="absolute inset-0 h-full w-full" @click="fullscreen = true">
+                            <img src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" alt="{{ $translation?->name }}" class="h-full w-full object-contain">
+                        </button>
+                    @endforelse
 
                     <div class="absolute start-4 top-4 flex flex-col gap-2">
                         @if($hasDiscount)
