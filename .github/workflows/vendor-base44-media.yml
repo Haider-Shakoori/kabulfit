@@ -1,0 +1,108 @@
+name: Vendor Base44 source media
+
+on:
+  push:
+    branches:
+      - feature/base44-laravel-migration
+    paths:
+      - docs/base44/source-media-urls.txt
+      - .github/workflows/vendor-base44-media.yml
+
+permissions:
+  contents: write
+
+jobs:
+  vendor-media:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out migration branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download Base44 media
+        shell: bash
+        run: |
+          set -euo pipefail
+          manifest="docs/base44/source-media-urls.txt"
+          destination="public/images/kabulfit-base44/source"
+          mkdir -p "$destination"
+
+          expected=0
+          while IFS= read -r url || [[ -n "$url" ]]; do
+            [[ -z "$url" ]] && continue
+            expected=$((expected + 1))
+            filename="${url##*/}"
+            echo "Downloading $filename"
+            curl --fail --location --retry 4 --retry-all-errors --retry-delay 2 \
+              --connect-timeout 20 --max-time 180 \
+              "$url" --output "$destination/$filename"
+            test -s "$destination/$filename"
+            mime="$(file --brief --mime-type "$destination/$filename")"
+            case "$mime" in
+              image/*) ;;
+              *) echo "Unexpected MIME for $filename: $mime" >&2; exit 1 ;;
+            esac
+          done < "$manifest"
+
+          actual="$(find "$destination" -maxdepth 1 -type f | wc -l | tr -d ' ')"
+          echo "Expected $expected images, downloaded $actual"
+          test "$actual" -eq "$expected"
+
+          (
+            cd "$destination"
+            sha256sum * > SHA256SUMS.txt
+          )
+
+      - name: Replace Base44 media URLs with local paths
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          remote = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/"
+          local = "/images/kabulfit-base44/source/"
+          roots = ["app", "config", "database", "resources", "tests"]
+          suffixes = {".php", ".blade.php", ".js", ".jsx", ".ts", ".tsx", ".css", ".json", ".jsonc", ".md"}
+
+          changed = []
+          for root in roots:
+              base = Path(root)
+              if not base.exists():
+                  continue
+              for path in base.rglob("*"):
+                  if not path.is_file():
+                      continue
+                  if not (path.suffix in suffixes or path.name.endswith(".blade.php")):
+                      continue
+                  try:
+                      text = path.read_text(encoding="utf-8")
+                  except UnicodeDecodeError:
+                      continue
+                  if remote not in text:
+                      continue
+                  updated = text.replace(remote, local)
+                  if updated != text:
+                      path.write_text(updated, encoding="utf-8")
+                      changed.append(str(path))
+
+          print("Rewritten files:")
+          for path in changed:
+              print(path)
+          PY
+
+      - name: Commit vendored media
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/kabulfit-base44/source app config database resources tests
+          if git diff --cached --quiet; then
+            echo "No media changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: vendor Base44 source media locally [media-sync]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
