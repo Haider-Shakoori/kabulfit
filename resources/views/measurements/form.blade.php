@@ -101,9 +101,9 @@
                             @foreach($definitions as $definition)
                                 @php
                                     $name = $definition->translation()?->name ?? $definition->code;
-                                    $step = AppSupportMeasurementsMeasurementConverter::fromCm($definition->step_cm, $unit);
-                                    $min = AppSupportMeasurementsMeasurementConverter::fromCm($definition->min_cm, $unit);
-                                    $max = AppSupportMeasurementsMeasurementConverter::fromCm($definition->max_cm, $unit);
+                                    $step = \\App\\Support\\Measurements\\MeasurementConverter::fromCm($definition->step_cm, $unit);
+                                    $min = \\App\\Support\\Measurements\\MeasurementConverter::fromCm($definition->min_cm, $unit);
+                                    $max = \\App\\Support\\Measurements\\MeasurementConverter::fromCm($definition->max_cm, $unit);
                                 @endphp
                                 <label class="rounded-xl border border-gray-100 bg-[#FDFBF7] p-4">
                                     <span class="flex items-start justify-between gap-3">
