@@ -186,9 +186,11 @@ class PayPalService
 
         $payload = $response->json();
 
+        $status = strtoupper((string) ($payload['status'] ?? 'PENDING'));
+
         return [
             'id' => (string) ($payload['id'] ?? ''),
-            'status' => strtolower((string) ($payload['status'] ?? 'pending')),
+            'status' => $status === 'COMPLETED' ? 'succeeded' : strtolower($status),
             'payload' => $payload,
         ];
     }
