@@ -91,8 +91,8 @@
                                             <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
                                                 @foreach($item->measurements as $measurement)
                                                     <div class="rounded-lg bg-white p-2 text-xs">
-                                                        <span class="block text-gray-500">{{ $measurement->label ?? $measurement->measurement_code }}</span>
-                                                        <strong class="text-gray-900">{{ $measurement->value }} {{ $measurement->unit }}</strong>
+                                                        <span class="block text-gray-500">{{ $measurement->definition_name }}</span>
+                                                        <strong class="text-gray-900">{{ $measurement->value_cm }} cm</strong>
                                                     </div>
                                                 @endforeach
                                             </div>
