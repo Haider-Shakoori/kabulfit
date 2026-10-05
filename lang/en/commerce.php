@@ -11,4 +11,10 @@ return [
     'payment_status' => 'Payment status',
     'pay_now' => 'Pay securely',
     'payment_error' => 'Payment could not be completed. Please try again.',
+    'review_saved' => 'Your review was saved.',
+    'write_review' => 'Write a review',
+    'review_title' => 'Review title',
+    'review_comment' => 'Your review',
+    'verified_purchase' => 'Verified purchase',
+    'no_reviews' => 'No reviews yet. Be the first to review!',
 ];
