@@ -12,17 +12,17 @@
 
 <div
     class="p-4 sm:p-6 lg:p-8"
-    x-data='{
+    x-data="{
         ranges: @js($initialRanges),
         addRange() {
             const last = this.ranges[this.ranges.length - 1] || { max_kg: 0 };
             const min = Number(last.max_kg || 0);
-            this.ranges.push({ min_kg: min, max_kg: min + 1, price: "" });
+            this.ranges.push({ min_kg: min, max_kg: min + 1, price: '' });
         },
         removeRange(index) {
             if (this.ranges.length > 1) this.ranges.splice(index, 1);
         }
-    }'
+    }"
 >
     <x-form-errors />
     @if(session('status'))
