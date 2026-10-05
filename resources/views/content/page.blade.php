@@ -90,7 +90,7 @@
                         <button type="button" class="flex w-full items-center justify-between gap-4 p-5 text-start font-semibold text-gray-900" @click="open = open === {{ $loop->index }} ? -1 : {{ $loop->index }}">
                             <span>{{ $question }}</span><span class="text-xl text-[#881C27]" x-text="open === {{ $loop->index }} ? '−' : '+'"></span>
                         </button>
-                        <div x-show="open === {{ $loop->index }}" x-collapse class="border-t border-gray-100 px-5 py-4 text-sm leading-7 text-gray-600">{{ $answer }}</div>
+                        <div x-show="open === {{ $loop->index }}" x-transition class="border-t border-gray-100 px-5 py-4 text-sm leading-7 text-gray-600">{{ $answer }}</div>
                     </article>
                 @endforeach
             </div>
