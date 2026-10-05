@@ -12,6 +12,7 @@ use App\Models\Wishlist;
 use App\Services\Commerce\CartService;
 use App\Services\Commerce\CheckoutService;
 use App\Services\Payments\PaymentService;
+use App\Services\Payments\PayPalService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -127,23 +128,36 @@ class CommerceController extends Controller
         ]);
     }
 
-    public function place(Request $request, CheckoutService $checkout, PaymentService $payments): View
+    public function place(Request $request, CheckoutService $checkout, PaymentService $payments, PayPalService $paypal): View
     {
         $data = $request->validate([
             'address_uuid' => 'required|uuid',
             'shipping_method' => 'required|string',
             'coupon' => 'nullable|string',
+            'payment_method' => 'required|in:stripe,paypal',
         ]);
         $address = Address::where('user_id', $request->user()->id)->where('uuid', $data['address_uuid'])->firstOrFail();
         $shipping = ShippingMethod::where('code', $data['shipping_method'])->where('is_active', true)->firstOrFail();
         $coupon = ! empty($data['coupon']) ? Coupon::where('code', strtoupper($data['coupon']))->first() : null;
         $order = $checkout->create($request->user(), $this->carts->forUser($request->user()), $address, $shipping, $coupon);
-        $payment = $payments->initiate($order);
+
+        if ($data['payment_method'] === 'paypal') {
+            abort_unless($paypal->enabled(), 422, __('commerce.paypal_not_configured'));
+            $paypal->prepare($order);
+            $clientSecret = null;
+            $paymentMethod = 'paypal';
+        } else {
+            $payment = $payments->initiate($order);
+            $clientSecret = $payment['client_secret'];
+            $paymentMethod = 'stripe';
+        }
 
         return view('commerce.payment', [
-            'order' => $order,
-            'clientSecret' => $payment['client_secret'],
+            'order' => $order->load('items'),
+            'clientSecret' => $clientSecret,
             'stripeKey' => config('services.stripe.key'),
+            'paypalClientId' => config('services.paypal.client_id'),
+            'paymentMethod' => $paymentMethod,
             'seo' => PrivatePageSeo::make(__('commerce.payment'), route('orders.payment', ['locale' => app()->getLocale(), 'order' => $order])),
         ]);
     }
@@ -152,10 +166,14 @@ class CommerceController extends Controller
     {
         abort_unless($order->user_id === $request->user()->id, 404);
 
+        $paymentMethod = $order->payment?->provider ?: 'stripe';
+
         return view('commerce.payment', [
-            'order' => $order,
+            'order' => $order->load('items'),
             'clientSecret' => null,
             'stripeKey' => config('services.stripe.key'),
+            'paypalClientId' => config('services.paypal.client_id'),
+            'paymentMethod' => $paymentMethod,
             'seo' => PrivatePageSeo::make(__('commerce.payment'), route('orders.payment', ['locale' => app()->getLocale(), 'order' => $order])),
         ]);
     }
