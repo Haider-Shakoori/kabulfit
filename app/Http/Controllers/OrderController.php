@@ -66,4 +66,18 @@ class OrderController extends Controller
             'seo' => PrivatePageSeo::make(__('orders.order_number', ['number' => $order->number]), route('orders.show', ['locale' => app()->getLocale(), 'order' => $order])),
         ]);
     }
+
+    public function document(Request $request, string $locale, Order $order): View
+    {
+        abort_unless($order->user_id === $request->user()->id, 404);
+
+        return view('orders.document', [
+            'order' => $order->load([
+                'user',
+                'items.measurements',
+                'items.product.primaryMedia',
+            ]),
+            'isAdmin' => false,
+        ]);
+    }
 }
