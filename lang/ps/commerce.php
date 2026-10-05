@@ -30,4 +30,10 @@ return [
     'payment_status' => 'د تادیې حالت',
     'pay_now' => 'خوندي تادیه',
     'payment_error' => 'تادیه بشپړه نه شوه. بیا هڅه وکړئ.',
+    'review_saved' => 'ستاسو نظر خوندي شو.',
+    'write_review' => 'نظر ولیکئ',
+    'review_title' => 'د نظر سرلیک',
+    'review_comment' => 'ستاسو نظر',
+    'verified_purchase' => 'تایید شوی پېر',
+    'no_reviews' => 'تر اوسه نظر نشته. لومړی نظر تاسو ولیکئ!',
 ];
