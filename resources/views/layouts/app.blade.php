@@ -27,8 +27,9 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @php($metaPixelId = config('services.meta.pixel_id'))
-    @php($gaMeasurementId = config('services.analytics.measurement_id'))
+    @php($siteSettingsForAnalytics = app(\App\Services\Settings\SiteSettings::class))
+    @php($metaPixelId = $siteSettingsForAnalytics->get('analytics.meta_pixel_id', (string) config('services.meta.pixel_id')))
+    @php($gaMeasurementId = $siteSettingsForAnalytics->get('analytics.ga_measurement_id', (string) config('services.analytics.measurement_id')))
     @if($metaPixelId)
         <script>
             !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -75,7 +76,13 @@
         }, { once: true });
     </script>
 @endif
-@php($contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com'))
+@php($siteSettings = app(\App\Services\Settings\SiteSettings::class))
+@php($contactEmail = $siteSettings->get('site.contact_email', 'info@kabulfit.com'))
+@php($facebookUrl = $siteSettings->get('social.facebook', 'https://www.facebook.com/KabulFitTailoring/'))
+@php($instagramUrl = $siteSettings->get('social.instagram', ''))
+@php($tiktokUrl = $siteSettings->get('social.tiktok', ''))
+@php($youtubeUrl = $siteSettings->get('social.youtube', 'http://www.youtube.com/@Kabulfit'))
+@php($whatsappUrl = $siteSettings->get('social.whatsapp', 'https://wa.me/93794120017'))
 @php($isHome = request()->routeIs('home'))
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
@@ -206,14 +213,16 @@
                 <p class="mt-4 max-w-sm text-sm leading-7 text-white/65">{{ __('site.footer_intro') }}</p>
 
                 <div class="mt-5 space-y-3 text-sm text-white/75">
-                    <a class="block hover:text-white" href="https://wa.me/93794120017" target="_blank" rel="noopener noreferrer">{{ __('site.whatsapp_contact') }}</a>
+                    <a class="block hover:text-white" href="{{ $whatsappUrl }}" target="_blank" rel="noopener noreferrer">{{ __('site.whatsapp_contact') }}</a>
                     <a class="block hover:text-white" href="mailto:{{ $contactEmail }}">{{ $contactEmail }}</a>
                     <span class="block">{{ __('site.locations') }}</span>
                 </div>
 
                 <div class="mt-6 flex flex-wrap gap-3">
-                    <a href="https://www.facebook.com/KabulFitTailoring/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-sm font-bold transition hover:scale-110 hover:bg-[#881C27]">f</a>
-                    <a href="http://www.youtube.com/@Kabulfit" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-xs font-bold transition hover:scale-110 hover:bg-[#881C27]">▶</a>
+                    @if($facebookUrl)<a href="{{ $facebookUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-sm font-bold transition hover:scale-110 hover:bg-[#881C27]">f</a>@endif
+                    @if($instagramUrl)<a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-xs font-bold transition hover:scale-110 hover:bg-[#881C27]">◎</a>@endif
+                    @if($tiktokUrl)<a href="{{ $tiktokUrl }}" target="_blank" rel="noopener noreferrer" aria-label="TikTok" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-xs font-bold transition hover:scale-110 hover:bg-[#881C27]">♪</a>@endif
+                    @if($youtubeUrl)<a href="{{ $youtubeUrl }}" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-xs font-bold transition hover:scale-110 hover:bg-[#881C27]">▶</a>@endif
                 </div>
             </div>
 
