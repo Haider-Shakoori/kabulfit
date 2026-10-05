@@ -29,6 +29,13 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
+        $bestSellers = Product::query()
+            ->where('is_active', true)
+            ->with(CatalogQuery::cardEagerLoads())
+            ->orderByDesc('id')
+            ->limit(8)
+            ->get();
+
         $homeTitle = $this->settings->get('seo.home.title.'.$locale, __('site.home_title'));
         $homeDescription = $this->settings->get('seo.home.description.'.$locale, __('site.home_description'));
 
@@ -46,7 +53,7 @@ class HomeController extends Controller
             ],
         );
 
-        return view('home', compact('categories', 'featuredProducts', 'seo'));
+        return view('home', compact('categories', 'featuredProducts', 'bestSellers', 'seo'));
     }
 
     private function localeAlternates(string $routeName, array $parameters = []): array
