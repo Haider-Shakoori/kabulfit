@@ -33,6 +33,10 @@ class PayPalService
 
     public function createOrder(Order $order): array
     {
+        if (! $this->enabledForCurrency($order->currency)) {
+            throw new RuntimeException('PayPal is not configured for this order currency.');
+        }
+
         $payment = $this->prepare($order);
 
         if ($payment->provider !== 'paypal') {
