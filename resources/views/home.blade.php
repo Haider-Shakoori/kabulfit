@@ -6,21 +6,21 @@
         [
             'title' => __('site.hero_title'),
             'subtitle' => __('site.hero_subtitle'),
-            'image' => 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png',
+            'image' => '/images/kabulfit-base44/source/1cce53a01_2.png',
             'cta' => __('site.shop_now'),
             'href' => route('shop', ['locale' => app()->getLocale()]),
         ],
         [
             'title' => app()->getLocale() === 'ps' ? 'دودیزه ښکلا' : (app()->getLocale() === 'fa' ? 'ظرافت سنتی' : 'Traditional Elegance'),
             'subtitle' => __('site.story_p1'),
-            'image' => 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/58f1df170_2.png',
+            'image' => '/images/kabulfit-base44/source/58f1df170_2.png',
             'cta' => __('site.explore_collection'),
             'href' => route('shop', ['locale' => app()->getLocale()]),
         ],
         [
             'title' => app()->getLocale() === 'ps' ? 'د مناسب فټ تضمین' : (app()->getLocale() === 'fa' ? 'تضمین اندازه مناسب' : 'Custom Fit Guarantee'),
             'subtitle' => __('site.measurements_text'),
-            'image' => 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png',
+            'image' => '/images/kabulfit-base44/source/1cce53a01_2.png',
             'cta' => __('site.measurement_guide'),
             'href' => '#tailoring',
         ],
@@ -132,7 +132,7 @@
 </section>
 
 <section id="story" class="relative overflow-hidden py-20 text-white" data-section="story">
-    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/1cce53a01_2.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+    <img src="/images/kabulfit-base44/source/1cce53a01_2.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
     <div class="absolute inset-0 bg-black/85"></div>
     <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 md:grid-cols-2">
         <div>
@@ -144,7 +144,7 @@
         </div>
         <div class="relative">
             <div class="aspect-square overflow-hidden rounded-[3rem]">
-                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg" alt="{{ __('site.craftsmanship_alt') }}" class="h-full w-full object-cover" loading="lazy">
+                <img src="/images/kabulfit-base44/source/f065351e6_bn.jpg" alt="{{ __('site.craftsmanship_alt') }}" class="h-full w-full object-cover" loading="lazy">
             </div>
             <div class="absolute -bottom-6 -start-6 rounded-[2rem] bg-white p-6 text-gray-900 shadow-xl">
                 <div class="flex items-center gap-4">
@@ -187,7 +187,7 @@
                     </div>
                 </div>
                 <div class="relative min-h-[400px]">
-                    <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/58f1df170_2.png" alt="{{ __('site.measurement_guide') }}" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+                    <img src="/images/kabulfit-base44/source/58f1df170_2.png" alt="{{ __('site.measurement_guide') }}" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
                 </div>
             </div>
         </div>

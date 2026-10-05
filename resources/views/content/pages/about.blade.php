@@ -11,7 +11,7 @@
 
 <section class="py-12 sm:py-16 md:py-20">
     <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-2">
-        <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg" alt="Afghan craftsmanship" class="aspect-square w-full rounded-3xl object-cover shadow-2xl">
+        <img src="/images/kabulfit-base44/source/f065351e6_bn.jpg" alt="Afghan craftsmanship" class="aspect-square w-full rounded-3xl object-cover shadow-2xl">
         <div>
             <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">{{ $locale === 'ps' ? 'د هنر میراث' : ($locale === 'fa' ? 'میراث هنر' : 'A Legacy of Artistry') }}</h2>
             @foreach ($paragraphs as $paragraph)
