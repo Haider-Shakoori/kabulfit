@@ -127,6 +127,7 @@ Route::prefix('{locale}')
             Route::post('/checkout', [CommerceController::class, 'place'])->middleware('throttle:20,1')->name('checkout.place');
             Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
             Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('orders.show');
+            Route::get('/orders/{order:uuid}/document', [OrderController::class, 'document'])->name('orders.document');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
             Route::post('/products/{product:sku}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
@@ -146,6 +147,7 @@ Route::prefix('{locale}')
 
                     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
                     Route::get('/orders/{order:uuid}', [AdminOrderController::class, 'show'])->name('orders.show');
+                    Route::get('/orders/{order:uuid}/document', [AdminOrderController::class, 'document'])->name('orders.document');
                     Route::post('/orders/{order:uuid}/status', [AdminOrderController::class, 'transition'])->name('orders.transition');
                     Route::post('/orders/{order:uuid}/shipments', [AdminOrderController::class, 'shipment'])->name('orders.shipments.store');
                     Route::post('/shipments/{shipment:uuid}/status', [AdminOrderController::class, 'shipmentStatus'])->name('shipments.status');
