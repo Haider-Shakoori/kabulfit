@@ -128,6 +128,7 @@ class CatalogQuery
         return [
             'translations',
             'category.translations',
+            'category.parent.translations',
             'primaryMedia.translations',
             'primaryMedia.derivatives',
             'variants' => fn ($query) => $query
