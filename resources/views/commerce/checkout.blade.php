@@ -53,6 +53,7 @@
         step: 1,
         addAddress: false,
         terms: false,
+        paymentMethod: @js(old('payment_method', 'stripe')),
         addressUuid: @js($defaultAddress?->uuid ?? ""),
         shippingCode: @js($defaultShipping?->code ?? ""),
         addresses: @js($addressData),
@@ -216,8 +217,33 @@
                                     <span class="text-sm font-semibold text-gray-700">{{ $labels['promo'] }}</span>
                                     <input name="coupon" value="{{ old('coupon') }}" class="rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-[#881C27] focus:ring-2 focus:ring-[#881C27]/10" placeholder="{{ __('commerce.coupon') }}">
                                 </label>
+                            </div>
 
-                                <label class="mt-5 flex cursor-pointer items-start gap-3">
+                            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+                                <h2 class="text-lg font-semibold text-gray-900">{{ __('commerce.payment_method') }}</h2>
+                                <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="payment_method" value="stripe" x-model="paymentMethod" class="peer sr-only" required>
+                                        <span class="flex min-h-24 items-center gap-3 rounded-xl border-2 border-gray-200 p-4 transition peer-checked:border-[#881C27] peer-checked:bg-[#881C27]/5">
+                                            <span class="grid h-10 w-10 place-items-center rounded-full bg-[#881C27]/10 text-[#881C27]"><x-icon name="shield" class="h-5 w-5" /></span>
+                                            <span><strong class="block text-sm text-gray-900">{{ __('commerce.pay_with_card') }}</strong><span class="mt-1 block text-xs text-gray-500">Stripe</span></span>
+                                        </span>
+                                    </label>
+
+                                    @if(config('services.paypal.client_id') && config('services.paypal.secret'))
+                                        <label class="cursor-pointer">
+                                            <input type="radio" name="payment_method" value="paypal" x-model="paymentMethod" class="peer sr-only" required>
+                                            <span class="flex min-h-24 items-center gap-3 rounded-xl border-2 border-gray-200 p-4 transition peer-checked:border-[#0070ba] peer-checked:bg-blue-50">
+                                                <span class="grid h-10 w-10 place-items-center rounded-full bg-blue-100 font-bold text-[#0070ba]">P</span>
+                                                <span><strong class="block text-sm text-gray-900">{{ __('commerce.pay_with_paypal') }}</strong><span class="mt-1 block text-xs text-gray-500">{{ __('commerce.paypal_description') }}</span></span>
+                                            </span>
+                                        </label>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+                                <label class="flex cursor-pointer items-start gap-3">
                                     <input type="checkbox" x-model="terms" class="mt-1 h-4 w-4 rounded border-gray-300 text-[#881C27] focus:ring-[#881C27]">
                                     <span class="text-sm leading-6 text-gray-600">{{ $labels['terms'] }}</span>
                                 </label>
