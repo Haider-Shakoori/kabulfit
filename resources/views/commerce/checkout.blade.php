@@ -7,6 +7,9 @@
     $currency = $cart->currency;
     $defaultAddress = $addresses->firstWhere('is_default', true) ?? $addresses->first();
     $defaultShipping = $shippingMethods->first();
+    $paypalEnabled = config('services.paypal.client_id')
+        && config('services.paypal.secret')
+        && in_array(strtoupper($currency), config('services.paypal.supported_currencies', ['USD']), true);
 
     $addressData = $addresses->map(fn ($address) => [
         'uuid' => $address->uuid,
@@ -230,7 +233,7 @@
                                         </span>
                                     </label>
 
-                                    @if(config('services.paypal.client_id') && config('services.paypal.secret'))
+                                    @if($paypalEnabled)
                                         <label class="cursor-pointer">
                                             <input type="radio" name="payment_method" value="paypal" x-model="paymentMethod" class="peer sr-only" required>
                                             <span class="flex min-h-24 items-center gap-3 rounded-xl border-2 border-gray-200 p-4 transition peer-checked:border-[#0070ba] peer-checked:bg-blue-50">
