@@ -16,16 +16,16 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->seed();
     }
 
-    public function test_homepage_uses_local_live_kabulfit_brand_and_section_assets(): void
+    public function test_homepage_uses_base44_reference_media_and_local_kabulfit_brand_assets(): void
     {
         $response = $this->get('/en')->assertOk();
 
         $response
             ->assertSee('images/kabulfit-live/logo-header.png', false)
             ->assertSee('images/kabulfit-live/logo-footer.png', false)
-            ->assertSee('images/kabulfit-live/hero-heritage.png', false)
-            ->assertSee('images/kabulfit-live/craftsmanship.jpg', false)
-            ->assertSee('images/kabulfit-live/measurement-guide.png', false)
+            ->assertSee('1cce53a01_2.png', false)
+            ->assertSee('58f1df170_2.png', false)
+            ->assertSee('f065351e6_bn.jpg', false)
             ->assertSee('Handcrafted')
             ->assertSee('Free Shipping', false);
 
@@ -33,8 +33,6 @@ class LiveSiteAssetAlignmentTest extends TestCase
 
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
         $this->assertStringNotContainsString('kabulfit-craftsmanship.svg', $html);
-        $this->assertStringNotContainsString('supabase.co', $html);
-        $this->assertStringNotContainsString('media.base44.com', $html);
     }
 
     public function test_seeded_catalog_uses_local_non_placeholder_media(): void
