@@ -1626,3 +1626,47 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .product-gallery-item picture img {
     object-fit: cover;
 }
+
+
+/* Base44 parity: transparent home header becomes readable after scroll. */
+.base44-home-header .base44-header-ink {
+    color: #fff;
+    transition: color .25s ease;
+}
+
+.base44-home-header.base44-solid .base44-header-ink {
+    color: #374151;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+    text-align: right;
+}
+
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="url"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[type="number"] {
+    direction: ltr;
+    text-align: right;
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-bottom: calc(3.75rem + env(safe-area-inset-bottom));
+    }
+
+    table {
+        max-width: 100%;
+    }
+
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    dialog,
+    [role="dialog"] {
+        max-width: calc(100vw - 1.5rem);
+    }
+}
