@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\ShippingRateController as AdminShippingRateController;
 use App\Http\Controllers\Admin\TailoringController as AdminTailoringController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationController;
@@ -169,6 +170,11 @@ Route::prefix('{locale}')
 
                     Route::get('/legacy-urls', [AdminLegacyUrlController::class, 'index'])->name('legacy.index');
                     Route::put('/legacy-urls/{legacyUrl:uuid}', [AdminLegacyUrlController::class, 'update'])->name('legacy.update');
+
+                    Route::get('/shipping-rates', [AdminShippingRateController::class, 'index'])->name('shipping-rates.index');
+                    Route::post('/shipping-rates', [AdminShippingRateController::class, 'store'])->name('shipping-rates.store');
+                    Route::post('/shipping-rates/{shippingRate}/toggle', [AdminShippingRateController::class, 'toggle'])->name('shipping-rates.toggle');
+                    Route::delete('/shipping-rates/{shippingRate}', [AdminShippingRateController::class, 'destroy'])->name('shipping-rates.destroy');
 
                     Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
                     Route::put('/settings', [AdminSettingsController::class, 'update'])->name('settings.update');
