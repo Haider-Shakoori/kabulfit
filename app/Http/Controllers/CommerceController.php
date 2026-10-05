@@ -16,6 +16,7 @@ use App\Services\Payments\PayPalService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CommerceController extends Controller
@@ -136,13 +137,18 @@ class CommerceController extends Controller
             'coupon' => 'nullable|string',
             'payment_method' => 'required|in:stripe,paypal',
         ]);
+        if ($data['payment_method'] === 'paypal' && ! $paypal->enabled()) {
+            throw ValidationException::withMessages([
+                'payment_method' => __('commerce.paypal_not_configured'),
+            ]);
+        }
+
         $address = Address::where('user_id', $request->user()->id)->where('uuid', $data['address_uuid'])->firstOrFail();
         $shipping = ShippingMethod::where('code', $data['shipping_method'])->where('is_active', true)->firstOrFail();
         $coupon = ! empty($data['coupon']) ? Coupon::where('code', strtoupper($data['coupon']))->first() : null;
         $order = $checkout->create($request->user(), $this->carts->forUser($request->user()), $address, $shipping, $coupon);
 
         if ($data['payment_method'] === 'paypal') {
-            abort_unless($paypal->enabled(), 422, __('commerce.paypal_not_configured'));
             $paypal->prepare($order);
             $clientSecret = null;
             $paymentMethod = 'paypal';
