@@ -4,6 +4,7 @@ return [
     'title' => 'My Account',
     'customer_space' => 'Your KabulFit',
     'greeting' => 'Welcome, :name. Manage the account details KabulFit will use across web and mobile.',
+    'profile_saved' => "Profile updated.",
     'profile' => 'Profile',
     'email_status' => 'Email status',
     'verified' => 'Verified',
