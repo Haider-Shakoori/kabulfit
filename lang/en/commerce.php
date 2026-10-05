@@ -17,4 +17,12 @@ return [
     'review_comment' => 'Your review',
     'verified_purchase' => 'Verified purchase',
     'no_reviews' => 'No reviews yet. Be the first to review!',
+    'payment_method' => 'Payment Method',
+    'pay_with_card' => 'Credit / Debit Card',
+    'pay_with_paypal' => 'PayPal',
+    'paypal_description' => 'Pay securely with your PayPal account.',
+    'secured_by_paypal' => 'Secured by PayPal',
+    'paypal_error' => 'PayPal could not create the payment. Please try again.',
+    'paypal_capture_error' => 'PayPal payment capture failed. Please try again.',
+    'paypal_not_configured' => 'PayPal is not configured for this store.',
 ];
