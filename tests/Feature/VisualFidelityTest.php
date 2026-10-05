@@ -88,7 +88,8 @@ class VisualFidelityTest extends TestCase
         $html = $this->get('/en')->assertOk()->getContent();
 
         $this->assertStringContainsString('class="skip-link"', $html);
-        $this->assertStringContainsString('aria-controls="primary-nav"', $html);
+        $this->assertStringContainsString('aria-controls="mobile-navigation"', $html);
+        $this->assertStringContainsString('id="primary-nav"', $html);
         $this->assertStringContainsString('aria-label="Primary navigation"', $html);
         $this->assertStringContainsString('id="main-content"', $html);
         $this->assertStringContainsString('aria-labelledby="testimonials-title"', $html);
