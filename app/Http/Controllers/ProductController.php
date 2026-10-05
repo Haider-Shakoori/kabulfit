@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\SizeGuide;
 use App\Services\Catalog\CatalogQuery;
 use App\Services\Catalog\RecentlyViewedProducts;
@@ -50,6 +51,18 @@ class ProductController extends Controller
                 return blank($guide->subcategory);
             })
             ->values();
+        $reviews = Review::query()
+            ->where('product_id', $product->id)
+            ->where('is_approved', true)
+            ->with('user:id,name')
+            ->latest()
+            ->get();
+
+        $ratingAverage = $reviews->isEmpty() ? null : round((float) $reviews->avg('rating'), 1);
+        $existingReview = auth()->check()
+            ? Review::query()->where('product_id', $product->id)->where('user_id', auth()->id())->first()
+            : null;
+
         $canonical = route('products.show', ['locale' => $locale, 'slug' => $translation?->slug]);
 
         $relatedProducts = $product->relatedProducts()
@@ -87,6 +100,6 @@ class ProductController extends Controller
             ),
         );
 
-        return view('catalog.product', compact('product', 'relatedProducts', 'recentlyViewed', 'sizeGuides', 'seo'));
+        return view('catalog.product', compact('product', 'relatedProducts', 'recentlyViewed', 'sizeGuides', 'reviews', 'ratingAverage', 'existingReview', 'seo'));
     }
 }
