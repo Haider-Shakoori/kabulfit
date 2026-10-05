@@ -137,7 +137,7 @@ class CommerceController extends Controller
             'coupon' => 'nullable|string',
             'payment_method' => 'required|in:stripe,paypal',
         ]);
-        if ($data['payment_method'] === 'paypal' && ! $paypal->enabled()) {
+        if ($data['payment_method'] === 'paypal' && ! $paypal->enabledForCurrency($this->carts->forUser($request->user())->currency)) {
             throw ValidationException::withMessages([
                 'payment_method' => __('commerce.paypal_not_configured'),
             ]);
