@@ -87,7 +87,7 @@
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
 <header
-    class="fixed inset-x-0 top-0 z-50 transition-all duration-500 {{ $isHome ? 'base44-home-header' : '' }}"
+    class="{{ $isHome ? 'absolute' : 'relative' }} inset-x-0 top-0 z-50 transition-all duration-500 md:fixed {{ $isHome ? 'base44-home-header' : '' }}"
     x-data="{ open: false, searchOpen: false, scrolled: false, lastY: 0, direction: 'up' }"
     @scroll.window="
         const y = window.scrollY;
@@ -98,7 +98,7 @@
     :class="{{ $isHome ? "(scrolled && direction === 'down') ? 'base44-solid bg-white/95 shadow-lg backdrop-blur-md' : 'bg-transparent'" : "'bg-white shadow-lg'" }}"
     @keydown.escape.window="open = false; searchOpen = false"
 >
-    <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-3 text-sm text-white">
+    <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm text-white md:py-3">
         <div class="mx-auto flex max-w-7xl items-center justify-between">
             <p class="hidden animate-blink md:block">
                 {{ app()->getLocale() === 'ps' ? 'د محدود وخت لپاره وړیا شپینګ 🚚 او ځانګړې وړیا هدیې! 🎁' : (app()->getLocale() === 'fa' ? 'حمل‌ونقل رایگان 🚚 برای مدت محدود و هدایای رایگان ویژه! 🎁' : 'Free Shipping 🚚 for a Limited Time! & Exclusive Free Gifts! 🎁') }}
@@ -122,7 +122,7 @@
     </div>
 
     <div class="mx-auto max-w-7xl px-2 sm:px-4">
-        <div class="flex min-h-20 items-center justify-between gap-2">
+        <div class="flex min-h-16 items-center justify-between gap-2 md:min-h-20">
             <button type="button"
                     class="grid h-11 w-11 place-items-center rounded-full lg:hidden"
                     @click="open = true"
@@ -131,7 +131,7 @@
             </button>
 
             <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="shrink-0" aria-label="{{ __('site.kabulfit_home') }}">
-                <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" width="310" height="120" alt="KabulFit" class="h-20 w-auto object-contain sm:h-24">
+                <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" width="310" height="120" alt="KabulFit" class="kabulfit-header-logo block w-auto object-contain">
             </a>
 
             <nav id="primary-nav" class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
@@ -181,7 +181,7 @@
         <button class="absolute inset-0 bg-black/40" @click="open = false" aria-label="{{ __('site.menu') }}"></button>
         <aside id="mobile-navigation" x-transition class="absolute inset-y-0 start-0 w-[84%] max-w-sm overflow-y-auto bg-white p-6 shadow-2xl">
             <div class="flex items-center justify-between">
-                <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" alt="KabulFit" class="h-24 w-auto object-contain">
+                <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" alt="KabulFit" class="kabulfit-drawer-logo block w-auto object-contain">
                 <button class="grid h-10 w-10 place-items-center rounded-full bg-gray-100" @click="open = false"><x-icon name="close" class="h-5 w-5" /></button>
             </div>
             <nav class="mt-8 space-y-2">
@@ -199,7 +199,7 @@
     </div>
 </header>
 
-<main id="main-content" class="{{ $isHome ? '' : 'pt-32 sm:pt-36 md:pt-40' }} pb-16 md:pb-0">
+<main id="main-content" class="{{ $isHome ? '' : 'pt-0 md:pt-40' }} pb-16 md:pb-0">
     @yield('content')
 </main>
 
