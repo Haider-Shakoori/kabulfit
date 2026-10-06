@@ -88,10 +88,8 @@ class VisualFidelityTest extends TestCase
         $html = $this->get('/en')->assertOk()->getContent();
         $css = file_get_contents(resource_path('css/app.css'));
 
-        $this->assertStringContainsString('kabulfit-hero-image h-full w-full object-cover object-[center_50%]', $html);
-        $this->assertStringContainsString('.kabulfit-hero-image {', $css);
-        $this->assertStringContainsString('height: 100% !important;', $css);
-        $this->assertStringContainsString('object-fit: cover !important;', $css);
+        $this->assertStringContainsString('class="base44-hero-image"', $html);
+        $this->assertStringContainsString('position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;', $html);
         $this->assertStringNotContainsString("img { height: auto; }", $css);
     }
 
