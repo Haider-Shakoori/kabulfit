@@ -30,6 +30,10 @@ return [
 
     'heritage_label' => 'میراث افغانی، دوخته‌شده برای امروز',
     'hero_title' => 'ظرافت اصیل افغانی',
+    'traditional_elegance' => 'ظرافت سنتی',
+    'traditional_elegance_subtitle' => 'با عشق ساخته شده، با افتخار پوشیده می‌شود',
+    'custom_fit_guarantee' => 'تضمین اندازه سفارشی',
+    'custom_fit_guarantee_subtitle' => 'اندازه‌گیری کامل، لباس کامل',
     'hero_subtitle' => 'سنت‌های ماندگار را در قالب مد امروزی کشف کنید.',
     'shop_now' => 'خرید کنید',
     'measurement_guide' => 'راهنمای اندازه‌گیری',
