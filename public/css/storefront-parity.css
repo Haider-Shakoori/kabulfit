@@ -51,3 +51,20 @@
 .font-medium { font-weight: 500 !important; }
 .font-semibold { font-weight: 600 !important; }
 .font-bold { font-weight: 700 !important; }
+
+
+/* Link-color recovery for older cached bundles whose unlayered anchor reset
+   outranked Tailwind's layered text utilities. */
+a.text-white,
+a.text-white:visited { color: #fff !important; }
+
+a.text-gray-700,
+a.text-gray-700:visited { color: #374151 !important; }
+
+a.text-gray-800,
+a.text-gray-800:visited { color: #1f2937 !important; }
+
+a.text-gray-900,
+a.text-gray-900:visited { color: #111827 !important; }
+
+a.hover\:text-white:hover { color: #fff !important; }
