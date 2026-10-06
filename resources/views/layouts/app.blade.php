@@ -27,6 +27,7 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/storefront-parity.css') }}">
     @php($siteSettingsForAnalytics = app(\App\Services\Settings\SiteSettings::class))
     @php($metaPixelId = $siteSettingsForAnalytics->get('analytics.meta_pixel_id', (string) config('services.meta.pixel_id')))
     @php($gaMeasurementId = $siteSettingsForAnalytics->get('analytics.ga_measurement_id', (string) config('services.analytics.measurement_id')))
