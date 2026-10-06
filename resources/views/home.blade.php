@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="live-hero" data-section="hero">
-    <img class="live-hero-image" src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" width="1600" height="1000" alt="{{ __('site.hero_art_alt') }}" fetchpriority="high" decoding="async">
+    <img class="live-hero-image" src="{{ asset('images/kabulfit-live/hero-heritage.png') }}" width="1600" height="1000" alt="{{ __('site.hero_art_alt') }}" loading="eager" fetchpriority="high" decoding="async">
     <div class="live-hero-overlay" aria-hidden="true"></div>
     <div class="container live-hero-content">
         <div class="live-hero-copy">
