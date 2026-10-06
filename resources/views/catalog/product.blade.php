@@ -295,7 +295,7 @@
                             <input type="hidden" name="quantity" :value="quantity">
                             <button
                                 type="submit"
-                                class="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-3 text-lg font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                                class="base44-gradient-cta flex min-h-14 w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-lg font-semibold transition disabled:cursor-not-allowed disabled:opacity-50"
                                 :disabled="selectedVariant && selectedVariant.quantity < 1"
                             >
                                 <x-icon name="bag" class="h-5 w-5" />
@@ -310,7 +310,7 @@
                         <button type="button" class="grid h-14 w-14 place-items-center rounded-xl border-2 border-gray-300 text-gray-700 transition hover:border-[#2A6867] hover:text-[#2A6867]" @click="navigator.share ? navigator.share({title: @js($translation?->name), url: window.location.href}) : navigator.clipboard?.writeText(window.location.href)" aria-label="Share"><x-icon name="share" class="h-5 w-5" /></button>
                     </div>
                 @else
-                    <a class="flex min-h-14 w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-3 text-lg font-semibold text-white" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('commerce.sign_in_to_buy') }}</a>
+                    <a class="base44-gradient-cta flex min-h-14 w-full items-center justify-center rounded-xl px-5 py-3 text-lg font-semibold" href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{ __('commerce.sign_in_to_buy') }}</a>
                 @endauth
 
                 <div class="grid grid-cols-3 gap-4 border-t border-gray-100 pt-5">
