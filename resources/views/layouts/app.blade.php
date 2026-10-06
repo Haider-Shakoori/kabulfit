@@ -8,8 +8,12 @@
     <title>{{ $seo->title ?? 'KabulFit' }}</title>
     <meta name="description" content="{{ $seo->description ?? '' }}">
     <meta name="robots" content="{{ $seo->robots ?? 'index,follow' }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/kabulfit-live/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/kabulfit-optimized/favicon-64.png') }}">
     <link rel="canonical" href="{{ $seo->canonical ?? url()->current() }}">
+    @if(request()->routeIs('home'))
+        <link rel="preload" as="image" href="{{ asset('images/kabulfit-optimized/hero-h1-mobile.webp') }}" type="image/webp" media="(max-width: 768px)" fetchpriority="high">
+        <link rel="preload" as="image" href="{{ asset('images/kabulfit-base44/source/6b7f27f2f_H1.webp') }}" type="image/webp" media="(min-width: 769px)" fetchpriority="high">
+    @endif
     @foreach (($seo->alternates ?? []) as $locale => $href)
         <link rel="alternate" hreflang="{{ $locale }}" href="{{ $href }}">
     @endforeach
@@ -27,7 +31,6 @@
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ asset('css/storefront-parity.css') }}">
     @php($siteSettingsForAnalytics = app(\App\Services\Settings\SiteSettings::class))
     @php($metaPixelId = $siteSettingsForAnalytics->get('analytics.meta_pixel_id', (string) config('services.meta.pixel_id')))
     @php($gaMeasurementId = $siteSettingsForAnalytics->get('analytics.ga_measurement_id', (string) config('services.analytics.measurement_id')))
@@ -127,7 +130,7 @@
             </button>
 
             <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="shrink-0" aria-label="{{ __('site.kabulfit_home') }}">
-                <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" width="310" height="120" alt="KabulFit" class="kabulfit-header-logo block w-auto object-contain">
+                <img src="{{ asset('images/kabulfit-optimized/logo-header.webp') }}" width="310" height="120" alt="KabulFit" class="kabulfit-header-logo block w-auto object-contain">
             </a>
 
             <nav id="primary-nav" class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
@@ -177,7 +180,7 @@
         <button class="absolute inset-0 bg-black/40" @click="open = false" aria-label="{{ __('site.menu') }}"></button>
         <aside id="mobile-navigation" x-transition class="absolute inset-y-0 start-0 w-[84%] max-w-sm overflow-y-auto bg-white p-6 shadow-2xl">
             <div class="flex items-center justify-between">
-                <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" alt="KabulFit" class="kabulfit-drawer-logo block w-auto object-contain">
+                <img src="{{ asset('images/kabulfit-optimized/logo-header.webp') }}" width="320" height="140" alt="KabulFit" class="kabulfit-drawer-logo block w-auto object-contain" loading="lazy" decoding="async">
                 <button class="grid h-10 w-10 place-items-center rounded-full bg-gray-100" @click="open = false"><x-icon name="close" class="h-5 w-5" /></button>
             </div>
             <nav class="mt-8 space-y-2">
@@ -204,7 +207,7 @@
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-5 lg:gap-10">
             <div class="lg:col-span-2">
                 <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="inline-block">
-                    <img src="{{ asset('images/kabulfit-live/logo-footer.png') }}" width="310" height="120" alt="KabulFit" class="h-20 w-auto object-contain sm:h-24">
+                    <img src="{{ asset('images/kabulfit-optimized/logo-footer.webp') }}" width="320" height="140" alt="KabulFit" class="h-20 w-auto object-contain sm:h-24" loading="lazy" decoding="async">
                 </a>
                 <p class="mt-4 max-w-sm text-sm leading-7 text-white/65">{{ __('site.footer_intro') }}</p>
 
