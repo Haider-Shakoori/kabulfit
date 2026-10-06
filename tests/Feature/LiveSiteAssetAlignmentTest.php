@@ -21,14 +21,14 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $response = $this->get('/en')->assertOk();
 
         $response
-            ->assertSee('images/kabulfit-live/logo-header.png', false)
-            ->assertSee('images/kabulfit-live/logo-footer.png', false)
+            ->assertSee('images/kabulfit-optimized/logo-header.webp', false)
+            ->assertSee('images/kabulfit-optimized/logo-footer.webp', false)
             ->assertSee('6b7f27f2f_H1.webp', false)
             ->assertSee('f2989fdbd_H2.webp', false)
             ->assertSee('b6b455e59_H3.webp', false)
-            ->assertSee('1cce53a01_2.png', false)
-            ->assertSee('58f1df170_2.png', false)
-            ->assertSee('f065351e6_bn.jpg', false)
+            ->assertSee('images/kabulfit-optimized/story-bg.webp', false)
+            ->assertSee('images/kabulfit-optimized/measurement.webp', false)
+            ->assertSee('images/kabulfit-optimized/craftsmanship.webp', false)
             ->assertSee('Handcrafted')
             ->assertSee('Free Shipping', false);
 
@@ -59,7 +59,9 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertStringContainsString('base44-hero-image', $html);
         $this->assertStringContainsString('data-section="hero-bottom-fade"', $html);
         $this->assertSame(1, substr_count($html, 'data-section="hero-bottom-fade"'));
-        $this->assertStringContainsString('style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;"', $html);
+        $this->assertStringContainsString('loading="eager"', $html);
+        $this->assertStringContainsString('fetchpriority="high"', $html);
+        $this->assertStringContainsString('hero-h1-mobile.webp', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
         $this->assertStringContainsString('h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent', $html);
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
