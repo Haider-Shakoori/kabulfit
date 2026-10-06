@@ -14,6 +14,7 @@
             'title' => __('site.hero_title'),
             'subtitle' => __('site.hero_subtitle'),
             'image' => asset('images/kabulfit-base44/source/6b7f27f2f_H1.webp'),
+            'mobile_image' => asset('images/kabulfit-optimized/hero-h1-mobile.webp'),
             'cta' => __('site.shop_now'),
             'href' => route('shop', ['locale' => app()->getLocale()]),
         ],
@@ -21,6 +22,7 @@
             'title' => __('site.traditional_elegance'),
             'subtitle' => __('site.traditional_elegance_subtitle'),
             'image' => asset('images/kabulfit-base44/source/f2989fdbd_H2.webp'),
+            'mobile_image' => asset('images/kabulfit-optimized/hero-h2-mobile.webp'),
             'cta' => __('site.explore_collection'),
             'href' => route('shop', ['locale' => app()->getLocale()]),
         ],
@@ -28,34 +30,44 @@
             'title' => __('site.custom_fit_guarantee'),
             'subtitle' => __('site.custom_fit_guarantee_subtitle'),
             'image' => asset('images/kabulfit-base44/source/b6b455e59_H3.webp'),
+            'mobile_image' => asset('images/kabulfit-optimized/hero-h3-mobile.webp'),
             'cta' => __('site.measurement_guide'),
             'href' => $measurementGuideUrl,
         ],
     ];
     $categoryFallbacks = [
-        asset('images/kabulfit-live/catalog/category-3ed66ce35408.webp'),
-        asset('images/kabulfit-live/catalog/category-861c19f93a16.webp'),
-        asset('images/kabulfit-live/catalog/category-15e0668e6ecf.png'),
-        asset('images/kabulfit-live/catalog/product-e3216ebea370.webp'),
+        asset('images/kabulfit-optimized/category-men.webp'),
+        asset('images/kabulfit-optimized/category-women.webp'),
+        asset('images/kabulfit-optimized/category-kids.webp'),
+        asset('images/kabulfit-optimized/category-accessories.webp'),
     ];
 @endphp
 
 <section class="relative h-screen overflow-hidden" data-section="hero"
-    x-data="{ slides: @js($heroSlides), slide: 0 }"
-    x-init="setInterval(() => slide = (slide + 1) % slides.length, 6000)">
-    <template x-for="(item, index) in slides" :key="index">
-        <div class="absolute inset-0 overflow-hidden transition-opacity duration-1000" :class="slide === index ? 'opacity-100' : 'opacity-0'">
-            <img
-                :src="item.image"
-                :alt="item.title"
-                class="base44-hero-image"
-                style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;"
-                :loading="index === 0 ? 'eager' : 'lazy'"
-                :fetchpriority="index === 0 ? 'high' : 'low'"
-            >
-            <div class="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
-        </div>
-    </template>
+    x-data="{ slides: @js($heroSlides), slide: 0, timer: null }"
+    x-init="timer = setInterval(() => slide = (slide + 1) % slides.length, 10000)"
+    @mouseenter="clearInterval(timer)"
+    @mouseleave="timer = setInterval(() => slide = (slide + 1) % slides.length, 10000)">
+    <picture class="absolute inset-0 block h-full w-full overflow-hidden">
+        <source
+            media="(max-width: 768px)"
+            srcset="{{ $heroSlides[0]['mobile_image'] }}"
+            :srcset="slides[slide]?.mobile_image || @js($heroSlides[0]['mobile_image'])"
+        >
+        <img
+            src="{{ $heroSlides[0]['image'] }}"
+            :src="slides[slide]?.image || @js($heroSlides[0]['image'])"
+            alt="{{ $heroSlides[0]['title'] }}"
+            :alt="slides[slide]?.title || @js($heroSlides[0]['title'])"
+            class="base44-hero-image"
+            width="1536"
+            height="1024"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+        >
+    </picture>
+    <div class="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
 
     <div class="absolute inset-0 z-20 flex items-center">
         <div class="mx-auto w-full max-w-7xl px-4">
@@ -63,11 +75,11 @@
                 <span class="mb-4 inline-flex items-center gap-1 rounded-full border-0 bg-gradient-to-r from-[#881C27] to-[#2A6867] px-3 py-1 text-xs font-semibold text-white sm:mb-6 sm:text-sm">
                     ✦ {{ __('site.featured_label') }}
                 </span>
-                <h1 class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl" x-text="slides[slide]?.title || @js(__('site.hero_title'))"></h1>
-                <p class="mb-6 text-base text-white/80 sm:mb-8 sm:text-lg md:text-xl lg:text-2xl" x-text="slides[slide]?.subtitle || @js(__('site.hero_subtitle'))"></p>
+                <h1 class="mb-4 min-h-[4.5rem] text-3xl font-bold leading-tight text-white sm:mb-6 sm:min-h-[6rem] sm:text-4xl md:text-5xl lg:text-7xl" x-text="slides[slide]?.title || @js($heroSlides[0]['title'])">{{ $heroSlides[0]['title'] }}</h1>
+                <p class="mb-6 min-h-[3.5rem] text-base text-white/80 sm:mb-8 sm:min-h-[4rem] sm:text-lg md:text-xl lg:text-2xl" x-text="slides[slide]?.subtitle || @js($heroSlides[0]['subtitle'])">{{ $heroSlides[0]['subtitle'] }}</p>
                 <div class="flex flex-wrap gap-3 sm:gap-4">
-                    <a :href="slides[slide]?.href || @js(route('shop', ['locale' => app()->getLocale()]))" class="base44-gradient-cta inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition sm:px-7 sm:text-base">
-                        <span x-text="slides[slide]?.cta || @js(__('site.shop_now'))"></span>
+                    <a href="{{ $heroSlides[0]['href'] }}" :href="slides[slide]?.href || @js($heroSlides[0]['href'])" class="base44-gradient-cta inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition sm:px-7 sm:text-base">
+                        <span x-text="slides[slide]?.cta || @js($heroSlides[0]['cta'])">{{ $heroSlides[0]['cta'] }}</span>
                         <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                     </a>
                     <a href="{{ $measurementGuideUrl }}" class="base44-outline-light inline-flex items-center gap-2 rounded-full border-2 px-5 py-3 text-sm font-semibold transition sm:px-7 sm:text-base">
@@ -146,7 +158,7 @@
 </section>
 
 <section id="story" class="relative overflow-hidden py-20 text-white" data-section="story">
-    <img src="/images/kabulfit-base44/source/1cce53a01_2.png" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+    <img src="{{ asset('images/kabulfit-optimized/story-bg.webp') }}" alt="" class="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" width="1280" height="853">
     <div class="absolute inset-0 bg-black/85"></div>
     <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 md:grid-cols-2">
         <div>
@@ -154,11 +166,11 @@
             <h2 class="mt-6 text-4xl font-bold tracking-tight md:text-5xl">{{ __('site.afghan_culture') }}</h2>
             <p class="mt-5 text-xl leading-8 text-white/80">{{ __('site.story_p1') }}</p>
             <p class="mt-4 leading-7 text-white/70">{{ __('site.story_p2') }}</p>
-            <a href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}" class="base44-outline-light mt-8 inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 font-semibold transition">{{ __('site.learn_more') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
+            <a href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}" class="base44-outline-light mt-8 inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 font-semibold transition">{{ __('site.learn_more') }} KabulFit <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
         </div>
         <div class="relative">
             <div class="aspect-square overflow-hidden rounded-[3rem]">
-                <img src="/images/kabulfit-base44/source/f065351e6_bn.jpg" alt="{{ __('site.craftsmanship_alt') }}" class="h-full w-full object-cover" loading="lazy">
+                <img src="{{ asset('images/kabulfit-optimized/craftsmanship.webp') }}" alt="{{ __('site.craftsmanship_alt') }}" class="h-full w-full object-cover" loading="lazy" decoding="async" width="800" height="800">
             </div>
             <div class="absolute -bottom-6 -start-6 rounded-[2rem] bg-white p-6 text-gray-900 shadow-xl">
                 <div class="flex items-center gap-4">
@@ -201,7 +213,7 @@
                     </div>
                 </div>
                 <div class="relative min-h-[400px]">
-                    <img src="/images/kabulfit-base44/source/58f1df170_2.png" alt="{{ __('site.measurement_guide') }}" class="absolute inset-0 h-full w-full object-cover" loading="lazy">
+                    <img src="{{ asset('images/kabulfit-optimized/measurement.webp') }}" alt="{{ __('site.measurement_guide') }}" class="absolute inset-0 h-full w-full object-cover" loading="lazy" decoding="async" width="800" height="800">
                 </div>
             </div>
         </div>
