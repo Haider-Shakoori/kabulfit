@@ -1,0 +1,53 @@
+/* Critical storefront parity layer loaded after the Vite bundle.
+   Keep this small: it protects reference-site CTA colors even if a cached bundle
+   still contains older element-reset rules. */
+.base44-gradient-cta,
+.base44-gradient-cta:visited {
+    background: linear-gradient(90deg, #881C27, #2A6867);
+    color: #fff !important;
+}
+
+.base44-gradient-cta:hover {
+    color: #fff !important;
+    opacity: .9;
+}
+
+.base44-outline-light,
+.base44-outline-light:visited {
+    background: transparent;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.base44-outline-light:hover {
+    background: #fff;
+    color: #111827 !important;
+}
+
+.base44-gold-cta,
+.base44-gold-cta:visited {
+    background: #D4AF37;
+    color: #1f2937 !important;
+}
+
+.base44-gold-cta:hover {
+    background: #B8962E;
+    color: #1f2937 !important;
+}
+
+.base44-dark-cta,
+.base44-dark-cta:visited {
+    background: rgba(0, 0, 0, .90);
+    color: #fff !important;
+}
+
+.base44-dark-cta:hover {
+    background: #000;
+    color: #fff !important;
+}
+
+/* Older cached bundles used unlayered element resets. These restore the
+   Tailwind font-weight utilities that Base44 storefront buttons rely on. */
+.font-medium { font-weight: 500 !important; }
+.font-semibold { font-weight: 600 !important; }
+.font-bold { font-weight: 700 !important; }
