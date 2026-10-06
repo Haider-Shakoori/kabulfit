@@ -52,3 +52,6 @@ https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/pu
 https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/e9d011494_DressLength1.png
 https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f065351e6_bn.jpg
 https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/f93ac8c2b_FineEmbroidery.jpg
+https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/6b7f27f2f_H1.webp
+https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/f2989fdbd_H2.webp
+https://base44.app/api/apps/6944d141c2878421ef544832/files/mp/public/6944d141c2878421ef544832/b6b455e59_H3.webp
