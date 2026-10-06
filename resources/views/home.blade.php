@@ -45,7 +45,7 @@
     x-init="setInterval(() => slide = (slide + 1) % slides.length, 6000)">
     <template x-for="(item, index) in slides" :key="index">
         <div class="absolute inset-0 transition-opacity duration-1000" :class="slide === index ? 'opacity-100' : 'opacity-0'">
-            <img :src="item.image" :alt="item.title" class="h-full w-full object-cover object-center" :loading="index === 0 ? 'eager' : 'lazy'" :fetchpriority="index === 0 ? 'high' : 'low'">
+            <img :src="item.image" :alt="item.title" class="h-full w-full object-cover object-[center_50%]" :loading="index === 0 ? 'eager' : 'lazy'" :fetchpriority="index === 0 ? 'high' : 'low'">
             <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
         </div>
     </template>
@@ -79,6 +79,8 @@
     </div>
     <button type="button" class="absolute bottom-7 start-4 z-30 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/20 text-xl text-white backdrop-blur sm:start-8" @click="slide = slide === 0 ? slides.length - 1 : slide - 1" aria-label="Previous slide">‹</button>
     <button type="button" class="absolute bottom-7 end-4 z-30 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/20 text-xl text-white backdrop-blur sm:end-8" @click="slide = slide === slides.length - 1 ? 0 : slide + 1" aria-label="Next slide">›</button>
+
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent"></div>
 </section>
 
 <section class="border-b border-gray-100 bg-white py-8" data-section="trust">
