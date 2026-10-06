@@ -86,15 +86,15 @@ class StorefrontStyleParityTest extends TestCase
             ->assertSee('bg-white', false);
     }
 
-    public function test_post_bundle_parity_stylesheet_is_loaded_after_vite(): void
+    public function test_parity_styles_are_compiled_without_an_extra_blocking_stylesheet(): void
     {
         $html = $this->get('/en')->assertOk()->getContent();
-        $parityCss = file_get_contents(public_path('css/storefront-parity.css'));
+        $css = file_get_contents(resource_path('css/app.css'));
 
-        $this->assertStringContainsString('/css/storefront-parity.css', $html);
-        $this->assertStringContainsString('.base44-gradient-cta,', $parityCss);
-        $this->assertStringContainsString('color: #fff !important;', $parityCss);
-        $this->assertStringContainsString('.font-semibold { font-weight: 600 !important; }', $parityCss);
+        $this->assertStringNotContainsString('/css/storefront-parity.css', $html);
+        $this->assertStringContainsString('.base44-gradient-cta,', $css);
+        $this->assertStringContainsString('color: #fff !important;', $css);
+        $this->assertStringContainsString('.font-semibold { font-weight: 600 !important; }', $css);
     }
 
     public function test_product_card_quick_look_is_white_text_on_dark_background(): void
