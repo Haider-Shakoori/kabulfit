@@ -73,6 +73,17 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertStringContainsString('img, svg { display: block; max-width: 100%; }', $css);
     }
 
+    public function test_hero_css_cannot_be_collapsed_by_generic_responsive_image_rules(): void
+    {
+        $css = file_get_contents(resource_path('css/app.css'));
+
+        $this->assertStringContainsString('@layer base', $css);
+        $this->assertStringContainsString('.kabulfit-hero-image', $css);
+        $this->assertStringContainsString('height: 100% !important;', $css);
+        $this->assertStringContainsString('object-fit: cover !important;', $css);
+        $this->assertStringContainsString('object-position: center 50% !important;', $css);
+    }
+
     public function test_seeded_catalog_uses_local_non_placeholder_media(): void
     {
         $products = Product::query()
