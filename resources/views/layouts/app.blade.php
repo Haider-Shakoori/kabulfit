@@ -84,6 +84,7 @@
 @php($youtubeUrl = $siteSettings->get('social.youtube', 'http://www.youtube.com/@Kabulfit'))
 @php($whatsappUrl = $siteSettings->get('social.whatsapp', 'https://wa.me/93794120017'))
 @php($measurementGuideSlug = app()->getLocale() === 'en' ? 'measurement-guide' : (app()->getLocale() === 'fa' ? 'راهنمای-اندازه-گیری' : 'د-اندازې-لارښود'))
+@php($contactSlug = app()->getLocale() === 'en' ? 'contact' : (app()->getLocale() === 'fa' ? 'تماس' : 'اړیکه'))
 @php($isHome = request()->routeIs('home'))
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
@@ -151,7 +152,7 @@
                 </div>
                 <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}">{{ __('site.measurement_guide') }}</a>
                 <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.about') }}</a>
-                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="#contact">{{ __('site.contact') }}</a>
+                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug]) }}">{{ __('site.contact') }}</a>
             </nav>
 
             <div class="flex items-center gap-1 sm:gap-2">
@@ -191,7 +192,7 @@
                     [__('site.shop'), route('shop', ['locale' => app()->getLocale()])],
                     [__('site.measurement_guide'), route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug])],
                     [__('site.about'), route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')])],
-                    [__('site.contact'), '#contact'],
+                    [__('site.contact'), route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug])],
                 ] as [$label, $href])
                     <a @click="open = false" href="{{ $href }}" class="relative block overflow-hidden rounded-xl px-4 py-3 font-medium text-gray-800 transition duration-300 hover:scale-[1.02] hover:bg-gradient-to-r hover:from-[#881C27] hover:to-[#2A6867] hover:ps-6 hover:text-white">{{ $label }}</a>
                 @endforeach
@@ -245,7 +246,7 @@
                     @auth
                         <a class="hover:text-white" href="{{ route('orders.index', ['locale' => app()->getLocale()]) }}">{{ __('orders.orders') }}</a>
                     @endauth
-                    <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'contact' : (app()->getLocale() === 'fa' ? 'تماس' : 'اړیکه')]) }}">{{ __('site.contact') }}</a>
+                    <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug]) }}">{{ __('site.contact') }}</a>
                 </div>
             </div>
 
