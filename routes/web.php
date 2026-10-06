@@ -233,5 +233,5 @@ Route::prefix('{locale}')
     });
 
 Route::get('/{legacy}', LegacyPageRedirectController::class)
-    ->where('legacy', 'About|Contact|FAQ|MeasurementGuide|PrivacyPolicy|ReturnPolicy|ShippingPolicy|Shop|TermsConditions|Account|Cart|Checkout|Orders|Wishlist|MyMeasurements|TailorDashboard')
+    ->where('legacy', 'Home|About|Contact|FAQ|MeasurementGuide|PrivacyPolicy|ReturnPolicy|ShippingPolicy|Shop|TermsConditions|Account|Cart|Checkout|Orders|Wishlist|MyMeasurements|TailorDashboard')
     ->name('legacy.page');
