@@ -83,6 +83,18 @@ class VisualFidelityTest extends TestCase
         $this->assertStringContainsString('prefers-reduced-motion', $css);
     }
 
+    public function test_hero_images_are_forced_to_fill_the_viewport_without_global_height_override(): void
+    {
+        $html = $this->get('/en')->assertOk()->getContent();
+        $css = file_get_contents(resource_path('css/app.css'));
+
+        $this->assertStringContainsString('kabulfit-hero-image h-full w-full object-cover object-[center_50%]', $html);
+        $this->assertStringContainsString('.kabulfit-hero-image {', $css);
+        $this->assertStringContainsString('height: 100% !important;', $css);
+        $this->assertStringContainsString('object-fit: cover !important;', $css);
+        $this->assertStringNotContainsString("img { height: auto; }", $css);
+    }
+
     public function test_accessibility_landmarks_and_mobile_navigation_are_present(): void
     {
         $html = $this->get('/en')->assertOk()->getContent();
