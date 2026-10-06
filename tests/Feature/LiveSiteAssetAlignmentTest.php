@@ -58,6 +58,8 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertStringContainsString('Custom Fit Guarantee', $html);
         $this->assertStringContainsString('base44-hero-image', $html);
         $this->assertStringContainsString('data-section="hero-bottom-fade"', $html);
+        $this->assertSame(1, substr_count($html, 'data-section="hero-bottom-fade"'));
+        $this->assertStringContainsString('style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;"', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
         $this->assertStringContainsString('object-[center_50%]', $html);
         $this->assertStringContainsString('h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent', $html);
