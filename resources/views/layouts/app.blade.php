@@ -275,7 +275,7 @@
                         placeholder="your@email.com"
                         class="min-h-11 flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm text-white outline-none placeholder:text-white/40 focus:border-white/50 sm:min-h-12"
                     >
-                    <button type="submit" class="min-h-11 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90 sm:min-h-12">
+                    <button type="submit" class="base44-gradient-cta min-h-11 whitespace-nowrap rounded-lg px-5 py-2.5 text-sm font-semibold transition sm:min-h-12">
                         {{ __('site.subscribe') }}
                     </button>
                 </form>
