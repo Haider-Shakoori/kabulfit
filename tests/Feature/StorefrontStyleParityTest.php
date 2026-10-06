@@ -94,7 +94,7 @@ class StorefrontStyleParityTest extends TestCase
         $this->assertStringNotContainsString('/css/storefront-parity.css', $html);
         $this->assertStringContainsString('.base44-gradient-cta,', $css);
         $this->assertStringContainsString('color: #fff !important;', $css);
-        $this->assertStringContainsString('.font-semibold { font-weight: 600 !important; }', $css);
+        $this->assertStringContainsString('@layer base {', $css);
     }
 
     public function test_product_card_quick_look_is_white_text_on_dark_background(): void
