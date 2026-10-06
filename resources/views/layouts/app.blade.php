@@ -83,6 +83,7 @@
 @php($tiktokUrl = $siteSettings->get('social.tiktok', ''))
 @php($youtubeUrl = $siteSettings->get('social.youtube', 'http://www.youtube.com/@Kabulfit'))
 @php($whatsappUrl = $siteSettings->get('social.whatsapp', 'https://wa.me/93794120017'))
+@php($measurementGuideSlug = app()->getLocale() === 'en' ? 'measurement-guide' : (app()->getLocale() === 'fa' ? 'راهنمای-اندازه-گیری' : 'د-اندازې-لارښود'))
 @php($isHome = request()->routeIs('home'))
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
@@ -148,7 +149,7 @@
                         @endforeach
                     </div>
                 </div>
-                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('home', ['locale' => app()->getLocale()]) }}#tailoring">{{ __('site.measurement_guide') }}</a>
+                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}">{{ __('site.measurement_guide') }}</a>
                 <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.about') }}</a>
                 <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="#contact">{{ __('site.contact') }}</a>
             </nav>
@@ -188,7 +189,7 @@
                 @foreach ([
                     [__('site.home'), route('home', ['locale' => app()->getLocale()])],
                     [__('site.shop'), route('shop', ['locale' => app()->getLocale()])],
-                    [__('site.measurement_guide'), route('home', ['locale' => app()->getLocale()]).'#tailoring'],
+                    [__('site.measurement_guide'), route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug])],
                     [__('site.about'), route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')])],
                     [__('site.contact'), '#contact'],
                 ] as [$label, $href])
@@ -240,7 +241,7 @@
             <div>
                 <h2 class="font-semibold">{{ __('site.support') }}</h2>
                 <div class="mt-4 grid gap-3 text-sm text-white/65">
-                    <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'measurement-guide' : (app()->getLocale() === 'fa' ? 'راهنمای-اندازه-گیری' : 'د-اندازې-لارښود')]) }}">{{ __('site.measurement_guide') }}</a>
+                    <a class="hover:text-white" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}">{{ __('site.measurement_guide') }}</a>
                     @auth
                         <a class="hover:text-white" href="{{ route('orders.index', ['locale' => app()->getLocale()]) }}">{{ __('orders.orders') }}</a>
                     @endauth
