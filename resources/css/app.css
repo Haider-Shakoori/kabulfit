@@ -1700,3 +1700,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
         max-height: 5.5rem !important;
     }
 }
+
+
+/* Base44 hero parity: the carousel image must cover the entire viewport-height slide. */
+.base44-hero-image {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    object-position: center 50% !important;
+}
