@@ -56,6 +56,8 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertStringContainsString('Authentic Afghan Elegance', $html);
         $this->assertStringContainsString('Traditional Elegance', $html);
         $this->assertStringContainsString('Custom Fit Guarantee', $html);
+        $this->assertStringContainsString('base44-hero-image', $html);
+        $this->assertStringContainsString('data-section="hero-bottom-fade"', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
         $this->assertStringContainsString('object-[center_50%]', $html);
         $this->assertStringContainsString('h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent', $html);
