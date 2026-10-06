@@ -86,7 +86,6 @@ class StorefrontStyleParityTest extends TestCase
             ->assertSee('bg-white', false);
     }
 
-
     public function test_post_bundle_parity_stylesheet_is_loaded_after_vite(): void
     {
         $html = $this->get('/en')->assertOk()->getContent();
