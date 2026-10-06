@@ -23,6 +23,9 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $response
             ->assertSee('images/kabulfit-live/logo-header.png', false)
             ->assertSee('images/kabulfit-live/logo-footer.png', false)
+            ->assertSee('6b7f27f2f_H1.webp', false)
+            ->assertSee('f2989fdbd_H2.webp', false)
+            ->assertSee('b6b455e59_H3.webp', false)
             ->assertSee('1cce53a01_2.png', false)
             ->assertSee('58f1df170_2.png', false)
             ->assertSee('f065351e6_bn.jpg', false)
@@ -31,6 +34,11 @@ class LiveSiteAssetAlignmentTest extends TestCase
 
         $html = $response->getContent();
 
+        foreach (['6b7f27f2f_H1.webp', 'f2989fdbd_H2.webp', 'b6b455e59_H3.webp'] as $heroImage) {
+            $this->assertFileExists(public_path('images/kabulfit-base44/source/'.$heroImage));
+        }
+
+        $this->assertStringContainsString('/en/measurement-guide', $html);
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
         $this->assertStringNotContainsString('kabulfit-craftsmanship.svg', $html);
     }
