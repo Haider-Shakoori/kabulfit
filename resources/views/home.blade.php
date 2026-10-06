@@ -72,6 +72,8 @@
         </div>
     </div>
 
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent" data-section="hero-bottom-fade"></div>
+
     <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2">
         <template x-for="(item, index) in slides" :key="'dot-' + index">
             <button type="button" class="h-2.5 rounded-full bg-white transition-all" :class="slide === index ? 'w-8 opacity-100' : 'w-2.5 opacity-50'" @click="slide = index" :aria-label="'Go to slide ' + (index + 1)"></button>
