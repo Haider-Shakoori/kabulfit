@@ -95,7 +95,7 @@
                             <textarea name="message" rows="7" required minlength="5" maxlength="5000" class="rounded-md border border-gray-200 px-3 py-2.5 outline-none focus:border-[#881C27] focus:ring-2 focus:ring-[#881C27]/10">{{ old('message') }}</textarea>
                         </label>
 
-                        <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white transition hover:opacity-90">
+                        <button type="submit" class="base44-gradient-cta inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 font-semibold transition">
                             <span>➤</span>
                             {{ __('site.send_message') }}
                         </button>
@@ -111,6 +111,6 @@
         <span class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-[#881C27]/10 text-2xl text-[#881C27]">?</span>
         <h2 class="mt-6 text-3xl font-bold text-gray-900">{{ __('site.frequent_questions') }}</h2>
         <p class="mx-auto mt-3 max-w-2xl text-gray-600">{{ __('site.check_faq') }}</p>
-        <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $faqSlug]) }}" class="mt-8 inline-flex rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white">{{ __('site.view_faq') }}</a>
+        <a href="{{ route('content.page', ['locale' => $locale, 'slug' => $faqSlug]) }}" class="base44-gradient-cta mt-8 inline-flex rounded-full px-6 py-3 font-semibold">{{ __('site.view_faq') }}</a>
     </div>
 </section>
