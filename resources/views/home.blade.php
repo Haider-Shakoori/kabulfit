@@ -66,11 +66,11 @@
                 <h1 class="mb-4 text-3xl font-bold leading-tight text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-7xl" x-text="slides[slide]?.title || @js(__('site.hero_title'))"></h1>
                 <p class="mb-6 text-base text-white/80 sm:mb-8 sm:text-lg md:text-xl lg:text-2xl" x-text="slides[slide]?.subtitle || @js(__('site.hero_subtitle'))"></p>
                 <div class="flex flex-wrap gap-3 sm:gap-4">
-                    <a :href="slides[slide]?.href || @js(route('shop', ['locale' => app()->getLocale()]))" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 sm:px-7 sm:text-base">
+                    <a :href="slides[slide]?.href || @js(route('shop', ['locale' => app()->getLocale()]))" class="base44-gradient-cta inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition sm:px-7 sm:text-base">
                         <span x-text="slides[slide]?.cta || @js(__('site.shop_now'))"></span>
                         <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                     </a>
-                    <a href="{{ $measurementGuideUrl }}" class="inline-flex items-center gap-2 rounded-full border-2 border-white bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-7 sm:text-base">
+                    <a href="{{ $measurementGuideUrl }}" class="base44-outline-light inline-flex items-center gap-2 rounded-full border-2 px-5 py-3 text-sm font-semibold transition sm:px-7 sm:text-base">
                         <x-icon name="ruler" class="h-4 w-4" />
                         {{ __('site.measurement_guide') }}
                     </a>
@@ -133,7 +133,7 @@
                 <h2 class="text-4xl font-bold tracking-tight text-gray-900">{{ __('site.featured_label') }}</h2>
                 <p class="mt-2 text-gray-600">{{ __('site.featured_title') }}</p>
             </div>
-            <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}" class="hidden items-center gap-2 rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-3 text-sm font-semibold text-white sm:inline-flex">{{ __('site.view_all') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
+            <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}" class="base44-gradient-cta hidden items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold sm:inline-flex">{{ __('site.view_all') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
         </div>
         <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
             @forelse($featuredProducts as $product)
@@ -154,7 +154,7 @@
             <h2 class="mt-6 text-4xl font-bold tracking-tight md:text-5xl">{{ __('site.afghan_culture') }}</h2>
             <p class="mt-5 text-xl leading-8 text-white/80">{{ __('site.story_p1') }}</p>
             <p class="mt-4 leading-7 text-white/70">{{ __('site.story_p2') }}</p>
-            <a href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}" class="mt-8 inline-flex items-center gap-2 rounded-full border-2 border-white px-6 py-3 font-semibold text-white transition hover:bg-white hover:text-black">{{ __('site.learn_more') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
+            <a href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}" class="base44-outline-light mt-8 inline-flex items-center gap-2 rounded-full border-2 px-6 py-3 font-semibold transition">{{ __('site.learn_more') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
         </div>
         <div class="relative">
             <div class="aspect-square overflow-hidden rounded-[3rem]">
@@ -196,8 +196,8 @@
                     <h2 class="mt-6 text-3xl font-bold md:text-4xl">{{ __('site.measurements_title') }}</h2>
                     <p class="mt-4 text-white/80">{{ __('site.measurements_text') }}</p>
                     <div class="mt-8 flex flex-wrap gap-4">
-                        <a href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}" class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white shadow-lg">{{ __('site.start_measuring') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
-                        <a href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}" class="inline-flex rounded-full border-2 border-white px-6 py-3 font-semibold text-white transition hover:bg-white hover:text-gray-900">{{ __('site.watch_tutorial') }}</a>
+                        <a href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}" class="base44-gradient-cta inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold shadow-lg">{{ __('site.start_measuring') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
+                        <a href="{{ route('measurements.index', ['locale' => app()->getLocale()]) }}" class="base44-outline-light inline-flex rounded-full border-2 px-6 py-3 font-semibold transition">{{ __('site.watch_tutorial') }}</a>
                     </div>
                 </div>
                 <div class="relative min-h-[400px]">
