@@ -79,8 +79,8 @@ class LiveSiteAssetAlignmentTest extends TestCase
     {
         $css = file_get_contents(resource_path('css/app.css'));
 
-        $this->assertStringContainsString('@layer base', $css);
-        $this->assertStringContainsString('.kabulfit-hero-image', $css);
+        $this->assertStringNotContainsString('img { height: auto; }', $css);
+        $this->assertStringContainsString('.base44-hero-image', $css);
         $this->assertStringContainsString('height: 100% !important;', $css);
         $this->assertStringContainsString('object-fit: cover !important;', $css);
         $this->assertStringContainsString('object-position: center 50% !important;', $css);
