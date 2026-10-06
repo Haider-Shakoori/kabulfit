@@ -57,8 +57,18 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertStringContainsString('Traditional Elegance', $html);
         $this->assertStringContainsString('Custom Fit Guarantee', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
+        $this->assertStringContainsString('object-[center_50%]', $html);
+        $this->assertStringContainsString('h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent', $html);
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
         $this->assertStringNotContainsString('kabulfit-craftsmanship.svg', $html);
+    }
+
+    public function test_global_image_css_does_not_override_tailwind_height_utilities(): void
+    {
+        $css = file_get_contents(resource_path('css/app.css'));
+
+        $this->assertStringNotContainsString('img { height: auto; }', $css);
+        $this->assertStringContainsString('img, svg { display: block; max-width: 100%; }', $css);
     }
 
     public function test_seeded_catalog_uses_local_non_placeholder_media(): void
