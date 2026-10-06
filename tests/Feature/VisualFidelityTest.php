@@ -90,7 +90,7 @@ class VisualFidelityTest extends TestCase
 
         $this->assertStringContainsString('class="base44-hero-image"', $html);
         $this->assertStringContainsString('position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;', $html);
-        $this->assertStringNotContainsString("img { height: auto; }", $css);
+        $this->assertStringNotContainsString('img { height: auto; }', $css);
     }
 
     public function test_accessibility_landmarks_and_mobile_navigation_are_present(): void
