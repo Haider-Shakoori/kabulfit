@@ -30,6 +30,10 @@ return [
 
     'heritage_label' => 'افغان میراث، د نن لپاره ګنډل شوی',
     'hero_title' => 'اصلي افغان ښکلا',
+    'traditional_elegance' => 'دودیز ښکلا',
+    'traditional_elegance_subtitle' => 'د مینې سره جوړ شوی، د ویاړ سره اغوستل شوی',
+    'custom_fit_guarantee' => 'دودیز فټ تضمین',
+    'custom_fit_guarantee_subtitle' => 'بشپړ اندازې، بشپړ لباس',
     'hero_subtitle' => 'پخواني دودونه د ننني فیشن په بڼه تجربه کړئ.',
     'shop_now' => 'اوس واخلئ',
     'measurement_guide' => 'د اندازې لارښود',
