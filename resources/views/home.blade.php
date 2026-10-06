@@ -44,9 +44,16 @@
     x-data="{ slides: @js($heroSlides), slide: 0 }"
     x-init="setInterval(() => slide = (slide + 1) % slides.length, 6000)">
     <template x-for="(item, index) in slides" :key="index">
-        <div class="absolute inset-0 transition-opacity duration-1000" :class="slide === index ? 'opacity-100' : 'opacity-0'">
-            <img :src="item.image" :alt="item.title" class="h-full w-full object-cover object-[center_50%]" :loading="index === 0 ? 'eager' : 'lazy'" :fetchpriority="index === 0 ? 'high' : 'low'">
-            <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
+        <div class="absolute inset-0 overflow-hidden transition-opacity duration-1000" :class="slide === index ? 'opacity-100' : 'opacity-0'">
+            <img
+                :src="item.image"
+                :alt="item.title"
+                class="base44-hero-image"
+                style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;"
+                :loading="index === 0 ? 'eager' : 'lazy'"
+                :fetchpriority="index === 0 ? 'high' : 'low'"
+            >
+            <div class="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/50 to-transparent rtl:bg-gradient-to-l"></div>
         </div>
     </template>
 
@@ -72,17 +79,13 @@
         </div>
     </div>
 
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent" data-section="hero-bottom-fade"></div>
-
-    <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+    <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-3">
         <template x-for="(item, index) in slides" :key="'dot-' + index">
-            <button type="button" class="h-2.5 rounded-full bg-white transition-all" :class="slide === index ? 'w-8 opacity-100' : 'w-2.5 opacity-50'" @click="slide = index" :aria-label="'Go to slide ' + (index + 1)"></button>
+            <button type="button" class="h-3 rounded-full transition-all" :class="slide === index ? 'w-8 bg-gradient-to-r from-[#881C27] to-[#2A6867]' : 'w-3 bg-white/50'" @click="slide = index" :aria-label="'Go to slide ' + (index + 1)"></button>
         </template>
     </div>
-    <button type="button" class="absolute bottom-7 start-4 z-30 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/20 text-xl text-white backdrop-blur sm:start-8" @click="slide = slide === 0 ? slides.length - 1 : slide - 1" aria-label="Previous slide">‹</button>
-    <button type="button" class="absolute bottom-7 end-4 z-30 grid h-11 w-11 place-items-center rounded-full border border-white/30 bg-black/20 text-xl text-white backdrop-blur sm:end-8" @click="slide = slide === slides.length - 1 ? 0 : slide + 1" aria-label="Next slide">›</button>
 
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent"></div>
+    <div class="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent" data-section="hero-bottom-fade"></div>
 </section>
 
 <section class="border-b border-gray-100 bg-white py-8" data-section="trust">
