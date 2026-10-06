@@ -1702,21 +1702,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 
-/* Base44 hero parity: the carousel image must cover the entire viewport-height slide. */
+/* Base44 hero parity: keep this unlayered so generic responsive image rules cannot collapse it. */
 .base44-hero-image {
     position: absolute !important;
     inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    object-fit: cover !important;
-    object-position: center 50% !important;
-}
-
-
-/* Base44 hero parity: the carousel image must cover the entire viewport-height slide.
-   Keep this unlayered guard so generic responsive image rules can never collapse it to auto height. */
-.kabulfit-hero-image {
     width: 100% !important;
     height: 100% !important;
     max-width: none !important;
