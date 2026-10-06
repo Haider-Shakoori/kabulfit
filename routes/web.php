@@ -51,6 +51,7 @@ Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitema
 Route::get('/sitemaps/catalog.xml', [SeoController::class, 'catalogSitemap'])->name('sitemaps.catalog');
 Route::get('/sitemaps/content.xml', [SeoController::class, 'contentSitemap'])->name('sitemaps.content');
 Route::get('/ProductDetail', [LegacyRedirectController::class, 'product'])->name('legacy.product');
+Route::get('/MeasurementGuide', [LegacyRedirectController::class, 'measurementGuide'])->name('legacy.measurement-guide');
 
 Route::prefix('{locale}')
     ->where(['locale' => 'en|fa|ps'])
