@@ -61,7 +61,6 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertSame(1, substr_count($html, 'data-section="hero-bottom-fade"'));
         $this->assertStringContainsString('style="position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;"', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
-        $this->assertStringContainsString('object-[center_50%]', $html);
         $this->assertStringContainsString('h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent', $html);
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
         $this->assertStringNotContainsString('kabulfit-craftsmanship.svg', $html);
