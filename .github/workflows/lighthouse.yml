@@ -1,6 +1,8 @@
 name: Lighthouse Live Audit
 
 on:
+  push:
+    branches: ['feature/**']
   pull_request:
   workflow_dispatch:
 
