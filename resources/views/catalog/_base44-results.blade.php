@@ -40,10 +40,10 @@
 </section>
 
 <section
-    class="mx-auto max-w-7xl px-4 py-6 sm:py-8"
+    class="bg-white px-4 py-6 sm:py-8"
     x-data="{ filtersOpen: false, grid: 4 }"
 >
-    <div class="flex flex-col gap-6 sm:gap-8 lg:flex-row">
+    <div class="mx-auto flex max-w-7xl flex-col gap-6 sm:gap-8 lg:flex-row">
         <aside class="hidden w-72 shrink-0 lg:block">
             <div class="sticky top-36 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                 <div class="mb-6 flex items-center justify-between">
@@ -134,7 +134,7 @@
                     <div class="mx-auto grid h-24 w-24 place-items-center rounded-full bg-gray-100 text-4xl text-gray-400">⌕</div>
                     <h3 class="mt-6 text-xl font-semibold text-gray-900">{{ $noResultsLabel }}</h3>
                     <p class="mt-2 text-gray-500">{{ $locale === 'ps' ? 'خپل فلټرونه یا د لټون شرایط تنظیم کړئ' : ($locale === 'fa' ? 'فیلترها یا عبارات جستجو را تنظیم کنید' : 'Try adjusting your filters or search terms') }}</p>
-                    <a href="{{ $action }}" class="mt-6 inline-flex rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white">{{ $clearLabel }}</a>
+                    <a href="{{ $action }}" class="base44-gradient-cta mt-6 inline-flex rounded-full px-6 py-3 font-semibold">{{ $clearLabel }}</a>
                 </div>
             @endif
 
