@@ -30,6 +30,10 @@ return [
 
     'heritage_label' => 'Afghan heritage, tailored for today',
     'hero_title' => 'Authentic Afghan Elegance',
+    'traditional_elegance' => 'Traditional Elegance',
+    'traditional_elegance_subtitle' => 'Handcrafted with love, worn with pride',
+    'custom_fit_guarantee' => 'Custom Fit Guarantee',
+    'custom_fit_guarantee_subtitle' => 'Perfect measurements, perfect outfit',
     'hero_subtitle' => 'Discover timeless traditions woven into modern fashion.',
     'shop_now' => 'Shop Now',
     'measurement_guide' => 'Measurement Guide',
