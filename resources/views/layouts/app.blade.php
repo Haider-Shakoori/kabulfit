@@ -89,15 +89,8 @@
 <a class="skip-link" href="#main-content">{{ __('site.skip_to_content') }}</a>
 
 <header
-    class="{{ $isHome ? 'absolute' : 'relative' }} inset-x-0 top-0 z-50 transition-all duration-500 md:fixed {{ $isHome ? 'base44-home-header' : '' }}"
-    x-data="{ open: false, searchOpen: false, scrolled: false, lastY: 0, direction: 'up' }"
-    @scroll.window="
-        const y = window.scrollY;
-        direction = y > lastY ? 'down' : 'up';
-        scrolled = y > 100;
-        lastY = y;
-    "
-    :class="{{ $isHome ? "(scrolled && direction === 'down') ? 'base44-solid bg-white/95 shadow-lg backdrop-blur-md' : 'bg-transparent'" : "'bg-white shadow-lg'" }}"
+    class="relative inset-x-0 top-0 z-50 bg-white shadow-sm md:fixed"
+    x-data="{ open: false, searchOpen: false }"
     @keydown.escape.window="open = false; searchOpen = false"
 >
     <div class="bg-gradient-to-r from-[#881C27] to-[#2A6867] px-4 py-2 text-sm text-white md:py-3">
@@ -129,7 +122,7 @@
                     class="grid h-11 w-11 place-items-center rounded-full lg:hidden"
                     @click="open = true"
                     aria-label="{{ __('site.menu') }}" aria-controls="mobile-navigation" :aria-expanded="open.toString()">
-                <x-icon name="menu" class="h-6 w-6 base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
+                <x-icon name="menu" class="h-6 w-6 text-gray-700" />
             </button>
 
             <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="shrink-0" aria-label="{{ __('site.kabulfit_home') }}">
@@ -137,9 +130,9 @@
             </a>
 
             <nav id="primary-nav" class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
-                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('home', ['locale' => app()->getLocale()]) }}">{{ __('site.home') }}</a>
+                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('home', ['locale' => app()->getLocale()]) }}">{{ __('site.home') }}</a>
                 <div class="group relative">
-                    <a class="inline-flex items-center gap-1 transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
+                    <a class="inline-flex items-center gap-1 transition hover:text-[#D91E36] text-gray-800" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
                         {{ __('site.shop') }}
                         <span class="text-xs">⌄</span>
                     </a>
@@ -150,23 +143,23 @@
                         @endforeach
                     </div>
                 </div>
-                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}">{{ __('site.measurement_guide') }}</a>
-                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.about') }}</a>
-                <a class="transition hover:text-[#D91E36] base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-800' }}" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug]) }}">{{ __('site.contact') }}</a>
+                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}">{{ __('site.measurement_guide') }}</a>
+                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.about') }}</a>
+                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug]) }}">{{ __('site.contact') }}</a>
             </nav>
 
             <div class="flex items-center gap-1 sm:gap-2">
-                <button type="button" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/10" @click="searchOpen = !searchOpen" aria-label="{{ __('site.search_products') }}">
-                    <x-icon name="search" class="h-5 w-5 base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
+                <button type="button" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100" @click="searchOpen = !searchOpen" aria-label="{{ __('site.search_products') }}">
+                    <x-icon name="search" class="h-5 w-5 text-gray-700" />
                 </button>
-                <a href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-white/10 sm:grid" aria-label="{{ __('commerce.wishlist') }}">
-                    <x-icon name="heart" class="h-5 w-5 base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
+                <a href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100 sm:grid" aria-label="{{ __('commerce.wishlist') }}">
+                    <x-icon name="heart" class="h-5 w-5 text-gray-700" />
                 </a>
-                <a href="{{ route('cart', ['locale' => app()->getLocale()]) }}" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/10" aria-label="{{ __('commerce.cart') }}">
-                    <x-icon name="bag" class="h-5 w-5 base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
+                <a href="{{ route('cart', ['locale' => app()->getLocale()]) }}" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100" aria-label="{{ __('commerce.cart') }}">
+                    <x-icon name="bag" class="h-5 w-5 text-gray-700" />
                 </a>
-                <a href="{{ auth()->check() ? route('account', ['locale' => app()->getLocale()]) : route('login', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-white/10 sm:grid" aria-label="{{ auth()->check() ? __('auth.account') : __('auth.login') }}">
-                    <x-icon name="user" class="h-5 w-5 base44-header-ink {{ $isHome ? 'text-white' : 'text-gray-700' }}" />
+                <a href="{{ auth()->check() ? route('account', ['locale' => app()->getLocale()]) : route('login', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100 sm:grid" aria-label="{{ auth()->check() ? __('auth.account') : __('auth.login') }}">
+                    <x-icon name="user" class="h-5 w-5 text-gray-700" />
                 </a>
             </div>
         </div>
@@ -201,7 +194,7 @@
     </div>
 </header>
 
-<main id="main-content" class="{{ $isHome ? '' : 'pt-0 md:pt-40' }} pb-16 md:pb-0">
+<main id="main-content" class="pt-0 pb-16 md:pt-40 md:pb-0">
     @yield('content')
 </main>
 
