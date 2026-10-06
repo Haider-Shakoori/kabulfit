@@ -6,18 +6,18 @@ const root = path.resolve('public');
 const outRoot = path.join(root, 'images', 'kabulfit-optimized');
 
 const tasks = [
-  ['images/kabulfit-live/logo-header.png', 'logo-header.webp', 320, 74],
-  ['images/kabulfit-live/logo-footer.png', 'logo-footer.webp', 320, 74],
-  ['images/kabulfit-live/catalog/category-3ed66ce35408.webp', 'category-men.webp', 640, 68],
-  ['images/kabulfit-live/catalog/category-861c19f93a16.webp', 'category-women.webp', 640, 68],
-  ['images/kabulfit-live/catalog/category-15e0668e6ecf.png', 'category-kids.webp', 640, 68],
-  ['images/kabulfit-live/catalog/product-e3216ebea370.webp', 'category-accessories.webp', 640, 68],
-  ['images/kabulfit-base44/source/1cce53a01_2.png', 'story-bg.webp', 1280, 64],
-  ['images/kabulfit-base44/source/f065351e6_bn.jpg', 'craftsmanship.webp', 800, 70],
-  ['images/kabulfit-base44/source/58f1df170_2.png', 'measurement.webp', 800, 68],
-  ['images/kabulfit-base44/source/6b7f27f2f_H1.webp', 'hero-h1-mobile.webp', 768, 70],
-  ['images/kabulfit-base44/source/f2989fdbd_H2.webp', 'hero-h2-mobile.webp', 768, 70],
-  ['images/kabulfit-base44/source/b6b455e59_H3.webp', 'hero-h3-mobile.webp', 768, 70],
+  ['images/kabulfit-live/logo-header.png', 'logo-header.webp', 320, 66],
+  ['images/kabulfit-live/logo-footer.png', 'logo-footer.webp', 320, 66],
+  ['images/kabulfit-live/catalog/category-3ed66ce35408.webp', 'category-men.webp', 360, 52],
+  ['images/kabulfit-live/catalog/category-861c19f93a16.webp', 'category-women.webp', 360, 52],
+  ['images/kabulfit-live/catalog/category-15e0668e6ecf.png', 'category-kids.webp', 360, 52],
+  ['images/kabulfit-live/catalog/product-e3216ebea370.webp', 'category-accessories.webp', 360, 52],
+  ['images/kabulfit-base44/source/1cce53a01_2.png', 'story-bg.webp', 1000, 48],
+  ['images/kabulfit-base44/source/f065351e6_bn.jpg', 'craftsmanship.webp', 640, 58],
+  ['images/kabulfit-base44/source/58f1df170_2.png', 'measurement.webp', 640, 58],
+  ['images/kabulfit-base44/source/6b7f27f2f_H1.webp', 'hero-h1-mobile.webp', 768, 55],
+  ['images/kabulfit-base44/source/f2989fdbd_H2.webp', 'hero-h2-mobile.webp', 768, 55],
+  ['images/kabulfit-base44/source/b6b455e59_H3.webp', 'hero-h3-mobile.webp', 768, 55],
 ];
 
 fs.mkdirSync(outRoot, { recursive: true });
@@ -59,13 +59,13 @@ for (const name of fs.readdirSync(catalogSourceDir).filter((name) => /^product-.
   const source = path.join(catalogSourceDir, name);
   const base = path.parse(name).name;
 
-  for (const width of [320, 640]) {
+  for (const width of [240, 360, 480]) {
     const target = path.join(catalogOutDir, `${base}-${width}.webp`);
 
     await sharp(source)
       .rotate()
       .resize({ width, withoutEnlargement: true })
-      .webp({ quality: width === 320 ? 68 : 72, effort: 5, smartSubsample: true })
+      .webp({ quality: width === 240 ? 56 : (width === 360 ? 60 : 64), effort: 5, smartSubsample: true })
       .toFile(target);
 
     console.log(`catalog/${path.basename(target)}: ${fs.statSync(target).size} bytes`);
