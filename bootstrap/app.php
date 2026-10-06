@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\ApiCacheHeaders;
+use App\Http\Middleware\CompressHtmlResponse;
 use App\Http\Middleware\EnsureActiveUser;
 use App\Http\Middleware\RequirePermission;
 use App\Http\Middleware\SecurityHeaders;
@@ -34,6 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]));
 
         $middleware->append(SecurityHeaders::class);
+        $middleware->append(CompressHtmlResponse::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Central exception reporting/rendering will be expanded with domain workflows.
