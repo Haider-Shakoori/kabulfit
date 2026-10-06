@@ -1,0 +1,60 @@
+name: Lighthouse Live Audit
+
+on:
+  push:
+    branches: ['feature/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run Lighthouse against live storefront
+        run: |
+          npx --yes lighthouse@12.8.2 https://kabulfit.businessos.af/en \
+            --quiet \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json \
+            --output-path=lighthouse.json
+
+      - name: Print category scores and non-perfect audits
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('lighthouse.json', 'utf8'));
+          const categories = ['performance', 'accessibility', 'best-practices', 'seo'];
+
+          console.log('LIGHTHOUSE_CATEGORY_SCORES');
+          for (const id of categories) {
+            const score = Math.round((report.categories[id]?.score ?? 0) * 100);
+            console.log(`${id}=${score}`);
+          }
+
+          console.log('LIGHTHOUSE_NON_PERFECT_AUDITS');
+          for (const [id, audit] of Object.entries(report.audits)) {
+            if (audit.scoreDisplayMode === 'notApplicable' || audit.scoreDisplayMode === 'manual') continue;
+            if (audit.score === null || audit.score >= 1) continue;
+            const numeric = audit.numericValue !== undefined ? ` numeric=${audit.numericValue}` : '';
+            console.log(`${id} score=${audit.score} title=${audit.title}${numeric}`);
+          }
+          NODE
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-live-report
+          path: lighthouse.json
+          retention-days: 7

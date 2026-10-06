@@ -1,20 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="page-hero">
-    <div class="container">
-        <h1>{{ $translation->title }}</h1>
-        @if($translation->excerpt)<p>{{ $translation->excerpt }}</p>@endif
-    </div>
-</section>
+@php
+    $pageKey = $translation->page->page_key;
+    $paragraphs = collect(preg_split('/\R{2,}/u', trim($translation->body ?? '')))->filter()->values();
+    $locale = app()->getLocale();
+    $contactEmail = app(\App\Services\Settings\SiteSettings::class)->get('site.contact_email', 'info@kabulfit.com');
+@endphp
 
-<section class="section">
-    <div class="container">
-        <article class="account-panel">
-            @foreach(preg_split('/\R{2,}/u', trim($translation->body)) as $paragraph)
-                <p>{{ $paragraph }}</p>
-            @endforeach
-        </article>
-    </div>
-</section>
+@if ($pageKey === 'about')
+    @include('content.pages.about')
+@elseif ($pageKey === 'faq')
+    @include('content.pages.faq')
+@elseif ($pageKey === 'measurement-guide')
+    @include('content.pages.measurement-guide')
+@elseif ($pageKey === 'contact')
+    @include('content.pages.contact')
+@else
+    @include('content.pages.policy')
+@endif
 @endsection

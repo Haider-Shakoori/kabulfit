@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Services\Catalog\CatalogQuery;
 use App\Services\Settings\SiteSettings;
 use App\Support\Seo\SeoData;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -15,19 +16,30 @@ class HomeController extends Controller
 
     public function __invoke(string $locale): View
     {
-        $categories = Category::query()
-            ->where('is_active', true)
-            ->with('translations')
-            ->orderBy('sort_order')
-            ->get();
-
-        $featuredProducts = Product::query()
-            ->where('is_active', true)
-            ->where('is_featured', true)
-            ->with(CatalogQuery::cardEagerLoads())
-            ->orderBy('sort_order')
-            ->limit(8)
-            ->get();
+        [$categories, $featuredProducts, $bestSellers] = Cache::remember(
+            'storefront:home-catalog:v1',
+            now()->addMinutes(10),
+            fn (): array => [
+                Category::query()
+                    ->where('is_active', true)
+                    ->with('translations')
+                    ->orderBy('sort_order')
+                    ->get(),
+                Product::query()
+                    ->where('is_active', true)
+                    ->where('is_featured', true)
+                    ->with(CatalogQuery::cardEagerLoads())
+                    ->orderBy('sort_order')
+                    ->limit(8)
+                    ->get(),
+                Product::query()
+                    ->where('is_active', true)
+                    ->with(CatalogQuery::cardEagerLoads())
+                    ->orderByDesc('id')
+                    ->limit(8)
+                    ->get(),
+            ],
+        );
 
         $homeTitle = $this->settings->get('seo.home.title.'.$locale, __('site.home_title'));
         $homeDescription = $this->settings->get('seo.home.description.'.$locale, __('site.home_description'));
@@ -46,7 +58,7 @@ class HomeController extends Controller
             ],
         );
 
-        return view('home', compact('categories', 'featuredProducts', 'seo'));
+        return view('home', compact('categories', 'featuredProducts', 'bestSellers', 'seo'));
     }
 
     private function localeAlternates(string $routeName, array $parameters = []): array

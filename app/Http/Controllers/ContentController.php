@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use App\Models\BlogPostTranslation;
 use App\Models\ContentPageTranslation;
+use App\Models\MeasurementGuideVideo;
 use App\Support\Seo\SeoData;
 use Illuminate\View\View;
 
@@ -23,8 +24,18 @@ class ContentController extends Controller
             ->mapWithKeys(fn ($item) => [$item->locale => route('content.page', ['locale' => $item->locale, 'slug' => $item->slug])])
             ->all();
 
+        $measurementGuideVideos = $translation->page->page_key === 'measurement-guide'
+            ? MeasurementGuideVideo::query()
+                ->where('is_active', true)
+                ->orderBy('category')
+                ->orderBy('display_order')
+                ->orderBy('id')
+                ->get()
+            : collect();
+
         return view('content.page', [
             'translation' => $translation,
+            'measurementGuideVideos' => $measurementGuideVideos,
             'seo' => new SeoData(
                 $translation->seo_title ?: $translation->title.' | KabulFit',
                 $translation->seo_description ?: ($translation->excerpt ?? ''),

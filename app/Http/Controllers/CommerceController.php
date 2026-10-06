@@ -12,9 +12,11 @@ use App\Models\Wishlist;
 use App\Services\Commerce\CartService;
 use App\Services\Commerce\CheckoutService;
 use App\Services\Payments\PaymentService;
+use App\Services\Payments\PayPalService;
 use App\Support\Seo\PrivatePageSeo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class CommerceController extends Controller
@@ -45,7 +47,21 @@ class CommerceController extends Controller
         $variant = isset($data['variant_sku']) ? $product->variants->firstWhere('sku', $data['variant_sku']) : null;
         $this->carts->add($this->carts->forUser($request->user()), $product, $variant, $data['quantity']);
 
-        return redirect()->route('cart', ['locale' => app()->getLocale()]);
+        $unitPriceMinor = $product->sale_price_minor ?? $product->price_minor;
+
+        return redirect()
+            ->route('cart', ['locale' => app()->getLocale()])
+            ->with('pixel_event', [
+                'name' => 'AddToCart',
+                'payload' => [
+                    'content_ids' => [$product->sku],
+                    'content_name' => $product->translation()?->name ?? $product->sku,
+                    'content_type' => 'product',
+                    'value' => round(($unitPriceMinor * (int) $data['quantity']) / 100, 2),
+                    'currency' => $product->currency,
+                    'num_items' => (int) $data['quantity'],
+                ],
+            ]);
     }
 
     public function update(Request $request, CartItem $item): RedirectResponse
@@ -113,23 +129,41 @@ class CommerceController extends Controller
         ]);
     }
 
-    public function place(Request $request, CheckoutService $checkout, PaymentService $payments): View
+    public function place(Request $request, CheckoutService $checkout, PaymentService $payments, PayPalService $paypal): View
     {
         $data = $request->validate([
             'address_uuid' => 'required|uuid',
             'shipping_method' => 'required|string',
             'coupon' => 'nullable|string',
+            'payment_method' => 'required|in:stripe,paypal',
         ]);
+        if ($data['payment_method'] === 'paypal' && ! $paypal->enabledForCurrency($this->carts->forUser($request->user())->currency)) {
+            throw ValidationException::withMessages([
+                'payment_method' => __('commerce.paypal_not_configured'),
+            ]);
+        }
+
         $address = Address::where('user_id', $request->user()->id)->where('uuid', $data['address_uuid'])->firstOrFail();
         $shipping = ShippingMethod::where('code', $data['shipping_method'])->where('is_active', true)->firstOrFail();
         $coupon = ! empty($data['coupon']) ? Coupon::where('code', strtoupper($data['coupon']))->first() : null;
         $order = $checkout->create($request->user(), $this->carts->forUser($request->user()), $address, $shipping, $coupon);
-        $payment = $payments->initiate($order);
+
+        if ($data['payment_method'] === 'paypal') {
+            $paypal->prepare($order);
+            $clientSecret = null;
+            $paymentMethod = 'paypal';
+        } else {
+            $payment = $payments->initiate($order);
+            $clientSecret = $payment['client_secret'];
+            $paymentMethod = 'stripe';
+        }
 
         return view('commerce.payment', [
-            'order' => $order,
-            'clientSecret' => $payment['client_secret'],
+            'order' => $order->load('items'),
+            'clientSecret' => $clientSecret,
             'stripeKey' => config('services.stripe.key'),
+            'paypalClientId' => config('services.paypal.client_id'),
+            'paymentMethod' => $paymentMethod,
             'seo' => PrivatePageSeo::make(__('commerce.payment'), route('orders.payment', ['locale' => app()->getLocale(), 'order' => $order])),
         ]);
     }
@@ -138,10 +172,15 @@ class CommerceController extends Controller
     {
         abort_unless($order->user_id === $request->user()->id, 404);
 
+        $order->loadMissing(['payment', 'items']);
+        $paymentMethod = $order->payment?->provider ?: 'stripe';
+
         return view('commerce.payment', [
             'order' => $order,
             'clientSecret' => null,
             'stripeKey' => config('services.stripe.key'),
+            'paypalClientId' => config('services.paypal.client_id'),
+            'paymentMethod' => $paymentMethod,
             'seo' => PrivatePageSeo::make(__('commerce.payment'), route('orders.payment', ['locale' => app()->getLocale(), 'order' => $order])),
         ]);
     }

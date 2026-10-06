@@ -111,6 +111,8 @@ class CartService
     {
         return $cart->fresh([
             'items.product.translations',
+            'items.product.primaryMedia.translations',
+            'items.product.primaryMedia.derivatives',
             'items.variant.product',
             'items.variant.size',
             'items.variant.color.translations',

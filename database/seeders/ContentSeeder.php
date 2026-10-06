@@ -155,6 +155,7 @@ class ContentSeeder extends Seeder
 
         $verified = CarbonImmutable::parse('2026-09-22 00:00:00', 'Asia/Kabul');
         $entries = [
+            ['/Home', 'redirect', '/en', 'Verified Base44 home route; canonical Laravel home is localized.'],
             ['/About', 'redirect', '/en/about', 'Verified from the live public route inventory.'],
             ['/Contact', 'redirect', '/en/contact', 'Verified from the live public route inventory.'],
             ['/FAQ', 'redirect', '/en/faq', 'Verified from the live public route inventory.'],

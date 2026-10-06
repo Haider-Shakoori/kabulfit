@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             CatalogSeeder::class,
             CatalogDomainSeeder::class,
             MeasurementSeeder::class,
+            MeasurementGuideVideoSeeder::class,
             CommerceSeeder::class,
             AdminAuthorizationSeeder::class,
             ContentSeeder::class,

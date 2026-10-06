@@ -26,4 +26,12 @@ class LegacyRedirectController extends Controller
             'slug' => $translation->slug,
         ], 301);
     }
+
+    public function measurementGuide(): RedirectResponse
+    {
+        return redirect()->route('content.page', [
+            'locale' => config('kabulfit.default_locale'),
+            'slug' => 'measurement-guide',
+        ], 301);
+    }
 }

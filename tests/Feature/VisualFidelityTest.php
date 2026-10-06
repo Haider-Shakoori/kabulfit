@@ -83,12 +83,26 @@ class VisualFidelityTest extends TestCase
         $this->assertStringContainsString('prefers-reduced-motion', $css);
     }
 
+    public function test_hero_images_are_forced_to_fill_the_viewport_without_global_height_override(): void
+    {
+        $html = $this->get('/en')->assertOk()->getContent();
+        $css = file_get_contents(resource_path('css/app.css'));
+
+        $this->assertStringContainsString('class="base44-hero-image"', $html);
+        $this->assertStringContainsString('loading="eager"', $html);
+        $this->assertStringContainsString('fetchpriority="high"', $html);
+        $this->assertStringContainsString('rel="preload" as="image"', $html);
+        $this->assertStringContainsString('hero-h1-mobile.webp', $html);
+        $this->assertStringNotContainsString('img { height: auto; }', $css);
+    }
+
     public function test_accessibility_landmarks_and_mobile_navigation_are_present(): void
     {
         $html = $this->get('/en')->assertOk()->getContent();
 
         $this->assertStringContainsString('class="skip-link"', $html);
-        $this->assertStringContainsString('aria-controls="primary-nav"', $html);
+        $this->assertStringContainsString('aria-controls="mobile-navigation"', $html);
+        $this->assertStringContainsString('id="primary-nav"', $html);
         $this->assertStringContainsString('aria-label="Primary navigation"', $html);
         $this->assertStringContainsString('id="main-content"', $html);
         $this->assertStringContainsString('aria-labelledby="testimonials-title"', $html);

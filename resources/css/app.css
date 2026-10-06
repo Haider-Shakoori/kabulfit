@@ -62,10 +62,12 @@ body {
     font-family: Tahoma, Arial, sans-serif;
 }
 
-a { color: inherit; text-decoration: none; }
-img, svg { display: block; max-width: 100%; }
-img { height: auto; }
-button, input, select, textarea { font: inherit; }
+@layer base {
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+    button, input, select, textarea { font: inherit; }
+}
+
 button, a { -webkit-tap-highlight-color: transparent; }
 
 [x-cloak] { display: none !important; }
@@ -1625,4 +1627,139 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .product-media picture img,
 .product-gallery-item picture img {
     object-fit: cover;
+}
+
+
+/* Base44 parity: transparent home header becomes readable after scroll. */
+.base44-home-header .base44-header-ink {
+    color: #fff;
+    transition: color .25s ease;
+}
+
+.base44-home-header.base44-solid .base44-header-ink {
+    color: #374151;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+    text-align: right;
+}
+
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="url"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[type="number"] {
+    direction: ltr;
+    text-align: right;
+}
+
+@media (max-width: 767px) {
+    body {
+        padding-bottom: calc(3.75rem + env(safe-area-inset-bottom));
+    }
+
+    table {
+        max-width: 100%;
+    }
+
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    dialog,
+    [role="dialog"] {
+        max-width: calc(100vw - 1.5rem);
+    }
+}
+
+
+/* KabulFit storefront header: keep the mobile logo compact and let content flow below it. */
+.kabulfit-header-logo {
+    height: 3.5rem !important;
+    max-height: 3.5rem !important;
+    width: auto !important;
+    max-width: min(52vw, 11.875rem) !important;
+    object-fit: contain !important;
+}
+
+.kabulfit-drawer-logo {
+    height: 4.5rem !important;
+    max-height: 4.5rem !important;
+    width: auto !important;
+    max-width: 13rem !important;
+    object-fit: contain !important;
+}
+
+@media (min-width: 768px) {
+    .kabulfit-header-logo {
+        height: 5rem !important;
+        max-height: 5rem !important;
+        max-width: 16rem !important;
+    }
+
+    .kabulfit-drawer-logo {
+        height: 5.5rem !important;
+        max-height: 5.5rem !important;
+    }
+}
+
+
+/* Base44 hero parity: keep this unlayered so generic responsive image rules cannot collapse it. */
+.base44-hero-image {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    object-position: center 50% !important;
+}
+
+
+/* Base44 storefront color contracts.
+   These explicit classes prevent link reset/cascade rules from changing CTA text. */
+.base44-gradient-cta,
+.base44-gradient-cta:visited {
+    background: linear-gradient(90deg, #881C27, #2A6867);
+    color: #fff !important;
+}
+
+.base44-gradient-cta:hover {
+    color: #fff !important;
+    opacity: .9;
+}
+
+.base44-outline-light,
+.base44-outline-light:visited {
+    background: transparent;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.base44-outline-light:hover {
+    background: #fff;
+    color: #111827 !important;
+}
+
+.base44-gold-cta,
+.base44-gold-cta:visited {
+    background: #D4AF37;
+    color: #1f2937 !important;
+}
+
+.base44-gold-cta:hover {
+    background: #B8962E;
+    color: #1f2937 !important;
+}
+
+.base44-dark-cta,
+.base44-dark-cta:visited {
+    background: rgba(0, 0, 0, .90);
+    color: #fff !important;
+}
+
+.base44-dark-cta:hover {
+    background: #000;
+    color: #fff !important;
 }
