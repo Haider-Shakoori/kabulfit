@@ -89,7 +89,10 @@ class VisualFidelityTest extends TestCase
         $css = file_get_contents(resource_path('css/app.css'));
 
         $this->assertStringContainsString('class="base44-hero-image"', $html);
-        $this->assertStringContainsString('position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 50%;', $html);
+        $this->assertStringContainsString('loading="eager"', $html);
+        $this->assertStringContainsString('fetchpriority="high"', $html);
+        $this->assertStringContainsString('rel="preload" as="image"', $html);
+        $this->assertStringContainsString('hero-h1-mobile.webp', $html);
         $this->assertStringNotContainsString('img { height: auto; }', $css);
     }
 
