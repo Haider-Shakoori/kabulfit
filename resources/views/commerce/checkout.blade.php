@@ -167,7 +167,7 @@
                                         <button type="button"
                                                 @click="if (addressUuid) step = 2"
                                                 :disabled="!addressUuid"
-                                                class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40">
+                                                class="base44-gradient-cta inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition disabled:cursor-not-allowed disabled:opacity-40">
                                             {{ $labels['continue_review'] }}
                                             <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                                         </button>
@@ -256,7 +256,7 @@
                                 <button type="button" @click="step = 1" class="rounded-xl border-2 border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700">{{ $labels['back'] }}</button>
                                 <button type="submit"
                                         :disabled="!addressUuid || !shippingCode || !terms"
-                                        class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40">
+                                        class="base44-gradient-cta inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold transition disabled:cursor-not-allowed disabled:opacity-40">
                                     <x-icon name="shield" class="h-5 w-5" />
                                     {{ $labels['place'] }}
                                 </button>
