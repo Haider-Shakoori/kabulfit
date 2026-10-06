@@ -62,9 +62,12 @@ body {
     font-family: Tahoma, Arial, sans-serif;
 }
 
-a { color: inherit; text-decoration: none; }
-img, svg { display: block; max-width: 100%; }
-button, input, select, textarea { font: inherit; }
+@layer base {
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+    button, input, select, textarea { font: inherit; }
+}
+
 button, a { -webkit-tap-highlight-color: transparent; }
 
 [x-cloak] { display: none !important; }
@@ -1711,4 +1714,52 @@ button, a { -webkit-tap-highlight-color: transparent; }
     max-width: none !important;
     object-fit: cover !important;
     object-position: center 50% !important;
+}
+
+
+/* Base44 storefront color contracts.
+   These explicit classes prevent link reset/cascade rules from changing CTA text. */
+.base44-gradient-cta,
+.base44-gradient-cta:visited {
+    background: linear-gradient(90deg, #881C27, #2A6867);
+    color: #fff !important;
+}
+
+.base44-gradient-cta:hover {
+    color: #fff !important;
+    opacity: .9;
+}
+
+.base44-outline-light,
+.base44-outline-light:visited {
+    background: transparent;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.base44-outline-light:hover {
+    background: #fff;
+    color: #111827 !important;
+}
+
+.base44-gold-cta,
+.base44-gold-cta:visited {
+    background: #D4AF37;
+    color: #1f2937 !important;
+}
+
+.base44-gold-cta:hover {
+    background: #B8962E;
+    color: #1f2937 !important;
+}
+
+.base44-dark-cta,
+.base44-dark-cta:visited {
+    background: rgba(0, 0, 0, .90);
+    color: #fff !important;
+}
+
+.base44-dark-cta:hover {
+    background: #000;
+    color: #fff !important;
 }
