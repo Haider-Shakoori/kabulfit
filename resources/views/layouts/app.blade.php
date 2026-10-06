@@ -29,6 +29,9 @@
     @if (! empty($seo->jsonLd))
         <script type="application/ld+json">{!! json_encode($seo->jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endif
+    @if (request()->routeIs('home'))
+        <link rel="preload" as="image" href="{{ asset('images/kabulfit-live/hero-heritage.png') }}" fetchpriority="high">
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -56,7 +59,7 @@
 
     <div class="container nav-shell live-nav-shell" @click.outside="open = false">
         <a href="{{ route('home', ['locale' => app()->getLocale()]) }}" class="live-brand" aria-label="{{ __('site.kabulfit_home') }}">
-            <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" width="310" height="120" alt="KabulFit" fetchpriority="high">
+            <img src="{{ asset('images/kabulfit-live/logo-header.png') }}" width="310" height="120" alt="KabulFit" decoding="async">
         </a>
 
         <nav id="primary-nav" class="primary-nav live-primary-nav" :class="{ 'is-open': open }" aria-label="{{ __('site.primary_navigation') }}">
