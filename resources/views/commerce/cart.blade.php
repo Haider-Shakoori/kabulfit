@@ -30,7 +30,7 @@
                 </div>
                 <h2 class="text-2xl font-semibold text-gray-900">{{ __('commerce.empty_cart') }}</h2>
                 <p class="mt-2 text-gray-500">{{ $startShopping }}</p>
-                <a href="{{ route('shop', ['locale' => $locale]) }}" class="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white transition hover:opacity-90">
+                <a href="{{ route('shop', ['locale' => $locale]) }}" class="base44-gradient-cta mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition">
                     {{ $continueLabel }}
                     <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                 </a>
@@ -127,7 +127,7 @@
                             </div>
                             <p class="mt-2 text-xs leading-5 text-gray-500">{{ $shippingNote }}</p>
 
-                            <a href="{{ route('checkout', ['locale' => $locale]) }}" class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-4 font-semibold text-white transition hover:opacity-90">
+                            <a href="{{ route('checkout', ['locale' => $locale]) }}" class="base44-gradient-cta mt-6 flex w-full items-center justify-center gap-2 rounded-xl px-5 py-4 font-semibold transition">
                                 {{ __('commerce.continue_checkout') }}
                                 <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                             </a>
