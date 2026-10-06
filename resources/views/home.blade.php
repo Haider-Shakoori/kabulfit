@@ -126,7 +126,7 @@
             @foreach($categories->take(4) as $category)
                 @php($translation = $category->translation())
                 <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}" class="group relative h-[300px] overflow-hidden rounded-[2rem] sm:h-[400px] lg:h-[500px] lg:rounded-[3rem]">
-                    <img src="{{ $categoryFallbacks[$loop->index % count($categoryFallbacks)] }}" alt="{{ $translation?->name }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+                    <img src="{{ $categoryFallbacks[$loop->index % count($categoryFallbacks)] }}" alt="{{ $translation?->name }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" fetchpriority="low" width="360" height="600">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
                     <div class="absolute inset-x-0 bottom-0 p-4 text-white sm:p-6 lg:p-8">
                         <h3 class="text-xl font-bold sm:text-2xl lg:text-3xl">{{ $translation?->name }}</h3>
