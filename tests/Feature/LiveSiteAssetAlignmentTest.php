@@ -35,9 +35,27 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $html = $response->getContent();
 
         foreach (['6b7f27f2f_H1.webp', 'f2989fdbd_H2.webp', 'b6b455e59_H3.webp'] as $heroImage) {
-            $this->assertFileExists(public_path('images/kabulfit-base44/source/'.$heroImage));
+            $path = public_path('images/kabulfit-base44/source/'.$heroImage);
+
+            $this->assertFileExists($path);
+            $this->assertGreaterThan(50_000, filesize($path), $heroImage.' is unexpectedly small.');
+            $this->assertSame('image/webp', mime_content_type($path));
         }
 
+        $this->assertLessThan(
+            strpos($html, 'f2989fdbd_H2.webp'),
+            strpos($html, '6b7f27f2f_H1.webp'),
+            'Hero H1 must render before H2.',
+        );
+        $this->assertLessThan(
+            strpos($html, 'b6b455e59_H3.webp'),
+            strpos($html, 'f2989fdbd_H2.webp'),
+            'Hero H2 must render before H3.',
+        );
+
+        $this->assertStringContainsString('Authentic Afghan Elegance', $html);
+        $this->assertStringContainsString('Traditional Elegance', $html);
+        $this->assertStringContainsString('Custom Fit Guarantee', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
         $this->assertStringNotContainsString('kabulfit-craftsmanship.svg', $html);
