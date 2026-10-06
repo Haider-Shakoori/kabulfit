@@ -68,7 +68,7 @@
                             <form id="stripe-payment-form" class="space-y-5">
                                 <div id="stripe-payment-element" class="min-h-20"></div>
                                 <p id="stripe-payment-message" role="alert" class="text-sm text-red-600"></p>
-                                <button class="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-5 py-3 text-lg font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50" id="stripe-submit" type="submit">
+                                <button class="base44-gradient-cta flex min-h-14 w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-lg font-semibold transition disabled:cursor-not-allowed disabled:opacity-50" id="stripe-submit" type="submit">
                                     <x-icon name="shield" class="h-5 w-5" />
                                     {{ __('commerce.pay_now') }}
                                 </button>
