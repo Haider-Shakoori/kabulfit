@@ -2,27 +2,34 @@
 
 @section('content')
 @php
+    $measurementGuideSlug = app()->getLocale() === 'en'
+        ? 'measurement-guide'
+        : (app()->getLocale() === 'fa' ? 'راهنمای-اندازه-گیری' : 'د-اندازې-لارښود');
+    $measurementGuideUrl = route('content.page', [
+        'locale' => app()->getLocale(),
+        'slug' => $measurementGuideSlug,
+    ]);
     $heroSlides = [
         [
             'title' => __('site.hero_title'),
             'subtitle' => __('site.hero_subtitle'),
-            'image' => '/images/kabulfit-base44/source/1cce53a01_2.png',
+            'image' => asset('images/kabulfit-base44/source/6b7f27f2f_H1.webp'),
             'cta' => __('site.shop_now'),
             'href' => route('shop', ['locale' => app()->getLocale()]),
         ],
         [
-            'title' => app()->getLocale() === 'ps' ? 'دودیزه ښکلا' : (app()->getLocale() === 'fa' ? 'ظرافت سنتی' : 'Traditional Elegance'),
-            'subtitle' => __('site.story_p1'),
-            'image' => '/images/kabulfit-base44/source/58f1df170_2.png',
+            'title' => __('site.traditional_elegance'),
+            'subtitle' => __('site.traditional_elegance_subtitle'),
+            'image' => asset('images/kabulfit-base44/source/f2989fdbd_H2.webp'),
             'cta' => __('site.explore_collection'),
             'href' => route('shop', ['locale' => app()->getLocale()]),
         ],
         [
-            'title' => app()->getLocale() === 'ps' ? 'د مناسب فټ تضمین' : (app()->getLocale() === 'fa' ? 'تضمین اندازه مناسب' : 'Custom Fit Guarantee'),
-            'subtitle' => __('site.measurements_text'),
-            'image' => '/images/kabulfit-base44/source/1cce53a01_2.png',
+            'title' => __('site.custom_fit_guarantee'),
+            'subtitle' => __('site.custom_fit_guarantee_subtitle'),
+            'image' => asset('images/kabulfit-base44/source/b6b455e59_H3.webp'),
             'cta' => __('site.measurement_guide'),
-            'href' => '#tailoring',
+            'href' => $measurementGuideUrl,
         ],
     ];
     $categoryFallbacks = [
@@ -56,7 +63,7 @@
                         <span x-text="slides[slide]?.cta || @js(__('site.shop_now'))"></span>
                         <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                     </a>
-                    <a href="#tailoring" class="inline-flex items-center gap-2 rounded-full border-2 border-white bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-7 sm:text-base">
+                    <a href="{{ $measurementGuideUrl }}" class="inline-flex items-center gap-2 rounded-full border-2 border-white bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white hover:text-black sm:px-7 sm:text-base">
                         <x-icon name="ruler" class="h-4 w-4" />
                         {{ __('site.measurement_guide') }}
                     </a>
