@@ -34,7 +34,7 @@
         </div>
 
         <div class="absolute inset-x-0 bottom-0 translate-y-4 p-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}" class="flex w-full items-center justify-center gap-2 rounded-full bg-black/90 px-4 py-3 text-sm font-semibold text-white hover:bg-black">
+            <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}" class="base44-dark-cta flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold">
                 <x-icon name="eye" class="h-5 w-5" /> Quick Look
             </a>
         </div>
