@@ -26,6 +26,7 @@ class LegacyRedirectController extends Controller
             'slug' => $translation->slug,
         ], 301);
     }
+
     public function measurementGuide(): RedirectResponse
     {
         return redirect()->route('content.page', [
