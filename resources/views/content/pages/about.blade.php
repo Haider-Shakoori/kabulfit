@@ -1,7 +1,7 @@
 <section class="relative overflow-hidden bg-gradient-to-r from-[#881C27] to-[#2A6867] py-12 text-white sm:py-16">
     <div class="absolute inset-0 opacity-10" style="background-image:radial-gradient(circle at 1px 1px,white 1px,transparent 0);background-size:30px 30px"></div>
     <div class="relative mx-auto max-w-7xl px-4">
-        <span class="inline-flex rounded-full bg-[#D4AF37] px-4 py-2 text-xs font-semibold text-black">{{ $locale === 'ps' ? 'زموږ کیسه' : ($locale === 'fa' ? 'داستان ما' : 'Our Story') }}</span>
+        <a href="#our-story" class="base44-gold-cta inline-flex rounded-full px-4 py-2 text-xs font-semibold">{{ $locale === 'ps' ? 'زموږ کیسه' : ($locale === 'fa' ? 'داستان ما' : 'Our Story') }}</a>
         <h1 class="mt-5 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">{{ $translation->title }}</h1>
         @if ($translation->excerpt)
             <p class="mt-5 max-w-3xl text-lg leading-8 text-white/80 sm:text-xl">{{ $translation->excerpt }}</p>
@@ -9,7 +9,7 @@
     </div>
 </section>
 
-<section class="py-12 sm:py-16 md:py-20">
+<section id="our-story" class="py-12 sm:py-16 md:py-20">
     <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 md:grid-cols-2">
         <img src="/images/kabulfit-base44/source/f065351e6_bn.jpg" alt="Afghan craftsmanship" class="aspect-square w-full rounded-3xl object-cover shadow-2xl">
         <div>
@@ -50,5 +50,15 @@
         @foreach ([['5000+', 'Happy Customers'], ['50+', 'Countries Served'], ['200+', 'Artisans Supported'], ['100%', 'Authentic Products']] as [$value, $label])
             <div><p class="text-4xl font-bold text-[#D4AF37] md:text-5xl">{{ $value }}</p><p class="mt-2 text-sm text-white/70">{{ $label }}</p></div>
         @endforeach
+    </div>
+</section>
+
+<section class="bg-gradient-to-r from-[#881C27] to-[#2A6867] py-16 text-center text-white" data-section="about-closing-cta">
+    <div class="mx-auto max-w-4xl px-4">
+        <h2 class="text-3xl font-bold sm:text-4xl">{{ $locale === 'ps' ? 'د افغان ښکلا تجربه وکړئ' : ($locale === 'fa' ? 'ظرافت افغان را تجربه کنید' : 'Experience Afghan Elegance') }}</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-white/80">{{ $locale === 'ps' ? 'زموږ اصلي افغان کالي او دودیز خیاطي وپلټئ.' : ($locale === 'fa' ? 'لباس‌های اصیل افغان و خیاطی سفارشی ما را کشف کنید.' : 'Discover authentic Afghan clothing and custom tailoring crafted with care.') }}</p>
+        <a href="{{ route('shop', ['locale' => $locale]) }}" class="base44-gradient-cta mt-7 inline-flex rounded-full border border-white/20 px-6 py-3 font-semibold shadow-lg">
+            {{ $locale === 'ps' ? 'ټولګه وپلټئ' : ($locale === 'fa' ? 'مشاهده مجموعه' : 'Shop Collection') }}
+        </a>
     </div>
 </section>
