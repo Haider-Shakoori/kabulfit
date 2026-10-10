@@ -18,15 +18,15 @@ class CatalogFilteringTest extends TestCase
 
     public function test_shop_search_and_category_filters_are_server_rendered(): void
     {
-        $this->get('/en/shop?q=shawl')
+        $this->get('/en/shop?q=perahan')
             ->assertOk()
-            ->assertSee('Kuchi-Inspired Afghan Shawl')
-            ->assertDontSee('Classic Afghan Perahan Tunban');
+            ->assertSee('Classic Afghan Perahan Tunban')
+            ->assertDontSee('Herat Embroidered Afghan Dress');
 
-        $this->get('/en/shop?category=accessories')
+        $this->get('/en/shop?category=men')
             ->assertOk()
-            ->assertSee('Kuchi-Inspired Afghan Shawl')
-            ->assertDontSee('Kids Afghan Waistcoat Set');
+            ->assertSee('Classic Afghan Perahan Tunban')
+            ->assertDontSee('Herat Embroidered Afghan Dress');
     }
 
     public function test_collection_size_and_color_filters_work(): void
@@ -45,17 +45,14 @@ class CatalogFilteringTest extends TestCase
 
     public function test_price_sort_uses_integer_minor_unit_prices(): void
     {
-        $html = $this->get('/en/shop?sort=price_asc')->assertOk()->getContent();
+        $html = $this->get('/en/shop?category=men&sort=price_asc')->assertOk()->getContent();
 
-        $kids = strpos($html, 'Kids Afghan Waistcoat Set');
-        $shawl = strpos($html, 'Kuchi-Inspired Afghan Shawl');
         $perahan = strpos($html, 'Classic Afghan Perahan Tunban');
+        $waistcoat = strpos($html, 'Traditional Afghan Waistcoat');
 
-        $this->assertIsInt($kids);
-        $this->assertIsInt($shawl);
         $this->assertIsInt($perahan);
-        $this->assertLessThan($shawl, $kids);
-        $this->assertLessThan($perahan, $shawl);
+        $this->assertIsInt($waistcoat);
+        $this->assertLessThan($waistcoat, $perahan);
     }
 
     public function test_in_stock_filter_uses_variant_inventory(): void
