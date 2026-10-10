@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function __invoke(string $locale): View
     {
         [$categories, $featuredProducts, $bestSellers] = Cache::remember(
-            'storefront:home-catalog:v1',
+            'storefront:home-catalog:v2',
             now()->addMinutes(10),
             fn (): array => [
                 Category::query()
