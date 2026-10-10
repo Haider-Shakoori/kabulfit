@@ -92,7 +92,8 @@ class VisualFidelityTest extends TestCase
         $this->assertStringContainsString('loading="eager"', $html);
         $this->assertStringContainsString('fetchpriority="high"', $html);
         $this->assertStringContainsString('rel="preload" as="image"', $html);
-        $this->assertStringContainsString('hero-h1-mobile.webp', $html);
+        $this->assertStringNotContainsString('hero-h1-mobile.webp', $html);
+        $this->assertStringContainsString('6b7f27f2f_H1.webp', $html);
         $this->assertStringNotContainsString('img { height: auto; }', $css);
     }
 
