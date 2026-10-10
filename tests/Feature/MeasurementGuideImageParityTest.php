@@ -76,7 +76,7 @@ class MeasurementGuideImageParityTest extends TestCase
         $this->assertStringContainsString('Weight', $html);
         $this->assertStringContainsString('Measurement Unit', $html);
         $this->assertStringContainsString('Save as Profile', $html);
-        $this->assertStringContainsString("max-w-md grid-cols-2 rounded-lg bg-gray-100 p-1", $html);
+        $this->assertStringContainsString('max-w-md grid-cols-2 rounded-lg bg-gray-100 p-1', $html);
         $this->assertStringNotContainsString('mx-auto max-w-3xl rounded-2xl border border-gray-200 bg-white p-6 text-center', $html);
     }
 
