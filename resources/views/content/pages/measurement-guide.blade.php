@@ -284,7 +284,7 @@
                 </div>
             </div>
 
-            <div x-show="tab === 'form'" x-cloak class="mx-auto max-w-5xl">
+            <div x-show="tab === 'form'" x-cloak data-measurement-entry-form class="mx-auto max-w-5xl">
                 @auth
                     <form method="POST" action="{{ route('measurements.store', ['locale' => $locale]) }}" class="space-y-6">
                         @csrf
