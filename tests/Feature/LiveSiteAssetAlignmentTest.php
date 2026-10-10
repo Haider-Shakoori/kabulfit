@@ -26,9 +26,9 @@ class LiveSiteAssetAlignmentTest extends TestCase
             ->assertSee('6b7f27f2f_H1.webp', false)
             ->assertSee('f2989fdbd_H2.webp', false)
             ->assertSee('b6b455e59_H3.webp', false)
-            ->assertSee('images/kabulfit-optimized/story-bg.webp', false)
-            ->assertSee('images/kabulfit-optimized/measurement.webp', false)
-            ->assertSee('images/kabulfit-optimized/craftsmanship.webp', false)
+            ->assertSee('images/kabulfit-base44/source/1cce53a01_2.png', false)
+            ->assertSee('images/kabulfit-base44/source/58f1df170_2.png', false)
+            ->assertSee('images/kabulfit-base44/source/f065351e6_bn.jpg', false)
             ->assertSee('Handcrafted')
             ->assertSee('Free Shipping', false);
 
@@ -61,7 +61,10 @@ class LiveSiteAssetAlignmentTest extends TestCase
         $this->assertSame(1, substr_count($html, 'data-section="hero-bottom-fade"'));
         $this->assertStringContainsString('loading="eager"', $html);
         $this->assertStringContainsString('fetchpriority="high"', $html);
-        $this->assertStringContainsString('hero-h1-mobile.webp', $html);
+        $this->assertStringNotContainsString('hero-h1-mobile.webp', $html);
+        $this->assertStringNotContainsString('kabulfit-optimized/story-bg.webp', $html);
+        $this->assertStringNotContainsString('kabulfit-optimized/craftsmanship.webp', $html);
+        $this->assertStringNotContainsString('kabulfit-optimized/measurement.webp', $html);
         $this->assertStringContainsString('/en/measurement-guide', $html);
         $this->assertStringContainsString('h-24 bg-gradient-to-t from-[#FDFBF7] to-transparent', $html);
         $this->assertStringNotContainsString('kabulfit-hero-textile.svg', $html);
