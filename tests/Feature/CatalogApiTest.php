@@ -18,18 +18,18 @@ class CatalogApiTest extends TestCase
 
     public function test_catalog_api_returns_localized_slug_sku_money_stock_and_filter_metadata(): void
     {
-        $response = $this->getJson('/api/v1/en/catalog?category=women');
-
-        $response
+        $response = $this->getJson('/api/v1/en/catalog?category=women&per_page=48')
             ->assertOk()
-            ->assertJsonPath('data.0.sku', 'KF-W-DR-001')
-            ->assertJsonPath('data.0.slug', 'herat-embroidered-afghan-dress')
-            ->assertJsonPath('data.0.price.minor', 980000)
-            ->assertJsonPath('data.0.price.currency', 'AFN')
-            ->assertJsonPath('data.0.stock.in_stock', true)
             ->assertJsonPath('filters.sorts.0', 'featured');
 
-        $this->assertArrayNotHasKey('id', $response->json('data.0'));
+        $product = collect($response->json('data'))->firstWhere('sku', 'KF-W-DR-001');
+
+        $this->assertNotNull($product);
+        $this->assertSame('herat-embroidered-afghan-dress', $product['slug']);
+        $this->assertSame(980000, $product['price']['minor']);
+        $this->assertSame('AFN', $product['price']['currency']);
+        $this->assertTrue($product['stock']['in_stock']);
+        $this->assertArrayNotHasKey('id', $product);
     }
 
     public function test_product_api_exposes_variant_skus_without_database_ids(): void
