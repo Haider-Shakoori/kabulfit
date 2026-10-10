@@ -36,10 +36,10 @@
         ],
     ];
     $categoryFallbacks = [
-        asset('images/kabulfit-optimized/category-men.webp'),
-        asset('images/kabulfit-optimized/category-women.webp'),
-        asset('images/kabulfit-optimized/category-kids.webp'),
-        asset('images/kabulfit-optimized/category-accessories.webp'),
+        'men' => asset('images/kabulfit-base44/source/2b37f3480_1.webp'),
+        'women' => asset('images/kabulfit-base44/source/0d9b271e2_1.webp'),
+        'boys' => asset('images/kabulfit-base44/source/9a8998f13_5.png'),
+        'girls' => asset('images/kabulfit-base44/source/b31ec3a1c_1.webp'),
     ];
 @endphp
 
@@ -122,11 +122,12 @@
             <h2 class="text-4xl font-bold tracking-tight text-gray-900">{{ __('site.shop_by_category') }}</h2>
             <p class="mt-4 text-gray-600">{{ __('site.category_intro') }}</p>
         </div>
-        <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4 lg:gap-8">
+        <div class="grid grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             @foreach($categories->take(4) as $category)
                 @php($translation = $category->translation())
-                <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}" class="group relative h-[300px] overflow-hidden rounded-[2rem] sm:h-[400px] lg:h-[500px] lg:rounded-[3rem]">
-                    <img src="{{ $categoryFallbacks[$loop->index % count($categoryFallbacks)] }}" alt="{{ $translation?->name }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" fetchpriority="low" width="360" height="600">
+                @php($categoryImage = $category->image_url ? asset($category->image_url) : ($categoryFallbacks[$translation?->slug] ?? reset($categoryFallbacks)))
+                <a href="{{ route('categories.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}" class="group relative h-[300px] overflow-hidden rounded-[2rem] sm:h-[400px] md:h-[500px] md:rounded-[3rem]">
+                    <img src="{{ $categoryImage }}" alt="{{ $translation?->name }}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" fetchpriority="low" width="800" height="1000">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
                     <div class="absolute inset-x-0 bottom-0 p-4 text-white sm:p-6 lg:p-8">
                         <h3 class="text-xl font-bold sm:text-2xl lg:text-3xl">{{ $translation?->name }}</h3>
@@ -147,7 +148,7 @@
             </div>
             <a href="{{ route('shop', ['locale' => app()->getLocale()]) }}" class="base44-gradient-cta hidden items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold sm:inline-flex">{{ __('site.view_all') }} <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" /></a>
         </div>
-        <div class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+        <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
             @forelse($featuredProducts as $product)
                 <x-product-card :product="$product" />
             @empty
