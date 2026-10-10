@@ -1763,3 +1763,123 @@ button, a { -webkit-tap-highlight-color: transparent; }
     background: #000;
     color: #fff !important;
 }
+
+
+/* Base44 desktop navigation hover parity: the nav uses the same maroon-to-teal
+   gradient as storefront CTA buttons, with the original lift and underline. */
+.base44-nav-link {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: .625rem .875rem;
+    border-radius: .75rem;
+    transition: color .5s ease, transform .5s ease, box-shadow .5s ease;
+}
+
+.base44-nav-link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, #881C27, #2A6867);
+    opacity: 0;
+    transition: opacity .5s ease;
+}
+
+.base44-nav-link::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-end: 0;
+    width: 0;
+    height: .25rem;
+    background: linear-gradient(90deg, #881C27, #2A6867);
+    transition: width .5s ease;
+}
+
+.base44-nav-link > span {
+    position: relative;
+    z-index: 1;
+}
+
+.base44-nav-link:hover,
+.base44-nav-link:focus-visible {
+    color: #fff !important;
+    transform: scale(1.05);
+    box-shadow: 0 10px 22px rgba(17, 24, 39, .16);
+}
+
+.base44-nav-link:hover::before,
+.base44-nav-link:focus-visible::before {
+    opacity: 1;
+}
+
+.base44-nav-link:hover::after,
+.base44-nav-link:focus-visible::after {
+    width: 100%;
+}
+
+.base44-nav-subitem {
+    position: relative;
+    overflow: hidden;
+    transition: color .3s ease, padding-inline-start .3s ease, background .3s ease;
+}
+
+.base44-nav-subitem::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: 0;
+    width: .25rem;
+    background: linear-gradient(180deg, #881C27, #2A6867);
+    transform: scaleY(0);
+    transition: transform .3s ease;
+}
+
+.base44-nav-subitem:hover,
+.base44-nav-subitem:focus-visible {
+    padding-inline-start: 1.5rem;
+    color: #881C27 !important;
+    background: linear-gradient(90deg, rgba(136, 28, 39, .10), transparent);
+}
+
+.base44-nav-subitem:hover::before,
+.base44-nav-subitem:focus-visible::before {
+    transform: scaleY(1);
+}
+
+.base44-nav-action {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: #374151;
+    transition: color .5s ease, transform .5s ease, box-shadow .5s ease;
+}
+
+.base44-nav-action::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #881C27, #2A6867);
+    opacity: 0;
+    transition: opacity .5s ease;
+}
+
+.base44-nav-action:hover,
+.base44-nav-action:focus-visible {
+    color: #fff !important;
+    transform: scale(1.05);
+    box-shadow: 0 10px 22px rgba(17, 24, 39, .16);
+}
+
+.base44-nav-action:hover::before,
+.base44-nav-action:focus-visible::before {
+    opacity: 1;
+}
+
+.base44-nav-action:hover svg,
+.base44-nav-action:focus-visible svg {
+    color: #fff !important;
+}
