@@ -63,6 +63,23 @@ class MeasurementGuideImageParityTest extends TestCase
         $this->assertStringNotContainsString('grid gap-6 md:grid-cols-2 xl:grid-cols-3', $html);
     }
 
+    public function test_measurement_guide_enter_tab_matches_base44_inline_form_structure(): void
+    {
+        $html = $this->get('/en/measurement-guide')->assertOk()->getContent();
+
+        $this->assertStringContainsString('role="tablist"', $html);
+        $this->assertStringContainsString('How to Measure', $html);
+        $this->assertStringContainsString('Enter Measurements', $html);
+        $this->assertStringContainsString('data-measurement-entry-form', $html);
+        $this->assertStringContainsString('Enter Your Measurements', $html);
+        $this->assertStringContainsString('Body Type', $html);
+        $this->assertStringContainsString('Weight', $html);
+        $this->assertStringContainsString('Measurement Unit', $html);
+        $this->assertStringContainsString('Save as Profile', $html);
+        $this->assertStringContainsString("max-w-md grid-cols-2 rounded-lg bg-gray-100 p-1", $html);
+        $this->assertStringNotContainsString('mx-auto max-w-3xl rounded-2xl border border-gray-200 bg-white p-6 text-center', $html);
+    }
+
     public function test_homepage_static_content_uses_original_base44_images(): void
     {
         $html = $this->get('/en')->assertOk()->getContent();
