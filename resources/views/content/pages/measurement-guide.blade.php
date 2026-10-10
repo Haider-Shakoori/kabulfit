@@ -131,7 +131,7 @@
                 @if($translation->excerpt)
                     <p class="mt-5 text-lg leading-8 text-white/80 md:text-xl">{{ $translation->excerpt }}</p>
                 @endif
-                <button type="button" @click="$refs.guideSection.scrollIntoView({ behavior: 'smooth' })" class="mt-7 inline-flex items-center gap-2 rounded-full bg-[#D4AF37] px-6 py-3 font-semibold text-black transition hover:bg-[#B8962E]">
+                <button type="button" @click="$refs.guideSection.scrollIntoView({ behavior: 'smooth' })" class="base44-gold-cta mt-7 inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition">
                     <span aria-hidden="true">▶</span>
                     {{ __('site.watch_tutorial') }}
                 </button>
@@ -225,7 +225,7 @@
                 <h2 class="mt-4 text-2xl font-bold text-gray-900">{{ $labels['enter'] }}</h2>
                 <p class="mx-auto mt-3 max-w-xl text-gray-600">{{ __('site.measurements_text') }}</p>
                 @auth
-                    <a href="{{ route('measurements.create', ['locale' => $locale]) }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white">
+                    <a href="{{ route('measurements.create', ['locale' => $locale]) }}" class="base44-gradient-cta mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold">
                         {{ __('measurements.new_profile') }}
                         <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
                     </a>
