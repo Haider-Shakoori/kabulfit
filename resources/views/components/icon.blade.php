@@ -66,6 +66,17 @@
         @case('star')
             <path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
             @break
+        @case('book')
+            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5A2.5 2.5 0 0 1 20 21.5v-16Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            @break
+        @case('shirt')
+            <path d="m8 4-4 2.5 2.2 4L8 9.4V21h8V9.4l1.8 1.1 2.2-4L16 4c-.6 1.4-2 2.2-4 2.2S8.6 5.4 8 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            @break
+        @case('info')
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 10.5V17M12 7h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            @break
         @case('plus')
             <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
             @break
