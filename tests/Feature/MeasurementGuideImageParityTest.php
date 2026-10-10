@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -78,6 +79,24 @@ class MeasurementGuideImageParityTest extends TestCase
         $this->assertStringContainsString('Save as Profile', $html);
         $this->assertStringContainsString('max-w-md grid-cols-2 rounded-lg bg-gray-100 p-1', $html);
         $this->assertStringNotContainsString('mx-auto max-w-3xl rounded-2xl border border-gray-200 bg-white p-6 text-center', $html);
+    }
+
+    public function test_signed_in_customer_sees_saveable_inline_measurement_form(): void
+    {
+        $user = User::factory()->create();
+
+        $html = $this->actingAs($user)
+            ->get('/en/measurement-guide')
+            ->assertOk()
+            ->getContent();
+
+        $this->assertStringContainsString('action="'.route('measurements.store', ['locale' => 'en']).'"', $html);
+        $this->assertStringContainsString('name="garment_type"', $html);
+        $this->assertStringContainsString('name="display_unit"', $html);
+        $this->assertStringContainsString('name="name"', $html);
+        $this->assertStringContainsString('name="measurements[0][code]"', $html);
+        $this->assertStringContainsString('name="measurements[0][value]"', $html);
+        $this->assertStringContainsString('Save Measurements', $html);
     }
 
     public function test_homepage_static_content_uses_original_base44_images(): void
