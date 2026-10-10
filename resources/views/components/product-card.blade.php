@@ -49,12 +49,11 @@
             </div>
         @endif
 
-        <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-600">{{ $product->category?->translation()?->name }}</p>
-        <h3 class="line-clamp-1 font-medium text-gray-900 transition-colors group-hover:text-[#D91E36]">
+        <h3 class="mb-1 line-clamp-1 font-medium text-gray-900 transition-colors group-hover:text-[#D91E36]">
             <a href="{{ route('products.show', ['locale' => app()->getLocale(), 'slug' => $translation?->slug]) }}">{{ $translation?->name }}</a>
         </h3>
 
-        <div class="mt-3 flex items-center gap-2">
+        <div class="flex items-center gap-2">
             <strong class="{{ $hasDiscount ? 'text-[#D91E36]' : 'text-gray-900' }}">{{ $product->formattedPrice() }}</strong>
             @if($hasDiscount)
                 <span class="text-sm text-gray-600 line-through">{{ $product->formattedPrice($product->price_minor) }}</span>
