@@ -133,36 +133,36 @@
                 <img src="{{ asset('images/kabulfit-optimized/logo-header.webp') }}" width="310" height="120" alt="KabulFit" class="kabulfit-header-logo block w-auto object-contain">
             </a>
 
-            <nav id="primary-nav" class="hidden items-center gap-7 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
-                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('home', ['locale' => app()->getLocale()]) }}">{{ __('site.home') }}</a>
+            <nav id="primary-nav" class="hidden items-center gap-1 text-sm font-medium lg:flex" aria-label="{{ __('site.primary_navigation') }}">
+                <a class="base44-nav-link text-gray-800" href="{{ route('home', ['locale' => app()->getLocale()]) }}"><span>{{ __('site.home') }}</span></a>
                 <div class="group relative">
-                    <a class="inline-flex items-center gap-1 transition hover:text-[#D91E36] text-gray-800" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
-                        {{ __('site.shop') }}
-                        <span class="text-xs">⌄</span>
+                    <a class="base44-nav-link inline-flex items-center gap-1 text-gray-800" href="{{ route('shop', ['locale' => app()->getLocale()]) }}">
+                        <span>{{ __('site.shop') }}</span>
+                        <span class="relative z-10 text-xs transition-transform duration-500 group-hover:rotate-180">⌄</span>
                     </a>
                     <div class="invisible absolute start-0 top-full mt-3 w-56 translate-y-2 rounded-2xl border border-gray-100 bg-white p-2 text-gray-700 opacity-0 shadow-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                         @foreach ($categoriesForNavigation ?? [] as $navCategory)
                             @php($navTranslation = $navCategory->translation())
-                            <a class="block rounded-xl px-4 py-3 hover:bg-gray-50 hover:text-[#D91E36]" href="{{ route('categories.show', ['locale' => app()->getLocale(), 'slug' => $navTranslation?->slug]) }}">{{ $navTranslation?->name }}</a>
+                            <a class="base44-nav-subitem block rounded-xl px-4 py-3" href="{{ route('categories.show', ['locale' => app()->getLocale(), 'slug' => $navTranslation?->slug]) }}">{{ $navTranslation?->name }}</a>
                         @endforeach
                     </div>
                 </div>
-                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}">{{ __('site.measurement_guide') }}</a>
-                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}">{{ __('site.about') }}</a>
-                <a class="transition hover:text-[#D91E36] text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug]) }}">{{ __('site.contact') }}</a>
+                <a class="base44-nav-link text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $measurementGuideSlug]) }}"><span>{{ __('site.measurement_guide') }}</span></a>
+                <a class="base44-nav-link text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => app()->getLocale() === 'en' ? 'about' : (app()->getLocale() === 'fa' ? 'درباره' : 'زموږ-په-اړه')]) }}"><span>{{ __('site.about') }}</span></a>
+                <a class="base44-nav-link text-gray-800" href="{{ route('content.page', ['locale' => app()->getLocale(), 'slug' => $contactSlug]) }}"><span>{{ __('site.contact') }}</span></a>
             </nav>
 
             <div class="flex items-center gap-1 sm:gap-2">
-                <button type="button" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100" @click="searchOpen = !searchOpen" aria-label="{{ __('site.search_products') }}">
+                <button type="button" class="base44-nav-action grid h-10 w-10 place-items-center rounded-full" @click="searchOpen = !searchOpen" aria-label="{{ __('site.search_products') }}">
                     <x-icon name="search" class="h-5 w-5 text-gray-700" />
                 </button>
-                <a href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100 sm:grid" aria-label="{{ __('commerce.wishlist') }}">
+                <a href="{{ route('wishlist', ['locale' => app()->getLocale()]) }}" class="base44-nav-action hidden h-10 w-10 place-items-center rounded-full sm:grid" aria-label="{{ __('commerce.wishlist') }}">
                     <x-icon name="heart" class="h-5 w-5 text-gray-700" />
                 </a>
-                <a href="{{ route('cart', ['locale' => app()->getLocale()]) }}" class="grid h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100" aria-label="{{ __('commerce.cart') }}">
+                <a href="{{ route('cart', ['locale' => app()->getLocale()]) }}" class="base44-nav-action grid h-10 w-10 place-items-center rounded-full" aria-label="{{ __('commerce.cart') }}">
                     <x-icon name="bag" class="h-5 w-5 text-gray-700" />
                 </a>
-                <a href="{{ auth()->check() ? route('account', ['locale' => app()->getLocale()]) : route('login', ['locale' => app()->getLocale()]) }}" class="hidden h-10 w-10 place-items-center rounded-full transition hover:bg-gray-100 sm:grid" aria-label="{{ auth()->check() ? __('auth.account') : __('auth.login') }}">
+                <a href="{{ auth()->check() ? route('account', ['locale' => app()->getLocale()]) : route('login', ['locale' => app()->getLocale()]) }}" class="base44-nav-action hidden h-10 w-10 place-items-center rounded-full sm:grid" aria-label="{{ auth()->check() ? __('auth.account') : __('auth.login') }}">
                     <x-icon name="user" class="h-5 w-5 text-gray-700" />
                 </a>
             </div>
