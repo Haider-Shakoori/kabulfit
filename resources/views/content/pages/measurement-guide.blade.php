@@ -57,6 +57,10 @@
         })->values()->all();
     })->all();
 
+    $formDefinitions = collect(['male', 'female'])->mapWithKeys(function ($gender) use ($measurementFormDefinitions) {
+        return [$gender => collect($measurementFormDefinitions->get($gender, []))->values()];
+    });
+
     $labels = match ($locale) {
         'fa' => [
             'male' => 'مردانه',
@@ -71,6 +75,18 @@
             'tip2' => 'برای دقت بیشتر از شخص دیگری کمک بگیرید.',
             'tip3' => 'هر اندازه را دو بار بررسی کنید.',
             'close' => 'بستن',
+            'enter_title' => 'اندازه‌های خود را وارد کنید',
+            'enter_subtitle' => 'اندازه‌های خود را برای استفاده سریع در سفارش‌های بعدی ذخیره کنید',
+            'body_type' => 'نوع بدن',
+            'weight' => 'وزن',
+            'measurement_unit' => 'واحد اندازه‌گیری',
+            'inches' => 'اینچ',
+            'centimeters' => 'سانتی‌متر',
+            'save_as_profile' => 'ذخیره به عنوان پروفایل',
+            'profile_placeholder' => 'نام پروفایل (مثلاً «اندازه‌های من»)',
+            'save' => 'ذخیره',
+            'save_measurements' => 'ذخیره اندازه‌ها',
+            'login_to_save' => 'برای ذخیره اندازه‌ها وارد شوید',
         ],
         'ps' => [
             'male' => 'نارینه',
@@ -85,6 +101,18 @@
             'tip2' => 'د لا دقیقې اندازې لپاره له بل کس مرسته واخلئ.',
             'tip3' => 'هره اندازه دوه ځله وګورئ.',
             'close' => 'بندول',
+            'enter_title' => 'خپلې اندازې دننه کړئ',
+            'enter_subtitle' => 'خپلې اندازې د راتلونکو فرمایشونو لپاره په پروفایل کې وساتئ',
+            'body_type' => 'د بدن ډول',
+            'weight' => 'وزن',
+            'measurement_unit' => 'د اندازې واحد',
+            'inches' => 'انچ',
+            'centimeters' => 'سانتي متر',
+            'save_as_profile' => 'د پروفایل په توګه وساتئ',
+            'profile_placeholder' => 'د پروفایل نوم (لکه «زما اندازې»)',
+            'save' => 'ساتل',
+            'save_measurements' => 'اندازې وساتئ',
+            'login_to_save' => 'د اندازو د ساتلو لپاره ننوځئ',
         ],
         default => [
             'male' => 'Male',
@@ -99,6 +127,18 @@
             'tip2' => 'Ask someone to help for the most accurate result.',
             'tip3' => 'Double-check every measurement before saving it.',
             'close' => 'Close',
+            'enter_title' => 'Enter Your Measurements',
+            'enter_subtitle' => 'Save your measurements to your profile for quick checkout',
+            'body_type' => 'Body Type',
+            'weight' => 'Weight',
+            'measurement_unit' => 'Measurement Unit',
+            'inches' => 'Inches',
+            'centimeters' => 'Centimeters',
+            'save_as_profile' => 'Save as Profile',
+            'profile_placeholder' => "Profile name (e.g., 'My Measurements')",
+            'save' => 'Save',
+            'save_measurements' => 'Save Measurements',
+            'login_to_save' => 'Sign in to save measurements',
         ],
     };
 @endphp
@@ -113,6 +153,10 @@
         selectedIndex: 0,
         tab: 'guide',
         videoOpen: false,
+        unit: 'in',
+        weightUnit: 'kg',
+        weight: '',
+        profileName: '',
         get steps() { return this.data[this.gender] || [] },
         get selected() { return this.steps[this.selectedIndex] || this.steps[0] || {} },
         selectGender(value) { this.gender = value; this.selectedIndex = 0; this.videoOpen = false },
@@ -164,9 +208,29 @@
                 </div>
             </div>
 
-            <div class="mx-auto mb-8 grid max-w-md grid-cols-2 rounded-xl bg-gray-100 p-1">
-                <button type="button" @click="tab = 'guide'" class="rounded-lg px-4 py-2.5 text-sm font-semibold" :class="tab === 'guide' ? 'bg-white text-[#881C27] shadow-sm' : 'text-gray-500'">{{ $labels['how'] }}</button>
-                <button type="button" @click="tab = 'form'" class="rounded-lg px-4 py-2.5 text-sm font-semibold" :class="tab === 'form' ? 'bg-white text-[#881C27] shadow-sm' : 'text-gray-500'">{{ $labels['enter'] }}</button>
+            <div class="mx-auto mb-8 grid w-full max-w-md grid-cols-2 rounded-lg bg-gray-100 p-1" role="tablist" aria-label="{{ $labels['body'] }}">
+                <button
+                    type="button"
+                    role="tab"
+                    @click="tab = 'guide'"
+                    :aria-selected="tab === 'guide'"
+                    class="flex min-h-10 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition"
+                    :class="tab === 'guide' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                >
+                    <x-icon name="book" class="h-4 w-4 shrink-0" />
+                    <span>{{ $labels['how'] }}</span>
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    @click="tab = 'form'"
+                    :aria-selected="tab === 'form'"
+                    class="flex min-h-10 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition"
+                    :class="tab === 'form' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                >
+                    <x-icon name="shirt" class="h-4 w-4 shrink-0" />
+                    <span>{{ $labels['enter'] }}</span>
+                </button>
             </div>
 
             <div x-show="tab === 'guide'" class="grid gap-8 lg:grid-cols-3">
@@ -220,19 +284,128 @@
                 </div>
             </div>
 
-            <div x-show="tab === 'form'" x-cloak class="mx-auto max-w-3xl rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm sm:p-8">
-                <x-icon name="ruler" class="mx-auto h-12 w-12 text-[#881C27]" />
-                <h2 class="mt-4 text-2xl font-bold text-gray-900">{{ $labels['enter'] }}</h2>
-                <p class="mx-auto mt-3 max-w-xl text-gray-600">{{ __('site.measurements_text') }}</p>
+            <div x-show="tab === 'form'" x-cloak class="mx-auto max-w-5xl">
                 @auth
-                    <a href="{{ route('measurements.create', ['locale' => $locale]) }}" class="base44-gradient-cta mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold">
-                        {{ __('measurements.new_profile') }}
-                        <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180" />
-                    </a>
+                    <form method="POST" action="{{ route('measurements.store', ['locale' => $locale]) }}" class="space-y-6">
+                        @csrf
                 @else
-                    <a href="{{ route('login', ['locale' => $locale]) }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 font-semibold text-white">
-                        {{ __('auth.login') }}
-                    </a>
+                    <div class="space-y-6">
+                @endauth
+
+                    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
+                        <div class="text-center">
+                            <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">{{ $labels['enter_title'] }}</h2>
+                            <p class="mx-auto mt-2 max-w-2xl text-sm leading-6 text-gray-500 sm:text-base">{{ $labels['enter_subtitle'] }}</p>
+                        </div>
+
+                        @auth
+                            <input type="hidden" name="garment_type" :value="gender === 'female' ? 'dress' : 'perahan_tunban'">
+                            <input type="hidden" name="display_unit" x-model="unit">
+                        @endauth
+
+                        <div class="mt-7 grid gap-4 md:grid-cols-3">
+                            <div class="rounded-xl border border-gray-200 bg-[#FDFBF7] p-4">
+                                <span class="block text-sm font-semibold text-gray-800">{{ $labels['body_type'] }}</span>
+                                <div class="mt-3 grid grid-cols-2 gap-2">
+                                    <button type="button" @click="selectGender('male')" class="rounded-lg px-4 py-2.5 text-sm font-semibold transition" :class="gender === 'male' ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white shadow' : 'border border-gray-200 bg-white text-gray-600'">{{ $labels['male'] }}</button>
+                                    <button type="button" @click="selectGender('female')" class="rounded-lg px-4 py-2.5 text-sm font-semibold transition" :class="gender === 'female' ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white shadow' : 'border border-gray-200 bg-white text-gray-600'">{{ $labels['female'] }}</button>
+                                </div>
+                            </div>
+
+                            <div class="rounded-xl border border-gray-200 bg-[#FDFBF7] p-4">
+                                <span class="block text-sm font-semibold text-gray-800">{{ $labels['weight'] }}</span>
+                                <div class="mt-3 flex items-center gap-2">
+                                    <input type="number" step="0.5" min="0" x-model="weight" @auth name="weight" @endauth placeholder="0.0" class="min-w-0 max-w-[110px] flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#881C27]">
+                                    <div class="grid flex-1 grid-cols-2 gap-1 rounded-lg bg-gray-100 p-1">
+                                        <button type="button" @click="weightUnit = 'kg'" class="rounded-md px-2 py-2 text-xs font-semibold" :class="weightUnit === 'kg' ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white' : 'text-gray-500'">Kg</button>
+                                        <button type="button" @click="weightUnit = 'lb'" class="rounded-md px-2 py-2 text-xs font-semibold" :class="weightUnit === 'lb' ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white' : 'text-gray-500'">Lb</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="rounded-xl border border-gray-200 bg-[#FDFBF7] p-4">
+                                <span class="block text-sm font-semibold text-gray-800">{{ $labels['measurement_unit'] }}</span>
+                                <div class="mt-3 grid grid-cols-2 gap-2">
+                                    <button type="button" @click="unit = 'in'" class="rounded-lg px-3 py-2.5 text-sm font-semibold transition" :class="unit === 'in' ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white shadow' : 'border border-gray-200 bg-white text-gray-600'">{{ $labels['inches'] }}</button>
+                                    <button type="button" @click="unit = 'cm'" class="rounded-lg px-3 py-2.5 text-sm font-semibold transition" :class="unit === 'cm' ? 'bg-gradient-to-r from-[#881C27] to-[#2A6867] text-white shadow' : 'border border-gray-200 bg-white text-gray-600'">{{ $labels['centimeters'] }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
+                        @foreach(['male', 'female'] as $formGender)
+                            <div x-show="gender === '{{ $formGender }}'" @if($formGender === 'female') x-cloak @endif class="grid gap-4 md:grid-cols-2">
+                                @foreach($formDefinitions->get($formGender, collect()) as $definition)
+                                    @php
+                                        $definitionName = $definition->translation()?->name ?? $definition->code;
+                                        $definitionHelp = $definition->translation()?->instructions;
+                                    @endphp
+                                    <label class="rounded-xl border-2 border-gray-200 bg-white p-4 shadow-sm transition focus-within:border-[#881C27]/50">
+                                        <span class="flex items-start justify-between gap-3">
+                                            <span class="min-w-0">
+                                                <strong class="block text-sm font-semibold text-gray-900">{{ $definitionName }}</strong>
+                                                @if($definitionHelp)
+                                                    <small class="mt-1 block text-xs leading-5 text-gray-400">{{ $definitionHelp }}</small>
+                                                @endif
+                                            </span>
+                                            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full text-gray-400 hover:bg-gray-100" title="{{ $definitionHelp }}"><x-icon name="info" class="h-4 w-4" /></span>
+                                        </span>
+
+                                        @auth
+                                            <input type="hidden" name="measurements[{{ $loop->index }}][code]" value="{{ $definition->code }}" :disabled="gender !== '{{ $formGender }}'">
+                                        @endauth
+
+                                        <div class="mt-4 flex items-center gap-3">
+                                            <input
+                                                type="number"
+                                                inputmode="decimal"
+                                                step="0.5"
+                                                min="0"
+                                                placeholder="0.0"
+                                                @auth
+                                                    name="measurements[{{ $loop->index }}][value]"
+                                                    required
+                                                    :disabled="gender !== '{{ $formGender }}'"
+                                                @endauth
+                                                class="min-w-0 flex-1 rounded-lg border border-gray-200 bg-white px-3 py-3 text-base font-semibold outline-none focus:border-[#881C27] focus:ring-2 focus:ring-[#881C27]/10"
+                                            >
+                                            <span class="min-w-12 text-end text-sm text-gray-500" x-text="unit === 'in' ? @js($labels['inches']) : @js($labels['centimeters'])"></span>
+                                        </div>
+                                    </label>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </section>
+
+                    <section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
+                        <label class="block text-sm font-semibold text-gray-800">{{ $labels['save_as_profile'] }}</label>
+                        <div class="mt-3 flex flex-col gap-3 sm:flex-row">
+                            <input
+                                type="text"
+                                x-model="profileName"
+                                @auth name="name" required maxlength="100" @endauth
+                                placeholder="{{ $labels['profile_placeholder'] }}"
+                                class="min-h-11 min-w-0 flex-1 rounded-lg border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#881C27] focus:ring-2 focus:ring-[#881C27]/10"
+                            >
+                            @auth
+                                <button type="submit" class="min-h-11 rounded-lg bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 text-sm font-semibold text-white shadow-sm">{{ $labels['save'] }}</button>
+                            @else
+                                <a href="{{ route('login', ['locale' => $locale]) }}" class="inline-flex min-h-11 items-center justify-center rounded-lg bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-3 text-sm font-semibold text-white shadow-sm">{{ $labels['login_to_save'] }}</a>
+                            @endauth
+                        </div>
+
+                        @auth
+                            <button type="submit" class="mt-4 w-full rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-4 text-base font-semibold text-white shadow-sm sm:text-lg">{{ $labels['save_measurements'] }}</button>
+                        @else
+                            <a href="{{ route('login', ['locale' => $locale]) }}" class="mt-4 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-[#881C27] to-[#2A6867] px-6 py-4 text-base font-semibold text-white shadow-sm sm:text-lg">{{ $labels['login_to_save'] }}</a>
+                        @endauth
+                    </section>
+
+                @auth
+                    </form>
+                @else
+                    </div>
                 @endauth
             </div>
         </div>
