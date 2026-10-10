@@ -11,8 +11,7 @@
     <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/kabulfit-optimized/favicon-64.png') }}">
     <link rel="canonical" href="{{ $seo->canonical ?? url()->current() }}">
     @if(request()->routeIs('home'))
-        <link rel="preload" as="image" href="{{ asset('images/kabulfit-optimized/hero-h1-mobile.webp') }}" type="image/webp" media="(max-width: 768px)" fetchpriority="high">
-        <link rel="preload" as="image" href="{{ asset('images/kabulfit-base44/source/6b7f27f2f_H1.webp') }}" type="image/webp" media="(min-width: 769px)" fetchpriority="high">
+        <link rel="preload" as="image" href="{{ asset('images/kabulfit-base44/source/6b7f27f2f_H1.webp') }}" type="image/webp" fetchpriority="high">
     @endif
     @foreach (($seo->alternates ?? []) as $locale => $href)
         <link rel="alternate" hreflang="{{ $locale }}" href="{{ $href }}">
