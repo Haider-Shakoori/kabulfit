@@ -110,11 +110,14 @@ class Product extends Model
     public function formattedPrice(?int $minorUnits = null): string
     {
         [$major, $minor] = explode('.', $this->decimalPrice($minorUnits), 2);
-
         $amount = number_format((int) $major).'.'.$minor;
 
         return match (strtoupper($this->currency)) {
-            'USD' => '
+            'USD' => '$'.$amount,
+            'EUR' => '€'.$amount,
+            'GBP' => '£'.$amount,
+            default => $amount.' '.$this->currency,
+        };
     }
 
     public function availableStock(): int
