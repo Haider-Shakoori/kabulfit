@@ -77,6 +77,7 @@ Route::prefix('v1/{locale}')
                         ->name('assignments.notes.store');
                 });
 
+            Route::get('/shipping-methods', [CommerceController::class, 'shippingMethods'])->name('api.v1.shipping-methods');
             Route::get('/cart', [CommerceController::class, 'cart'])->name('api.v1.cart');
             Route::post('/cart/items', [CommerceController::class, 'add'])->name('api.v1.cart.items.store');
             Route::put('/cart/items/{item:uuid}', [CommerceController::class, 'update'])->name('api.v1.cart.items.update');
