@@ -99,7 +99,7 @@ class CatalogSeeder extends Seeder
                 'category_id' => $categoryId,
                 'price_minor' => $priceMinor,
                 'sale_price_minor' => null,
-                'currency' => 'AFN',
+                'currency' => 'USD',
                 'stock_quantity' => 0,
                 'is_active' => true,
                 'is_featured' => $featured,
