@@ -25,7 +25,7 @@ class CatalogApiTest extends TestCase
             ->assertJsonPath('data.0.sku', 'KF-W-DR-001')
             ->assertJsonPath('data.0.slug', 'herat-embroidered-afghan-dress')
             ->assertJsonPath('data.0.price.minor', 980000)
-            ->assertJsonPath('data.0.price.currency', 'AFN')
+            ->assertJsonPath('data.0.price.currency', 'USD')
             ->assertJsonPath('data.0.stock.in_stock', true)
             ->assertJsonPath('filters.sorts.0', 'featured');
 
