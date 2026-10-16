@@ -106,7 +106,7 @@ class Product extends Model
     {
         [$major, $minor] = explode('.', $this->decimalPrice($minorUnits), 2);
 
-        return '
+        return number_format((int) $major).'.'.$minor.' '.$this->currency;
     }
 
     public function availableStock(): int
