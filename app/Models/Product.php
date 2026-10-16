@@ -136,7 +136,6 @@ class Product extends Model
         return $this->availableStock() > 0;
     }
 }
-.number_format((int) $major).'.'.$minor;
     }
 
     public function availableStock(): int
