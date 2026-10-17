@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\LegacyProductRedirect;
 use App\Models\Product;
+use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
