@@ -7,7 +7,7 @@
     <meta name="color-scheme" content="light">
     <title>{{ $seo->title ?? 'KabulFit' }}</title>
     <meta name="description" content="{{ $seo->description ?? '' }}">
-    <meta name="robots" content="{{ $seo->robots ?? 'index,follow' }}">
+    <meta name="robots" content="{{ request()->getHost() === config('kabulfit.staging_host') ? 'noindex,nofollow,noarchive' : ($seo->robots ?? 'index,follow') }}">
     <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/kabulfit-optimized/favicon-64.png') }}">
     <link rel="canonical" href="{{ $seo->canonical ?? url()->current() }}">
     @if(request()->routeIs('home'))
