@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use Database\Seeders\CatalogSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -49,6 +50,25 @@ class CatalogApiTest extends TestCase
         }
 
         $this->assertSame('$65.00', Product::query()->where('sku', 'KF-M-PT-001')->firstOrFail()->formattedPrice());
+    }
+
+    public function test_reseeding_catalog_does_not_overwrite_website_managed_products_and_categories(): void
+    {
+        $product = Product::query()->where('sku', 'KF-M-PT-001')->firstOrFail();
+        $product->update(['price_minor' => 7300]);
+        $product->category->translations()->where('locale', 'en')->update(['name' => 'Website Edited Category']);
+
+        $this->seed(CatalogSeeder::class);
+
+        $this->assertDatabaseHas('products', [
+            'sku' => 'KF-M-PT-001',
+            'price_minor' => 7300,
+            'currency' => 'USD',
+        ]);
+        $this->assertSame(
+            'Website Edited Category',
+            $product->category->fresh('translations')->translation('en')->name,
+        );
     }
 
     public function test_product_api_exposes_variant_skus_without_database_ids(): void
