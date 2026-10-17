@@ -40,6 +40,12 @@
         : 0;
     $colors = collect($variantData)->filter(fn ($variant) => $variant['color_code'] !== '')->unique('color_code')->values();
     $sizes = collect($variantData)->filter(fn ($variant) => $variant['size'] !== '')->unique('size')->values();
+    if ($activeVariants->isEmpty()) {
+        $sizes = collect($product->size_options ?? [])
+            ->map(fn (string $size): array => ['size' => $size])
+            ->values();
+    }
+    $requiresSizeChoice = $activeVariants->isEmpty() && $sizes->isNotEmpty();
 
     $locale = app()->getLocale();
     $backLabel = $locale === 'ps' ? 'بېرته پلورنځي ته' : ($locale === 'fa' ? 'بازگشت به فروشگاه' : 'Back to Shop');
@@ -271,9 +277,9 @@
                         <div class="flex items-center overflow-hidden rounded-lg border border-gray-200 bg-white">
                             <button type="button" class="grid h-11 w-11 place-items-center text-gray-600 disabled:opacity-30" @click="quantity = Math.max(1, quantity - 1)" :disabled="quantity <= 1"><x-icon name="minus" class="h-4 w-4" /></button>
                             <span class="w-12 text-center font-semibold" x-text="quantity"></span>
-                            <button type="button" class="grid h-11 w-11 place-items-center text-gray-600 disabled:opacity-30" @click="quantity = Math.min((selectedVariant?.quantity || 99), quantity + 1)" :disabled="selectedVariant && quantity >= selectedVariant.quantity"><x-icon name="plus" class="h-4 w-4" /></button>
+                            <button type="button" class="grid h-11 w-11 place-items-center text-gray-600 disabled:opacity-30" @click="quantity = Math.min((selectedVariant?.quantity ?? {{ min(99, $product->availableStock()) }}), quantity + 1)" :disabled="selectedVariant && quantity >= selectedVariant.quantity"><x-icon name="plus" class="h-4 w-4" /></button>
                         </div>
-                        <span class="rounded-full border px-3 py-1 text-xs font-medium" :class="(selectedVariant?.quantity || {{ $product->availableStock() }}) > 0 ? 'border-green-200 bg-green-50 text-green-700' : 'border-red-200 bg-red-50 text-red-700'" x-text="(selectedVariant?.quantity || {{ $product->availableStock() }}) > 0 ? @js(__('site.in_stock')) : @js(__('site.out_of_stock'))"></span>
+                        <span class="rounded-full border px-3 py-1 text-xs font-medium" :class="(selectedVariant?.quantity ?? {{ $product->availableStock() }}) > 0 ? 'border-green-200 bg-green-50 text-green-700' : 'border-red-200 bg-red-50 text-red-700'" x-text="(selectedVariant?.quantity ?? {{ $product->availableStock() }}) > 0 ? @js(__('site.in_stock')) : @js(__('site.out_of_stock'))"></span>
                     </div>
                 </div>
 
@@ -291,12 +297,14 @@
                             <input type="hidden" name="product_slug" value="{{ $translation?->slug }}">
                             @if($variantData !== [])
                                 <input type="hidden" name="variant_sku" :value="selectedSku">
+                            @elseif($requiresSizeChoice)
+                                <input type="hidden" name="size_code" :value="selectedSize">
                             @endif
                             <input type="hidden" name="quantity" :value="quantity">
                             <button
                                 type="submit"
                                 class="base44-gradient-cta flex min-h-14 w-full items-center justify-center gap-2 rounded-xl px-5 py-3 text-lg font-semibold transition disabled:cursor-not-allowed disabled:opacity-50"
-                                :disabled="selectedVariant && selectedVariant.quantity < 1"
+                                :disabled="(selectedVariant && selectedVariant.quantity < 1) || (@js($requiresSizeChoice) && !selectedSize) || {{ $product->availableStock() }} < 1"
                             >
                                 <x-icon name="bag" class="h-5 w-5" />
                                 {{ __('commerce.add_to_cart') }}

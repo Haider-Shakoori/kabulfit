@@ -15,7 +15,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id', 'sku', 'price_minor', 'sale_price_minor', 'currency',
-        'stock_quantity', 'stock_reserved', 'is_active', 'is_featured', 'sort_order',
+        'stock_quantity', 'stock_reserved', 'size_options', 'is_active', 'is_featured', 'sort_order',
         'tailoring_enabled', 'measurement_garment_type',
     ];
 
@@ -26,6 +26,7 @@ class Product extends Model
             'sale_price_minor' => 'integer',
             'stock_quantity' => 'integer',
             'stock_reserved' => 'integer',
+            'size_options' => 'array',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'tailoring_enabled' => 'boolean',

@@ -22,6 +22,7 @@ class ProductDetailResource extends ProductSummaryResource
         return [
             ...$base,
             'description' => $translation?->description,
+            'size_options' => $this->size_options ?? [],
             'tailoring' => $this->when($includes->contains('tailoring'), [
                 'enabled' => $this->tailoring_enabled,
                 'garment_type' => $this->measurement_garment_type,

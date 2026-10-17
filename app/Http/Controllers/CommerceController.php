@@ -38,6 +38,7 @@ class CommerceController extends Controller
         $data = $request->validate([
             'product_slug' => 'required|string',
             'variant_sku' => 'nullable|string',
+            'size_code' => 'nullable|string|max:20',
             'quantity' => 'required|integer|min:1|max:99',
         ]);
         $product = Product::whereHas(
@@ -45,7 +46,7 @@ class CommerceController extends Controller
             fn ($query) => $query->where('locale', app()->getLocale())->where('slug', $data['product_slug']),
         )->with(['translations', 'variants.inventory', 'variants.product'])->firstOrFail();
         $variant = isset($data['variant_sku']) ? $product->variants->firstWhere('sku', $data['variant_sku']) : null;
-        $this->carts->add($this->carts->forUser($request->user()), $product, $variant, $data['quantity']);
+        $this->carts->add($this->carts->forUser($request->user()), $product, $variant, $data['quantity'], null, $data['size_code'] ?? null);
 
         $unitPriceMinor = $product->sale_price_minor ?? $product->price_minor;
 
