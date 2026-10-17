@@ -38,11 +38,11 @@ class CommerceController extends Controller
 
     public function add(Request $r): JsonResponse
     {
-        $d = $r->validate(['product_slug' => 'required|string', 'variant_sku' => 'nullable|string', 'quantity' => 'required|integer|min:1|max:99']);
+        $d = $r->validate(['product_slug' => 'required|string', 'variant_sku' => 'nullable|string', 'size_code' => 'nullable|string|max:20', 'quantity' => 'required|integer|min:1|max:99']);
         $p = Product::whereHas('translations', fn ($q) => $q->where('locale', app()->getLocale())->where('slug', $d['product_slug']))->with(['translations', 'variants.inventory', 'variants.product'])->firstOrFail();
         $v = isset($d['variant_sku']) ? $p->variants->firstWhere('sku', $d['variant_sku']) : null;
 
-        return response()->json($this->payload($this->carts->add($this->carts->forUser($r->user()), $p, $v, $d['quantity'])), 201);
+        return response()->json($this->payload($this->carts->add($this->carts->forUser($r->user()), $p, $v, $d['quantity'], null, $d['size_code'] ?? null)), 201);
     }
 
     public function update(Request $r, string $locale, CartItem $item): JsonResponse
@@ -121,7 +121,7 @@ class CommerceController extends Controller
 
     private function payload($cart): array
     {
-        return ['data' => ['uuid' => $cart->uuid, 'currency' => $cart->currency, 'items' => $cart->items->map(fn ($i) => ['uuid' => $i->uuid, 'product_slug' => $i->product->translation()?->slug, 'sku' => $i->variant?->sku ?? $i->product->sku, 'name' => $i->product->translation()?->name, 'quantity' => $i->quantity, 'unit_price_minor' => $i->unitPriceMinor(), 'line_total_minor' => $i->lineTotalMinor(),
+        return ['data' => ['uuid' => $cart->uuid, 'currency' => $cart->currency, 'items' => $cart->items->map(fn ($i) => ['uuid' => $i->uuid, 'product_slug' => $i->product->translation()?->slug, 'sku' => $i->variant?->sku ?? $i->product->sku, 'name' => $i->product->translation()?->name, 'quantity' => $i->quantity, 'size_code' => $i->size_code, 'unit_price_minor' => $i->unitPriceMinor(), 'line_total_minor' => $i->lineTotalMinor(),
             'tailoring' => $i->tailoringRequest ? [
                 'uuid' => $i->tailoringRequest->uuid,
                 'status' => $i->tailoringRequest->status,
