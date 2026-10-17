@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Base44CatalogMediaController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
@@ -46,6 +47,9 @@ use App\Http\Controllers\TailorWorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', DefaultLocaleRedirectController::class)->name('locale.default');
+Route::get('/images/kabulfit-base44/catalog/{filename}', Base44CatalogMediaController::class)
+    ->where('filename', '[a-f0-9]{20}\\.(?:webp|png|jpe?g)')
+    ->name('base44.catalog.media');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitemap');
 Route::get('/sitemaps/catalog.xml', [SeoController::class, 'catalogSitemap'])->name('sitemaps.catalog');
