@@ -13,6 +13,7 @@ class Base44FullCatalogImportTest extends TestCase
     use RefreshDatabase;
 
     private string $snapshot;
+
     private string $image;
 
     protected function setUp(): void
