@@ -70,13 +70,13 @@ class CatalogSeeder extends Seeder
 
     private function category(int $sortOrder, array $translations): Category
     {
-        $category = Category::query()->updateOrCreate(
+        $category = Category::query()->firstOrCreate(
             ['sort_order' => $sortOrder],
             ['is_active' => true],
         );
 
         foreach ($translations as $locale => [$name, $slug, $description]) {
-            $category->translations()->updateOrCreate(
+            $category->translations()->firstOrCreate(
                 ['locale' => $locale],
                 [
                     'name' => $name,
@@ -93,7 +93,7 @@ class CatalogSeeder extends Seeder
 
     private function product(int $categoryId, string $sku, int $priceMinor, bool $featured, int $sortOrder, array $translations): Product
     {
-        $product = Product::query()->updateOrCreate(
+        $product = Product::query()->firstOrCreate(
             ['sku' => $sku],
             [
                 'category_id' => $categoryId,
@@ -108,7 +108,7 @@ class CatalogSeeder extends Seeder
         );
 
         foreach ($translations as $locale => [$name, $slug, $description]) {
-            $product->translations()->updateOrCreate(
+            $product->translations()->firstOrCreate(
                 ['locale' => $locale],
                 [
                     'name' => $name,
