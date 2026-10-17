@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ShippingMethod;
 use App\Models\User;
@@ -44,7 +45,7 @@ class Base44AggregateStockCheckoutTest extends TestCase
         return $product;
     }
 
-    private function checkoutFor(Product $product, int $quantity): \App\Models\Order
+    private function checkoutFor(Product $product, int $quantity): Order
     {
         $user = User::factory()->create();
         $address = $user->addresses()->create([
