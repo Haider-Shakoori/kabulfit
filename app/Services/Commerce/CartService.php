@@ -27,6 +27,7 @@ class CartService
         ?ProductVariant $variant,
         int $quantity,
         ?TailoringRequest $tailoringRequest = null,
+        ?string $sizeCode = null,
     ): Cart {
         if ($cart->currency !== 'USD' || $product->currency !== 'USD') {
             throw ValidationException::withMessages(['product' => __('commerce.invalid_item')]);
@@ -34,6 +35,21 @@ class CartService
 
         if ($quantity < 1 || ! $product->is_active || ($variant && (! $variant->is_active || $variant->product_id !== $product->id))) {
             throw ValidationException::withMessages(['quantity' => __('commerce.invalid_item')]);
+        }
+
+        // Base44 supplied aggregate stock with per-product size choices,
+        // not size-specific inventory. Record the chosen size on each cart line.
+        $sizeCode = $sizeCode === null ? null : strtoupper(trim($sizeCode));
+        $originalSizes = $product->size_options ?? [];
+        if ($variant && $sizeCode !== null) {
+            throw ValidationException::withMessages(['size_code' => __('commerce.invalid_item')]);
+        }
+        if (! $variant && ! $tailoringRequest && $originalSizes !== [] &&
+            ! in_array($sizeCode, $originalSizes, true)) {
+            throw ValidationException::withMessages(['size_code' => __('commerce.invalid_item')]);
+        }
+        if ($originalSizes === [] && $sizeCode !== null) {
+            throw ValidationException::withMessages(['size_code' => __('commerce.invalid_item')]);
         }
 
         if ($tailoringRequest) {
@@ -56,7 +72,7 @@ class CartService
 
         $lineKey = $tailoringRequest
             ? 'tailor:'.$tailoringRequest->uuid
-            : 'std:'.$product->id.':'.($variant?->id ?? 0);
+            : 'std:'.$product->id.':'.($variant?->id ?? 0).($sizeCode ? ':size:'.$sizeCode : '');
 
         $item = $cart->items()->firstOrNew(['line_key' => $lineKey]);
 
@@ -65,6 +81,7 @@ class CartService
             $item->product_id = $product->id;
             $item->product_variant_id = $variant?->id;
             $item->tailoring_request_id = $tailoringRequest?->id;
+            $item->size_code = $sizeCode;
         }
 
         $wanted = $tailoringRequest ? 1 : (($item->exists ? $item->quantity : 0) + $quantity);
