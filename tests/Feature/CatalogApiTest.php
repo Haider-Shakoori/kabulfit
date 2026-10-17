@@ -32,6 +32,24 @@ class CatalogApiTest extends TestCase
         $this->assertArrayNotHasKey('id', $response->json('data.0'));
     }
 
+    public function test_approved_product_prices_are_seeded_in_us_dollars(): void
+    {
+        foreach ([
+            'KF-M-PT-001' => 6500,
+            'KF-W-DR-001' => 9800,
+            'KF-K-VS-001' => 4200,
+            'KF-M-WC-001' => 7900,
+        ] as $sku => $priceMinor) {
+            $this->assertDatabaseHas('products', [
+                'sku' => $sku,
+                'price_minor' => $priceMinor,
+                'currency' => 'USD',
+            ]);
+        }
+
+        $this->assertSame('$65.00', Product::query()->where('sku', 'KF-M-PT-001')->firstOrFail()->formattedPrice());
+    }
+
     public function test_product_api_exposes_variant_skus_without_database_ids(): void
     {
         $slug = Product::query()
