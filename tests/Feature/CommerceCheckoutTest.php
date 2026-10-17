@@ -69,6 +69,19 @@ class CommerceCheckoutTest extends TestCase
         $this->assertDatabaseHas('coupons', ['code' => 'WELCOME10', 'maximum_discount_minor' => 750]);
     }
 
+    public function test_cart_api_rejects_legacy_non_usd_products(): void
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        Product::query()->where('sku', 'KF-M-PT-001')->update(['currency' => 'AFN']);
+
+        $this->postJson('/api/v1/en/cart/items', [
+            'product_slug' => 'classic-afghan-perahan-tunban',
+            'variant_sku' => 'KF-M-PT-001-M-BLACK',
+            'quantity' => 1,
+        ])->assertUnprocessable()->assertJsonValidationErrors(['product']);
+    }
+
     public function test_authenticated_customer_can_add_variant_to_cart_api(): void
     {
         $user = User::factory()->create();
