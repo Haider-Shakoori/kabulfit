@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\LegacyProductRedirect;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class Base44FullCatalogImportTest extends TestCase
@@ -54,6 +56,7 @@ class Base44FullCatalogImportTest extends TestCase
                 'price' => 219,
                 'sale_price' => null,
                 'stock_quantity' => 7,
+                'sizes' => ['S', 'M', 'L', 'XL'],
                 'is_active' => true,
                 'is_featured' => true,
                 'allows_custom_size' => false,
@@ -90,6 +93,7 @@ class Base44FullCatalogImportTest extends TestCase
         $this->assertSame('USD', $product->currency);
         $this->assertTrue($product->is_active);
         $this->assertSame(7, $product->stock_quantity);
+        $this->assertSame(['S', 'M', 'L', 'XL'], $product->size_options);
         $this->assertSame(1, $product->media()->count());
         $this->assertSame('Original Base44 Product', $product->translation('en')->name);
         $this->assertDatabaseHas('legacy_product_redirects', [
@@ -101,6 +105,58 @@ class Base44FullCatalogImportTest extends TestCase
         $this->assertSame(0, Artisan::call('kabulfit:import-base44', $args + ['--commit' => true]));
         $this->assertSame(1, Product::query()->where('sku', 'B44-ABCDEF1234567890ABCDEF01')->count());
         $this->assertSame(1, LegacyProductRedirect::query()->where('legacy_key', 'abcdef1234567890abcdef01')->count());
+    }
+
+    public function test_customers_choose_original_size_without_invented_variant_inventory(): void
+    {
+        $this->assertSame(0, Artisan::call('kabulfit:import-base44', [
+            'snapshot' => $this->snapshot,
+            '--expected-total' => '1',
+            '--expected-active' => '1',
+            '--commit' => true,
+        ]));
+
+        Sanctum::actingAs(User::factory()->create());
+
+        $payload = [
+            'product_slug' => 'original-base44-product',
+            'quantity' => 2,
+        ];
+        $this->postJson('/api/v1/en/cart/items', $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['size_code']);
+
+        $this->postJson('/api/v1/en/cart/items', $payload + ['size_code' => 'XXL'])
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['size_code']);
+
+        $this->postJson('/api/v1/en/cart/items', $payload + ['size_code' => 'M'])
+            ->assertCreated()
+            ->assertJsonPath('data.items.0.size_code', 'M');
+
+        $this->postJson('/api/v1/en/cart/items', $payload + ['size_code' => 'L'])
+            ->assertCreated()
+            ->assertJsonCount(2, 'data.items');
+
+        $this->getJson('/api/v1/en/products/original-base44-product')
+            ->assertOk()
+            ->assertJsonPath('data.size_options', ['S', 'M', 'L', 'XL'])
+            ->assertJsonPath('data.stock.available', 7);
+    }
+
+    public function test_size_only_backfill_preserves_custom_catalog_prices_and_stock(): void
+    {
+        $args = ['snapshot' => $this->snapshot, '--expected-total' => '1', '--expected-active' => '1'];
+        $this->assertSame(0, Artisan::call('kabulfit:import-base44', $args + ['--commit' => true]));
+        $product = Product::query()->where('sku', 'B44-ABCDEF1234567890ABCDEF01')->firstOrFail();
+        $product->update(['price_minor' => 12345, 'stock_quantity' => 3, 'size_options' => null]);
+
+        $this->assertSame(0, Artisan::call('kabulfit:sync-base44-sizes', $args));
+        $this->assertNull($product->fresh()->size_options);
+        $this->assertSame(0, Artisan::call('kabulfit:sync-base44-sizes', $args + ['--commit' => true]));
+        $this->assertSame(['S', 'M', 'L', 'XL'], $product->fresh()->size_options);
+        $this->assertSame(12345, $product->fresh()->price_minor);
+        $this->assertSame(3, $product->fresh()->stock_quantity);
     }
 
     public function test_validation_refuses_incomplete_snapshot_without_database_changes(): void
