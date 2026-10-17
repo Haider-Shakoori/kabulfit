@@ -122,7 +122,7 @@ class CheckoutService
                     'tailoring_notes' => $tailoring?->customer_notes,
                     'sku' => $variant?->sku ?? $item->product->sku,
                     'name' => $item->product->translation()?->name ?? $item->product->sku,
-                    'variant_label' => $variant?->option_key,
+                    'variant_label' => $variant?->option_key ?? ($item->size_code ? 'Size '.$item->size_code : null),
                     'unit_price_minor' => $item->unitPriceMinor(),
                     'quantity' => $item->quantity,
                     'line_total_minor' => $item->lineTotalMinor(),
