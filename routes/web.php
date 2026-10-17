@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\Base44CatalogMediaController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
@@ -27,6 +26,7 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Base44CatalogMediaController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
 use App\Http\Controllers\ContactMessageController;
