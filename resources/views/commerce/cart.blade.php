@@ -60,6 +60,8 @@
                                             <a href="{{ route('products.show', ['locale' => $locale, 'slug' => $productTranslation?->slug]) }}" class="font-semibold text-gray-900 transition hover:text-[#881C27]">{{ $productTranslation?->name }}</a>
                                             @if($item->variant)
                                                 <p class="mt-1 text-sm text-gray-500">{{ $item->variant->option_key }}</p>
+                                            @elseif($item->size_code)
+                                                <p class="mt-1 text-sm text-gray-500">{{ $locale === 'ps' ? 'اندازه' : ($locale === 'fa' ? 'سایز' : 'Size') }}: {{ $item->size_code }}</p>
                                             @endif
                                             @if($item->tailoringRequest)
                                                 <span class="mt-2 inline-flex rounded-full bg-[#881C27]/10 px-2.5 py-1 text-xs font-semibold text-[#881C27]">{{ __('measurements.tailored') }}</span>
