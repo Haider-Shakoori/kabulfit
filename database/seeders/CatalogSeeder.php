@@ -60,7 +60,7 @@ class CatalogSeeder extends Seeder
                 'ps' => ['دودیز افغان واسکټ', 'دودیز-افغان-واسکټ', 'د رسمي او ورځني اغوستلو لپاره هندسي ګنډل شوی افغان واسکټ.'],
             ]);
 
-            $this->product($accessories->id, 'KF-A-KS-001', 480000, true, 50, [
+            $this->product($accessories->id, 'KF-A-KS-001', 4800, true, 50, [
                 'en' => ['Kuchi-Inspired Afghan Shawl', 'kuchi-inspired-afghan-shawl', 'A versatile shawl inspired by Kuchi color, textile and decorative traditions.'],
                 'fa' => ['شال افغانی الهام‌گرفته از کوچی', 'شال-افغانی-الهام-گرفته-از-کوچی', 'شال چندمنظوره با الهام از رنگ، پارچه و تزئینات سنت کوچی.'],
                 'ps' => ['له کوچي دود الهام اخیستی افغان شال', 'له-کوچي-دود-الهام-اخیستی-افغان-شال', 'د کوچي رنګونو، ټوکر او سینګار له دود څخه الهام اخیستی شال.'],
