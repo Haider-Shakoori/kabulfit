@@ -15,7 +15,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id', 'sku', 'price_minor', 'sale_price_minor', 'currency',
-        'stock_quantity', 'is_active', 'is_featured', 'sort_order',
+        'stock_quantity', 'stock_reserved', 'is_active', 'is_featured', 'sort_order',
         'tailoring_enabled', 'measurement_garment_type',
     ];
 
@@ -25,6 +25,7 @@ class Product extends Model
             'price_minor' => 'integer',
             'sale_price_minor' => 'integer',
             'stock_quantity' => 'integer',
+            'stock_reserved' => 'integer',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
             'tailoring_enabled' => 'boolean',
@@ -123,15 +124,21 @@ class Product extends Model
     public function availableStock(): int
     {
         if ($this->relationLoaded('variants')) {
-            return (int) $this->variants
-                ->where('is_active', true)
+            $activeVariants = $this->variants->where('is_active', true);
+
+            // The original Base44 export has aggregate stock but no variant rows.
+            if ($activeVariants->isEmpty()) {
+                return max(0, $this->stock_quantity - $this->stock_reserved);
+            }
+
+            return (int) $activeVariants
                 ->sum(fn (ProductVariant $variant): int => $variant->availableQuantity());
         }
 
         $variantCount = $this->variants()->where('is_active', true)->count();
 
         if ($variantCount === 0) {
-            return $this->stock_quantity;
+            return max(0, $this->stock_quantity - $this->stock_reserved);
         }
 
         return (int) InventoryItem::query()
