@@ -4,9 +4,13 @@ namespace Tests\Feature;
 
 use App\Models\LegacyProductRedirect;
 use App\Models\Product;
+use App\Models\ShippingMethod;
 use App\Models\User;
+use App\Services\Commerce\CartService;
+use App\Services\Commerce\CheckoutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -116,7 +120,8 @@ class Base44FullCatalogImportTest extends TestCase
             '--commit' => true,
         ]));
 
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
 
         $payload = [
             'product_slug' => 'original-base44-product',
@@ -142,6 +147,21 @@ class Base44FullCatalogImportTest extends TestCase
             ->assertOk()
             ->assertJsonPath('data.size_options', ['S', 'M', 'L', 'XL'])
             ->assertJsonPath('data.stock.available', 7);
+
+        $address = $user->addresses()->create([
+            'uuid' => (string) Str::uuid(), 'label' => 'Home',
+            'recipient_name' => 'Customer', 'phone' => '+93700000000',
+            'country_code' => 'AF', 'province' => 'Kabul', 'city' => 'Kabul',
+            'address_line1' => 'Test address', 'is_default' => true,
+        ]);
+        $order = app(CheckoutService::class)->create(
+            $user,
+            app(CartService::class)->forUser($user),
+            $address,
+            ShippingMethod::query()->where('code', 'standard-af')->firstOrFail(),
+        );
+        $this->assertSame(['Size L', 'Size M'], $order->items->pluck('variant_label')->sort()->values()->all());
+        $this->assertSame(4, Product::query()->where('sku', 'B44-ABCDEF1234567890ABCDEF01')->firstOrFail()->stock_reserved);
     }
 
     public function test_size_only_backfill_preserves_custom_catalog_prices_and_stock(): void
