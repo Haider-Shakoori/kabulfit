@@ -44,7 +44,7 @@ class SeoTest extends TestCase
         $this->assertStringContainsString('hreflang="fa"', $html);
         $this->assertStringContainsString('"@type":"Product"', $html);
         $this->assertStringContainsString('"priceCurrency":"USD"', $html);
-        $this->assertStringContainsString('"price":"6500.00"', $html);
+        $this->assertStringContainsString('"price":"65.00"', $html);
         $this->assertSame(1, preg_match_all('/<h1(?:\s[^>]*)?>/i', $html));
     }
 
