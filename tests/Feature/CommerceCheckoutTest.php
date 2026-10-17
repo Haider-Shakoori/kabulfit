@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Contracts\Payments\PaymentGateway;
+use App\Models\Coupon;
 use App\Models\InventoryItem;
 use App\Models\Payment;
 use App\Models\PaymentEvent;
@@ -13,6 +14,7 @@ use App\Models\User;
 use App\Services\Commerce\CartService;
 use App\Services\Commerce\CheckoutService;
 use App\Services\Payments\PaymentService;
+use Database\Seeders\CommerceSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
@@ -43,6 +45,28 @@ class CommerceCheckoutTest extends TestCase
                 return ['id' => 're_test', 'status' => 'succeeded'];
             }
         });
+    }
+
+    public function test_approved_shipping_and_coupon_terms_survive_reseeding(): void
+    {
+        $this->assertDatabaseHas('shipping_methods', [
+            'code' => 'standard-af', 'currency' => 'USD', 'price_minor' => 250,
+        ]);
+        $this->assertDatabaseHas('shipping_methods', [
+            'code' => 'express-af', 'currency' => 'USD', 'price_minor' => 500,
+        ]);
+        $this->assertDatabaseHas('coupons', [
+            'code' => 'WELCOME10',
+            'minimum_subtotal_minor' => 1000,
+            'maximum_discount_minor' => 1000,
+        ]);
+
+        ShippingMethod::query()->where('code', 'standard-af')->update(['price_minor' => 375]);
+        Coupon::query()->where('code', 'WELCOME10')->update(['maximum_discount_minor' => 750]);
+        $this->seed(CommerceSeeder::class);
+
+        $this->assertDatabaseHas('shipping_methods', ['code' => 'standard-af', 'price_minor' => 375]);
+        $this->assertDatabaseHas('coupons', ['code' => 'WELCOME10', 'maximum_discount_minor' => 750]);
     }
 
     public function test_authenticated_customer_can_add_variant_to_cart_api(): void
