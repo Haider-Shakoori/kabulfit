@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\LegacyProductRedirect;
+use App\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -94,7 +95,7 @@ class SyncBase44Sizes extends Command
 
         DB::transaction(function () use ($updates): void {
             foreach ($updates as $id => $sizes) {
-                \App\Models\Product::query()->whereKey($id)->firstOrFail()
+                Product::query()->whereKey($id)->firstOrFail()
                     ->update(['size_options' => $sizes]);
             }
         });
