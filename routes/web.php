@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', DefaultLocaleRedirectController::class)->name('locale.default');
 Route::get('/images/kabulfit-base44/catalog/{filename}', Base44CatalogMediaController::class)
-    ->where('filename', '[a-f0-9]{20}\\.(?:webp|png|jpe?g)')
+    ->where('filename', '[a-f0-9]{20}[.](?:webp|png|jpe?g)')
     ->name('base44.catalog.media');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitemap');
