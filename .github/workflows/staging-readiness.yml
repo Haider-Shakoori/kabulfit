@@ -39,7 +39,8 @@ jobs:
             python3 scripts/verify_staging_catalog.py \
               --base https://kabulfit.businessos.af \
               --sample "$IMAGE_SAMPLE" \
-              --all-galleries --interval 2
+              --all-galleries --interval 2 \
+              --require-original-parity
           else
             python3 scripts/verify_staging_catalog.py \
               --base https://kabulfit.businessos.af \

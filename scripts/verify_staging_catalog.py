@@ -39,7 +39,7 @@ def require(ok: bool, reason: str) -> None:
         raise RuntimeError(reason)
 
 
-def verify(base: str, sample: int, expected_active: int, expected_categories: int, all_galleries: bool = False, interval: float = 1.5) -> None:
+def verify(base: str, sample: int, expected_active: int, expected_categories: int, all_galleries: bool = False, interval: float = 1.5, require_original_parity: bool = False) -> None:
     base = base.rstrip("/")
     host = urlparse(base)
     require(host.scheme == "https" and bool(host.netloc), "Only an HTTPS staging base URL is supported")
@@ -76,6 +76,18 @@ def verify(base: str, sample: int, expected_active: int, expected_categories: in
         media = product.get("primary_media") or {}
         require(media.get("url"), f"Missing primary image for {product['sku']}")
     print(f"PASS {len(products)} unique active SKUs, all USD, with primary media URLs")
+    if require_original_parity:
+        require(all_galleries, "Original parity requires --all-galleries")
+        unavailable = [
+            str(product["sku"])
+            for product in products
+            if (product.get("stock") or {}).get("available", 0) <= 0
+        ]
+        require(
+            not unavailable,
+            f"{len(unavailable)} original products have zero available stock: " + ", ".join(unavailable[:8]),
+        )
+        print(f"PASS {len(products)} original products show positive aggregate stock")
 
     media_urls: list[tuple[str, str]] = [
         (str(item["sku"]), str(item["primary_media"]["url"]))
@@ -94,6 +106,15 @@ def verify(base: str, sample: int, expected_active: int, expected_categories: in
             require(detail.get("price") == product["price"], f"Product detail price mismatch: {slug}")
             require(isinstance(detail.get("variants"), list), f"Missing variants array: {slug}")
             require(isinstance(detail.get("media"), list), f"Missing gallery array: {slug}")
+            if require_original_parity:
+                sizes = detail.get("size_options")
+                require(
+                    isinstance(sizes, list) and
+                    4 <= len(sizes) <= 5 and
+                    set(sizes).issubset({"S", "M", "L", "XL", "XXL"}) and
+                    {"S", "M", "L", "XL"}.issubset(set(sizes)),
+                    f"Missing original S/M/L/XL(/XXL) choices for {slug}",
+                )
             for media in detail["media"]:
                 if media.get("url"):
                     gallery_urls.add(str(media["url"]))
@@ -126,11 +147,19 @@ if __name__ == "__main__":
     parser.add_argument("--expected-categories", type=int, default=8)
     parser.add_argument("--all-galleries", action="store_true", help="Fetch all active product details and test gallery URLs")
     parser.add_argument("--interval", type=float, default=1.5, help="Pacing in seconds for optional full gallery checks")
+    parser.add_argument(
+        "--require-original-parity",
+        action="store_true",
+        help="Before first cutover, require positive aggregate stock and original size options for every active product",
+    )
     args = parser.parse_args()
     try:
         require(args.sample >= 0, "Sample must be non-negative")
         require(0.5 <= args.interval <= 30, "Interval must be between 0.5 and 30 seconds")
-        verify(args.base, args.sample, args.expected_active, args.expected_categories, args.all_galleries, args.interval)
+        verify(
+            args.base, args.sample, args.expected_active, args.expected_categories,
+            args.all_galleries, args.interval, args.require_original_parity,
+        )
     except (RuntimeError, HTTPError, URLError, KeyError, ValueError, json.JSONDecodeError) as error:
         print("FAIL", error, file=sys.stderr)
         sys.exit(1)

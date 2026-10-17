@@ -93,6 +93,28 @@ Blade/Tailwind/Alpine are responsible for:
 
 Original Base44 read-only export: 141 products (130 active, 11 inactive), 8 original categories, 739 original product photo references. The guarded Laravel importer archives 730 available images; the other 9 source links were already broken and belonged to inactive products. Keep the export JSON private and preserve the exact original USD prices, localized names, stock, source IDs and media mapping. The five historical non-Base44 sample products remain hidden rather than being advertised as part of the original catalog.
 
+### Original stock and size restoration gate
+
+The verified Base44 export contains 130 active USD-priced products with positive
+aggregate stock and the original sizes S/M/L/XL (plus XXL on 25 products).
+After deploying the additive `stock_reserved`, `reservation_state`,
+`size_options`, and `size_code` migrations to cPanel staging:
+
+1. Back up the existing staging database and imported photos.
+2. Run `php artisan kabulfit:sync-base44-sizes <private-local-snapshot.json>`
+   without `--commit` to validate all 141 source records.
+3. Apply `--commit` only after the dry run succeeds; this changes size choices
+   but never source prices, aggregate stock quantities, or media.
+4. Verify public image URLs resolve to image MIME types.
+5. Run
+   `python3 scripts/verify_staging_catalog.py --all-galleries --sample 0 --interval 2 --require-original-parity`
+   only on staging. This intentionally fails for missing original sizes,
+   zero available stock, mismatched product details, or broken photo URLs.
+
+Full gallery verification is rate-limited and may take time. Re-running the
+original full importer after live orders is **not** an acceptable substitute
+for a sizes-only backfill, as it can overwrite product stock or catalog edits.
+
 ### Staging acceptance checklist
 
 1. Run `python3 scripts/verify_staging_catalog.py --base https://kabulfit.businessos.af --sample 0` to confirm all 130 public products, 8 categories, USD-only money objects, unique source-mapped SKUs, and HTTP 200 images.
