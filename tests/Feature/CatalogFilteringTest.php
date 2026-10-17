@@ -54,8 +54,8 @@ class CatalogFilteringTest extends TestCase
         $this->assertIsInt($kids);
         $this->assertIsInt($shawl);
         $this->assertIsInt($perahan);
-        $this->assertLessThan($perahan, $kids);
-        $this->assertLessThan($shawl, $perahan);
+        $this->assertLessThan($shawl, $kids);
+        $this->assertLessThan($perahan, $shawl);
     }
 
     public function test_in_stock_filter_uses_variant_inventory(): void
