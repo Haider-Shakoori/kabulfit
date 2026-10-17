@@ -9,7 +9,7 @@ class CartItem extends Model
 {
     protected $fillable = [
         'uuid', 'line_key', 'cart_id', 'product_id', 'product_variant_id',
-        'tailoring_request_id', 'quantity',
+        'tailoring_request_id', 'size_code', 'quantity',
     ];
 
     protected function casts(): array
