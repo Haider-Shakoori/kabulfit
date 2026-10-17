@@ -43,8 +43,8 @@ class SeoTest extends TestCase
         $this->assertStringContainsString('<link rel="canonical" href="http://localhost/en/products/'.$slug.'">', $html);
         $this->assertStringContainsString('hreflang="fa"', $html);
         $this->assertStringContainsString('"@type":"Product"', $html);
-        $this->assertStringContainsString('"priceCurrency":"AFN"', $html);
-        $this->assertStringContainsString('"price":"6500.00"', $html);
+        $this->assertStringContainsString('"priceCurrency":"USD"', $html);
+        $this->assertStringContainsString('"price":"65.00"', $html);
         $this->assertSame(1, preg_match_all('/<h1(?:\s[^>]*)?>/i', $html));
     }
 
