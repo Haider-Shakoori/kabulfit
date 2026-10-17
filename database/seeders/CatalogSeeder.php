@@ -36,25 +36,25 @@ class CatalogSeeder extends Seeder
                 'ps' => ['اکسسوري', 'اکسسوري', 'افغان الهام لرونکي شالونه او د دودیز لباس بشپړوونکي توکي.'],
             ]);
 
-            $this->product($men->id, 'KF-M-PT-001', 650000, true, 10, [
+            $this->product($men->id, 'KF-M-PT-001', 6500, true, 10, [
                 'en' => ['Classic Afghan Perahan Tunban', 'classic-afghan-perahan-tunban', 'A refined made-to-measure Perahan Tunban inspired by Afghan tailoring traditions.'],
                 'fa' => ['پیرهن تنبان کلاسیک افغانی', 'پیرهن-تنبان-کلاسیک-افغانی', 'پیرهن تنبان شیک با دوخت سفارشی و الهام‌گرفته از خیاطی اصیل افغانی.'],
                 'ps' => ['کلاسیک افغان پیرهن تنبان', 'کلاسیک-افغان-پیرهن-تنبان', 'د افغان دودیز خیاطۍ پر بنسټ په اندازه ګنډل شوی ښکلی پیرهن تنبان.'],
             ]);
 
-            $this->product($women->id, 'KF-W-DR-001', 980000, true, 20, [
+            $this->product($women->id, 'KF-W-DR-001', 9800, true, 20, [
                 'en' => ['Herat Embroidered Afghan Dress', 'herat-embroidered-afghan-dress', 'A formal Afghan dress featuring Herat-inspired embroidery and tailored finishing.'],
                 'fa' => ['لباس افغانی خامک‌دوزی هرات', 'لباس-افغانی-خامک-دوزی-هرات', 'لباس مجلسی افغانی با خامک‌دوزی الهام‌گرفته از هنر هرات و دوخت حرفه‌ای.'],
                 'ps' => ['د هرات ګنډل شوی افغان لباس', 'د-هرات-ګنډل-شوی-افغان-لباس', 'رسمي افغان لباس د هرات له هنر الهام اخیستل شوي ګنډلو او مسلکي جوړښت سره.'],
             ]);
 
-            $this->product($kids->id, 'KF-K-VS-001', 420000, false, 30, [
+            $this->product($kids->id, 'KF-K-VS-001', 4200, false, 30, [
                 'en' => ['Kids Afghan Waistcoat Set', 'kids-afghan-waistcoat-set', 'A comfortable Afghan-inspired waistcoat set prepared for celebrations and family occasions.'],
                 'fa' => ['ست واسکت افغانی اطفال', 'ست-واسکت-افغانی-اطفال', 'ست راحت واسکت افغانی برای جشن‌ها و محافل خانوادگی کودکان.'],
                 'ps' => ['د ماشومانو افغان واسکټ سیټ', 'د-ماشومانو-افغان-واسکټ-سیټ', 'د ماشومانو د مېلو او کورنیو مراسمو لپاره ارام افغان واسکټ سیټ.'],
             ]);
 
-            $this->product($men->id, 'KF-M-WC-001', 790000, true, 40, [
+            $this->product($men->id, 'KF-M-WC-001', 7900, true, 40, [
                 'en' => ['Traditional Afghan Waistcoat', 'traditional-afghan-waistcoat', 'A structured Afghan waistcoat with geometric embroidery for formal and everyday layering.'],
                 'fa' => ['واسکت سنتی افغانی', 'واسکت-سنتی-افغانی', 'واسکت ساختارمند افغانی با نقش‌های هندسی برای محافل رسمی و استفاده روزمره.'],
                 'ps' => ['دودیز افغان واسکټ', 'دودیز-افغان-واسکټ', 'د رسمي او ورځني اغوستلو لپاره هندسي ګنډل شوی افغان واسکټ.'],
