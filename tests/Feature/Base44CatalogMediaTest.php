@@ -37,6 +37,22 @@ class Base44CatalogMediaTest extends TestCase
             ->assertHeader('X-Content-Type-Options', 'nosniff');
     }
 
+    public function test_uses_release_archive_if_host_overrides_public_path(): void
+    {
+        $originalPublicPath = public_path();
+
+        try {
+            // A cPanel alias may point public_path() away from the release archive.
+            app()->usePublicPath(sys_get_temp_dir().'/kabulfit-unused-public-path');
+
+            $this->get('/images/kabulfit-base44/catalog/'.str_repeat('a', 20).'.png')
+                ->assertOk()
+                ->assertHeader('Content-Type', 'image/png');
+        } finally {
+            app()->usePublicPath($originalPublicPath);
+        }
+    }
+
     public function test_missing_and_unapproved_file_names_are_not_served(): void
     {
         $this->get('/images/kabulfit-base44/catalog/'.str_repeat('b', 20).'.webp')
