@@ -33,6 +33,24 @@ class SeoTest extends TestCase
         $this->assertStringContainsString('application/ld+json', $html);
     }
 
+    public function test_staging_host_is_noindexed_without_changing_live_seo(): void
+    {
+        $staging = $this->get('https://kabulfit.businessos.af/en')->assertOk();
+        $staging->assertHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
+        $this->assertStringContainsString(
+            '<meta name="robots" content="noindex,nofollow,noarchive">',
+            $staging->getContent(),
+        );
+
+        $robots = $this->get('https://kabulfit.businessos.af/robots.txt')->assertOk();
+        $this->assertStringContainsString("User-agent: *\nDisallow: /", $robots->getContent());
+        $this->assertStringNotContainsString('Sitemap:', $robots->getContent());
+
+        $live = $this->get('http://localhost/en')->assertOk();
+        $live->assertHeaderMissing('X-Robots-Tag');
+        $this->assertStringContainsString('<meta name="robots" content="index,follow">', $live->getContent());
+    }
+
     public function test_product_has_localized_canonical_hreflang_and_product_schema(): void
     {
         $product = Product::query()->with('translations')->where('sku', 'KF-M-PT-001')->firstOrFail();
