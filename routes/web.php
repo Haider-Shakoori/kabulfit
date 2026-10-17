@@ -3,16 +3,23 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuditController as AdminAuditController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ContentController as AdminContentController;
+use App\Http\Controllers\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\EngagementController as AdminEngagementController;
 use App\Http\Controllers\Admin\LegacyUrlController as AdminLegacyUrlController;
 use App\Http\Controllers\Admin\MeasurementController as AdminMeasurementController;
+use App\Http\Controllers\Admin\MeasurementGuideController as AdminMeasurementGuideController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\Admin\ShippingRateController as AdminShippingRateController;
+use App\Http\Controllers\Admin\SizeGuideController as AdminSizeGuideController;
 use App\Http\Controllers\Admin\TailoringController as AdminTailoringController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationController;
@@ -21,14 +28,18 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CommerceController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DefaultLocaleRedirectController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegacyPageRedirectController;
 use App\Http\Controllers\LegacyRedirectController;
 use App\Http\Controllers\MeasurementProfileController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SeoController;
 use App\Http\Controllers\TailoringController;
 use App\Http\Controllers\TailorWorkspaceController;
@@ -40,6 +51,7 @@ Route::get('/sitemap.xml', [SeoController::class, 'sitemapIndex'])->name('sitema
 Route::get('/sitemaps/catalog.xml', [SeoController::class, 'catalogSitemap'])->name('sitemaps.catalog');
 Route::get('/sitemaps/content.xml', [SeoController::class, 'contentSitemap'])->name('sitemaps.content');
 Route::get('/ProductDetail', [LegacyRedirectController::class, 'product'])->name('legacy.product');
+Route::get('/MeasurementGuide', [LegacyRedirectController::class, 'measurementGuide'])->name('legacy.measurement-guide');
 
 Route::prefix('{locale}')
     ->where(['locale' => 'en|fa|ps'])
@@ -52,6 +64,9 @@ Route::prefix('{locale}')
         Route::get('/products/{slug}', [ProductController::class, 'show'])->name('products.show');
         Route::get('/blog', [ContentController::class, 'blog'])->name('blog.index');
         Route::get('/blog/{slug}', [ContentController::class, 'post'])->name('blog.show');
+        Route::post('/contact', [ContactMessageController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+        Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->middleware('throttle:10,1')->name('newsletter.subscribe');
+        Route::get('/newsletter/unsubscribe/{subscriber}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
         Route::middleware('guest')->group(function (): void {
             Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -81,6 +96,7 @@ Route::prefix('{locale}')
                 ->name('verification.send');
 
             Route::get('/account', AccountController::class)->name('account');
+            Route::put('/account', [AccountController::class, 'update'])->name('account.update');
             Route::post('/account/addresses', [AddressController::class, 'store'])->name('addresses.store');
             Route::put('/account/addresses/{address:uuid}', [AddressController::class, 'update'])->name('addresses.update');
             Route::delete('/account/addresses/{address:uuid}', [AddressController::class, 'destroy'])->name('addresses.destroy');
@@ -120,7 +136,11 @@ Route::prefix('{locale}')
             Route::post('/checkout', [CommerceController::class, 'place'])->middleware('throttle:20,1')->name('checkout.place');
             Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
             Route::get('/orders/{order:uuid}', [OrderController::class, 'show'])->name('orders.show');
+            Route::get('/orders/{order:uuid}/document', [OrderController::class, 'document'])->name('orders.document');
             Route::get('/orders/{order:uuid}/payment', [CommerceController::class, 'payment'])->name('orders.payment');
+            Route::post('/orders/{order:uuid}/paypal/create', [PayPalController::class, 'create'])->middleware('throttle:20,1')->name('paypal.create');
+            Route::post('/orders/{order:uuid}/paypal/capture', [PayPalController::class, 'capture'])->middleware('throttle:20,1')->name('paypal.capture');
+            Route::post('/products/{product:sku}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 
             Route::prefix('admin')
                 ->name('admin.')
@@ -131,19 +151,39 @@ Route::prefix('{locale}')
                     Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
                     Route::put('/products/{product:sku}', [AdminProductController::class, 'update'])->name('products.update');
 
+                    Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+                    Route::post('/categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+                    Route::put('/categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+                    Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+
                     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
                     Route::get('/orders/{order:uuid}', [AdminOrderController::class, 'show'])->name('orders.show');
+                    Route::get('/orders/{order:uuid}/document', [AdminOrderController::class, 'document'])->name('orders.document');
                     Route::post('/orders/{order:uuid}/status', [AdminOrderController::class, 'transition'])->name('orders.transition');
                     Route::post('/orders/{order:uuid}/shipments', [AdminOrderController::class, 'shipment'])->name('orders.shipments.store');
                     Route::post('/shipments/{shipment:uuid}/status', [AdminOrderController::class, 'shipmentStatus'])->name('shipments.status');
 
                     Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
                     Route::get('/customers/{customer:uuid}', [AdminCustomerController::class, 'show'])->name('customers.show');
+
+                    Route::get('/engagement', [AdminEngagementController::class, 'index'])->name('engagement.index');
+                    Route::post('/engagement/messages/{contactMessage}/status', [AdminEngagementController::class, 'messageStatus'])->name('engagement.messages.status');
+                    Route::post('/engagement/subscribers/{subscriber}/toggle', [AdminEngagementController::class, 'subscriberToggle'])->name('engagement.subscribers.toggle');
                     Route::put('/customers/{customer:uuid}', [AdminCustomerController::class, 'update'])->name('customers.update');
                     Route::put('/customers/{customer:uuid}/roles', [AdminCustomerController::class, 'roles'])->name('customers.roles');
 
                     Route::get('/measurements', [AdminMeasurementController::class, 'index'])->name('measurements.index');
                     Route::put('/measurements/{definition:uuid}', [AdminMeasurementController::class, 'update'])->name('measurements.update');
+
+                    Route::get('/measurement-guides', [AdminMeasurementGuideController::class, 'index'])->name('measurement-guides.index');
+                    Route::post('/measurement-guides', [AdminMeasurementGuideController::class, 'store'])->name('measurement-guides.store');
+                    Route::put('/measurement-guides/{measurementGuide}', [AdminMeasurementGuideController::class, 'update'])->name('measurement-guides.update');
+                    Route::delete('/measurement-guides/{measurementGuide}', [AdminMeasurementGuideController::class, 'destroy'])->name('measurement-guides.destroy');
+
+                    Route::get('/size-guides', [AdminSizeGuideController::class, 'index'])->name('size-guides.index');
+                    Route::post('/size-guides', [AdminSizeGuideController::class, 'store'])->name('size-guides.store');
+                    Route::put('/size-guides/{sizeGuide}', [AdminSizeGuideController::class, 'update'])->name('size-guides.update');
+                    Route::delete('/size-guides/{sizeGuide}', [AdminSizeGuideController::class, 'destroy'])->name('size-guides.destroy');
 
                     Route::get('/tailoring', [AdminTailoringController::class, 'index'])->name('tailoring.index');
                     Route::get('/tailoring/{tailoring:uuid}', [AdminTailoringController::class, 'show'])->name('tailoring.show');
@@ -163,6 +203,20 @@ Route::prefix('{locale}')
                     Route::get('/legacy-urls', [AdminLegacyUrlController::class, 'index'])->name('legacy.index');
                     Route::put('/legacy-urls/{legacyUrl:uuid}', [AdminLegacyUrlController::class, 'update'])->name('legacy.update');
 
+                    Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
+                    Route::post('/reviews/{review}/toggle', [AdminReviewController::class, 'toggle'])->name('reviews.toggle');
+                    Route::delete('/reviews/{review}', [AdminReviewController::class, 'destroy'])->name('reviews.destroy');
+
+                    Route::get('/coupons', [AdminCouponController::class, 'index'])->name('coupons.index');
+                    Route::post('/coupons', [AdminCouponController::class, 'store'])->name('coupons.store');
+                    Route::put('/coupons/{coupon}', [AdminCouponController::class, 'update'])->name('coupons.update');
+                    Route::delete('/coupons/{coupon}', [AdminCouponController::class, 'destroy'])->name('coupons.destroy');
+
+                    Route::get('/shipping-rates', [AdminShippingRateController::class, 'index'])->name('shipping-rates.index');
+                    Route::post('/shipping-rates', [AdminShippingRateController::class, 'store'])->name('shipping-rates.store');
+                    Route::post('/shipping-rates/{shippingRate}/toggle', [AdminShippingRateController::class, 'toggle'])->name('shipping-rates.toggle');
+                    Route::delete('/shipping-rates/{shippingRate}', [AdminShippingRateController::class, 'destroy'])->name('shipping-rates.destroy');
+
                     Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
                     Route::put('/settings', [AdminSettingsController::class, 'update'])->name('settings.update');
 
@@ -179,5 +233,5 @@ Route::prefix('{locale}')
     });
 
 Route::get('/{legacy}', LegacyPageRedirectController::class)
-    ->where('legacy', 'About|Contact|FAQ|MeasurementGuide|PrivacyPolicy|ReturnPolicy|ShippingPolicy|Shop|TermsConditions|Account|Cart|Checkout|Orders|Wishlist|MyMeasurements|TailorDashboard')
+    ->where('legacy', 'Home|About|Contact|FAQ|MeasurementGuide|PrivacyPolicy|ReturnPolicy|ShippingPolicy|Shop|TermsConditions|Account|Cart|Checkout|Orders|Wishlist|MyMeasurements|TailorDashboard')
     ->name('legacy.page');

@@ -22,7 +22,9 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'metrics' => [
                 'orders' => Order::query()->count(),
+                'pending_orders' => Order::query()->whereIn('status', ['pending', 'pending_payment'])->count(),
                 'paid_orders' => Order::query()->whereIn('status', ['paid', 'processing', 'ready', 'shipped', 'delivered'])->count(),
+                'revenue_minor' => Order::query()->whereIn('status', ['paid', 'processing', 'ready', 'shipped', 'delivered'])->sum('total_minor'),
                 'customers' => User::query()->count(),
                 'products' => Product::query()->count(),
                 'tailoring' => TailoringRequest::query()->count(),

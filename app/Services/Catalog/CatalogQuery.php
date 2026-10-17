@@ -25,6 +25,16 @@ class CatalogQuery
             ->with(self::cardEagerLoads());
 
         $categorySlug ??= $filters['category'] ?? null;
+        $categorySlugs = collect($filters['categories'] ?? [])
+            ->filter()
+            ->map(fn (string $slug): string => strtolower($slug))
+            ->values()
+            ->all();
+        if ($categorySlug) {
+            $categorySlugs[] = strtolower($categorySlug);
+            $categorySlugs = array_values(array_unique($categorySlugs));
+        }
+
         $collectionSlug ??= $filters['collection'] ?? null;
 
         if ($search = trim((string) ($filters['q'] ?? ''))) {
@@ -41,10 +51,10 @@ class CatalogQuery
             });
         }
 
-        if ($categorySlug) {
+        if ($categorySlugs !== []) {
             $query->whereHas('category.translations', fn (Builder $categoryQuery) => $categoryQuery
                 ->where('locale', $locale)
-                ->where('slug', $categorySlug));
+                ->whereIn('slug', $categorySlugs));
         }
 
         if ($collectionSlug) {
@@ -53,12 +63,20 @@ class CatalogQuery
                 ->where('slug', $collectionSlug));
         }
 
-        if ($size = $filters['size'] ?? null) {
+        $sizes = collect($filters['sizes'] ?? [])
+            ->when(! empty($filters['size']), fn ($items) => $items->push($filters['size']))
+            ->filter()
+            ->map(fn (string $size): string => strtoupper($size))
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($sizes !== []) {
             $query->whereHas('variants', fn (Builder $variantQuery) => $variantQuery
                 ->where('is_active', true)
                 ->whereHas('size', fn (Builder $sizeQuery) => $sizeQuery
                     ->where('is_active', true)
-                    ->where('code', strtoupper($size))));
+                    ->whereIn('code', $sizes)));
         }
 
         if ($color = $filters['color'] ?? null) {
@@ -110,6 +128,7 @@ class CatalogQuery
         return [
             'translations',
             'category.translations',
+            'category.parent.translations',
             'primaryMedia.translations',
             'primaryMedia.derivatives',
             'variants' => fn ($query) => $query

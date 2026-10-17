@@ -1,0 +1,135 @@
+name: Vendor Base44 source media
+# Source media are vendored once from the Base44 export manifest.
+
+on:
+  push:
+    branches:
+      - feature/base44-laravel-migration
+    paths:
+      - docs/base44/source-media-urls.txt
+      - .github/workflows/vendor-base44-media.yml
+
+permissions:
+  contents: write
+
+jobs:
+  vendor-media:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out migration branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download Base44 media
+        shell: bash
+        run: |
+          set -euo pipefail
+          manifest="docs/base44/source-media-urls.txt"
+          destination="public/images/kabulfit-base44/source"
+          mkdir -p "$destination"
+
+          expected=0
+          downloaded=0
+          : > "$destination/MISSING.txt"
+
+          while IFS= read -r url || [[ -n "$url" ]]; do
+            [[ -z "$url" ]] && continue
+            expected=$((expected + 1))
+            filename="${url##*/}"
+            echo "Downloading $filename"
+
+            if ! curl --fail --location --retry 4 --retry-all-errors --retry-delay 2 \
+              --connect-timeout 20 --max-time 180 \
+              "$url" --output "$destination/$filename"; then
+              echo "$filename | $url" >> "$destination/MISSING.txt"
+              rm -f "$destination/$filename"
+              echo "Unavailable: $filename"
+              continue
+            fi
+
+            if [[ ! -s "$destination/$filename" ]]; then
+              echo "$filename | $url | empty file" >> "$destination/MISSING.txt"
+              rm -f "$destination/$filename"
+              continue
+            fi
+
+            mime="$(file --brief --mime-type "$destination/$filename")"
+            case "$mime" in
+              image/*) downloaded=$((downloaded + 1)) ;;
+              *)
+                echo "$filename | $url | unexpected MIME $mime" >> "$destination/MISSING.txt"
+                rm -f "$destination/$filename"
+                ;;
+            esac
+          done < "$manifest"
+
+          echo "Expected $expected source assets; downloaded $downloaded"
+          test "$downloaded" -gt 0
+
+          (
+            cd "$destination"
+            find . -maxdepth 1 -type f ! -name 'SHA256SUMS.txt' ! -name 'MISSING.txt' -printf '%f\n' | sort | xargs -r sha256sum > SHA256SUMS.txt
+          )
+
+          echo "Missing assets:"
+          cat "$destination/MISSING.txt" || true
+
+      - name: Replace Base44 media URLs with local paths
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          remote = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6944d141c2878421ef544832/"
+          local = "/images/kabulfit-base44/source/"
+          destination = Path("public/images/kabulfit-base44/source")
+          roots = ["app", "config", "database", "resources", "tests"]
+          suffixes = {".php", ".blade.php", ".js", ".jsx", ".ts", ".tsx", ".css", ".json", ".jsonc", ".md"}
+          available = {p.name for p in destination.iterdir() if p.is_file() and p.name not in {"MISSING.txt", "SHA256SUMS.txt"}}
+
+          changed = []
+          for root in roots:
+              base = Path(root)
+              if not base.exists():
+                  continue
+              for path in base.rglob("*"):
+                  if not path.is_file():
+                      continue
+                  if not (path.suffix in suffixes or path.name.endswith(".blade.php")):
+                      continue
+                  try:
+                      text = path.read_text(encoding="utf-8")
+                  except UnicodeDecodeError:
+                      continue
+                  if remote not in text:
+                      continue
+
+                  updated = text
+                  for filename in available:
+                      updated = updated.replace(remote + filename, local + filename)
+
+                  if updated != text:
+                      path.write_text(updated, encoding="utf-8")
+                      changed.append(str(path))
+
+          print("Rewritten files:")
+          for path in changed:
+              print(path)
+          PY
+
+      - name: Commit vendored media
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/images/kabulfit-base44/source app config database resources tests
+          if git diff --cached --quiet; then
+            echo "No media changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: vendor Base44 source media locally [media-sync]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('sku')->unique();
             $table->unsignedBigInteger('price_minor');
             $table->unsignedBigInteger('sale_price_minor')->nullable();
-            $table->char('currency', 3)->default('AFN');
+            $table->char('currency', 3)->default('USD');
             $table->unsignedInteger('stock_quantity')->default(0)->index();
             $table->boolean('is_active')->default(true)->index();
             $table->boolean('is_featured')->default(false)->index();

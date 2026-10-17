@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use App\Models\BlogPostTranslation;
 use App\Models\ContentPageTranslation;
+use App\Models\MeasurementDefinition;
+use App\Models\MeasurementGuideVideo;
 use App\Support\Seo\SeoData;
 use Illuminate\View\View;
 
@@ -23,8 +25,31 @@ class ContentController extends Controller
             ->mapWithKeys(fn ($item) => [$item->locale => route('content.page', ['locale' => $item->locale, 'slug' => $item->slug])])
             ->all();
 
+        $isMeasurementGuide = $translation->page->page_key === 'measurement-guide';
+
+        $measurementGuideVideos = $isMeasurementGuide
+            ? MeasurementGuideVideo::query()
+                ->where('is_active', true)
+                ->orderBy('category')
+                ->orderBy('display_order')
+                ->orderBy('id')
+                ->get()
+            : collect();
+
+        $measurementFormDefinitions = $isMeasurementGuide
+            ? MeasurementDefinition::query()
+                ->where('is_active', true)
+                ->whereIn('garment_type', ['perahan_tunban', 'dress'])
+                ->with('translations')
+                ->orderBy('sort_order')
+                ->get()
+                ->groupBy(fn (MeasurementDefinition $definition) => $definition->garment_type === 'dress' ? 'female' : 'male')
+            : collect();
+
         return view('content.page', [
             'translation' => $translation,
+            'measurementGuideVideos' => $measurementGuideVideos,
+            'measurementFormDefinitions' => $measurementFormDefinitions,
             'seo' => new SeoData(
                 $translation->seo_title ?: $translation->title.' | KabulFit',
                 $translation->seo_description ?: ($translation->excerpt ?? ''),

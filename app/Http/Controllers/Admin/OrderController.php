@@ -34,6 +34,20 @@ class OrderController extends Controller
         ]);
     }
 
+    public function document(string $locale, Order $order): View
+    {
+        $this->authorize('view', $order);
+
+        return view('orders.document', [
+            'order' => $order->load([
+                'user',
+                'items.measurements',
+                'items.product.primaryMedia',
+            ]),
+            'isAdmin' => true,
+        ]);
+    }
+
     public function transition(Request $request, string $locale, Order $order, OrderLifecycleService $orders, AuditService $audit): RedirectResponse
     {
         $this->authorize('update', $order);

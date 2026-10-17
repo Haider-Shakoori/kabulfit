@@ -17,8 +17,12 @@ class CatalogFilterRequest extends FormRequest
         return [
             'q' => ['nullable', 'string', 'max:100'],
             'category' => ['nullable', 'string', 'max:190'],
+            'categories' => ['nullable', 'array', 'max:20'],
+            'categories.*' => ['string', 'max:190'],
             'collection' => ['nullable', 'string', 'max:190'],
             'size' => ['nullable', 'string', 'max:24'],
+            'sizes' => ['nullable', 'array', 'max:20'],
+            'sizes.*' => ['string', 'max:24'],
             'color' => ['nullable', 'string', 'max:190'],
             'min_price' => ['nullable', 'regex:/^\d{1,10}(?:\.\d{1,2})?$/'],
             'max_price' => ['nullable', 'regex:/^\d{1,10}(?:\.\d{1,2})?$/'],

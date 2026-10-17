@@ -1,0 +1,42 @@
+[
+  {
+    "base44_id": "69477bc8405f92df484cb236",
+    "name": "Men",
+    "name_dari": "مردانه",
+    "name_pashto": "نارینه",
+    "slug": "men",
+    "description": "Traditional Afghan men's clothing",
+    "display_order": 1,
+    "image_filename": "2b37f3480_1.webp"
+  },
+  {
+    "base44_id": "69477bc8405f92df484cb237",
+    "name": "Women",
+    "name_dari": "زنانه",
+    "name_pashto": "ښځینه",
+    "slug": "women",
+    "description": "Traditional Afghan women's clothing",
+    "display_order": 2,
+    "image_filename": "0d9b271e2_1.webp"
+  },
+  {
+    "base44_id": "69477bc8405f92df484cb238",
+    "name": "Boys",
+    "name_dari": "بچه گانه",
+    "name_pashto": "هلکان",
+    "slug": "boys",
+    "description": "Traditional Afghan children's clothing",
+    "display_order": 3,
+    "image_filename": "9a8998f13_5.png"
+  },
+  {
+    "base44_id": "69702e8e1327f73d27b9ecaa",
+    "name": "Girls",
+    "name_dari": "دخترانه ",
+    "name_pashto": "انجونی ",
+    "slug": "girls",
+    "description": "",
+    "display_order": 4,
+    "image_filename": "b31ec3a1c_1.webp"
+  }
+]

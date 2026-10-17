@@ -11,7 +11,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CatalogSeeder::class,
             CatalogDomainSeeder::class,
+            Base44HomepageCatalogSeeder::class,
             MeasurementSeeder::class,
+            MeasurementGuideVideoSeeder::class,
             CommerceSeeder::class,
             AdminAuthorizationSeeder::class,
             ContentSeeder::class,

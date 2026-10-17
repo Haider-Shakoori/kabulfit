@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'cart' => 'Cart', 'checkout' => 'Checkout', 'payment' => 'Payment', 'empty_cart' => 'Your cart is empty.', 'invalid_item' => 'This product option is unavailable.', 'insufficient_stock' => 'The requested quantity is not available.', 'invalid_coupon' => 'This coupon is invalid or unavailable.', 'subtotal' => 'Subtotal', 'quantity' => 'Quantity', 'remove' => 'Remove', 'continue_checkout' => 'Continue to checkout', 'shipping_address' => 'Shipping address', 'shipping_method' => 'Shipping method', 'coupon' => 'Coupon', 'place_order' => 'Continue to payment', 'order' => 'Order', 'payment_pending' => 'Payment confirmation is pending. Your order updates only after Stripe confirms the payment.', 'secure_payment' => 'Secure payment', 'total' => 'Total',
+    'cart' => 'Cart', 'checkout' => 'Checkout', 'payment' => 'Payment', 'empty_cart' => 'Your cart is empty.', 'invalid_item' => 'This product option is unavailable.', 'insufficient_stock' => 'The requested quantity is not available.', 'invalid_coupon' => 'This coupon is invalid or unavailable.', 'invalid_shipping' => 'This shipping method is unavailable for the cart currency.', 'subtotal' => 'Subtotal', 'quantity' => 'Quantity', 'remove' => 'Remove', 'continue_checkout' => 'Continue to checkout', 'shipping_address' => 'Shipping address', 'shipping_method' => 'Shipping method', 'coupon' => 'Coupon', 'place_order' => 'Continue to payment', 'order' => 'Order', 'payment_pending' => 'Payment confirmation is pending. Your order updates only after Stripe confirms the payment.', 'secure_payment' => 'Secure payment', 'total' => 'Total',
     'wishlist' => 'Wishlist',
     'empty_wishlist' => 'Your wishlist is empty.',
     'option' => 'Option',
@@ -11,4 +11,18 @@ return [
     'payment_status' => 'Payment status',
     'pay_now' => 'Pay securely',
     'payment_error' => 'Payment could not be completed. Please try again.',
+    'review_saved' => 'Your review was saved.',
+    'write_review' => 'Write a review',
+    'review_title' => 'Review title',
+    'review_comment' => 'Your review',
+    'verified_purchase' => 'Verified purchase',
+    'no_reviews' => 'No reviews yet. Be the first to review!',
+    'payment_method' => 'Payment Method',
+    'pay_with_card' => 'Credit / Debit Card',
+    'pay_with_paypal' => 'PayPal',
+    'paypal_description' => 'Pay securely with your PayPal account.',
+    'secured_by_paypal' => 'Secured by PayPal',
+    'paypal_error' => 'PayPal could not create the payment. Please try again.',
+    'paypal_capture_error' => 'PayPal payment capture failed. Please try again.',
+    'paypal_not_configured' => 'PayPal is not configured for this store.',
 ];
