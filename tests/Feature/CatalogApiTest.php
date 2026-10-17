@@ -39,6 +39,7 @@ class CatalogApiTest extends TestCase
             'KF-W-DR-001' => 9800,
             'KF-K-VS-001' => 4200,
             'KF-M-WC-001' => 7900,
+            'KF-A-KS-001' => 4800,
         ] as $sku => $priceMinor) {
             $this->assertDatabaseHas('products', [
                 'sku' => $sku,
