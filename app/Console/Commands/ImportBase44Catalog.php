@@ -175,6 +175,10 @@ class ImportBase44Catalog extends Command
                     'sale_price_minor' => isset($row['sale_price']) ? (int) round(((float) $row['sale_price']) * 100) : null,
                     'currency' => 'USD',
                     'stock_quantity' => (int) ($row['stock_quantity'] ?? 0),
+                    'size_options' => array_values(array_unique(array_filter(array_map(
+                        fn ($size): string => strtoupper(trim((string) $size)),
+                        (array) ($row['sizes'] ?? []),
+                    ), fn (string $size): bool => preg_match('/^[A-Z0-9-]{1,20}$/', $size) === 1))),
                     'is_active' => (bool) ($row['is_active'] ?? false),
                     'is_featured' => (bool) ($row['is_featured'] ?? false),
                     'sort_order' => ($index + 1) * 10,
