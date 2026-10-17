@@ -28,6 +28,10 @@ class CartService
         int $quantity,
         ?TailoringRequest $tailoringRequest = null,
     ): Cart {
+        if ($cart->currency !== 'USD' || $product->currency !== 'USD') {
+            throw ValidationException::withMessages(['product' => __('commerce.invalid_item')]);
+        }
+
         if ($quantity < 1 || ! $product->is_active || ($variant && (! $variant->is_active || $variant->product_id !== $product->id))) {
             throw ValidationException::withMessages(['quantity' => __('commerce.invalid_item')]);
         }

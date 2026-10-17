@@ -24,7 +24,7 @@ class CheckoutService
         abort_unless($cart->user_id === $user->id && $address->user_id === $user->id, 404);
 
         return DB::transaction(function () use ($user, $cart, $address, $shipping, $coupon) {
-            if ($shipping->currency !== $cart->currency) {
+            if ($cart->currency !== 'USD' || $shipping->currency !== 'USD' || $shipping->currency !== $cart->currency) {
                 throw ValidationException::withMessages(['shipping_method' => __('commerce.invalid_shipping')]);
             }
 
