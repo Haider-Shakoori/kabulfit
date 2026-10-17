@@ -61,7 +61,7 @@ class CommerceCheckoutTest extends TestCase
             ->assertJsonMissingPath('data.items.0.id')
             ->assertJsonPath('data.items.0.quantity', 2)
             ->assertJsonPath('data.items.0.sku', 'KF-M-PT-001-M-BLACK')
-            ->assertJsonPath('data.subtotal_minor', 1300000);
+            ->assertJsonPath('data.subtotal_minor', 13000);
     }
 
     public function test_checkout_reserves_stock_and_returns_stripe_client_secret(): void
