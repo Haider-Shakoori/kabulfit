@@ -72,11 +72,22 @@ class CatalogQuery
             ->all();
 
         if ($sizes !== []) {
-            $query->whereHas('variants', fn (Builder $variantQuery) => $variantQuery
-                ->where('is_active', true)
-                ->whereHas('size', fn (Builder $sizeQuery) => $sizeQuery
+            $query->where(function (Builder $sizeFilter) use ($sizes): void {
+                $sizeFilter->whereHas('variants', fn (Builder $variantQuery) => $variantQuery
                     ->where('is_active', true)
-                    ->whereIn('code', $sizes)));
+                    ->whereHas('size', fn (Builder $sizeQuery) => $sizeQuery
+                        ->where('is_active', true)
+                        ->whereIn('code', $sizes)))
+                    ->orWhere(function (Builder $originalSizes) use ($sizes): void {
+                        $originalSizes->whereDoesntHave('variants', fn (Builder $variants) => $variants
+                            ->where('is_active', true))
+                            ->where(function (Builder $jsonSizes) use ($sizes): void {
+                                foreach ($sizes as $size) {
+                                    $jsonSizes->orWhereJsonContains('size_options', $size);
+                                }
+                            });
+                    });
+            });
         }
 
         if ($color = $filters['color'] ?? null) {
