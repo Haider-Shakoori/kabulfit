@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urljoin, urlparse
 from urllib.request import Request, urlopen
@@ -16,8 +17,21 @@ from urllib.request import Request, urlopen
 
 def request(url: str, *, accept: str = "application/json") -> tuple[str, bytes]:
     req = Request(url, headers={"Accept": accept, "User-Agent": "KabulFit-Staging-Readiness/1.0"})
-    with urlopen(req, timeout=15) as response:
-        return response.headers.get("Content-Type", ""), response.read()
+    for attempt in range(3):
+        try:
+            with urlopen(req, timeout=15) as response:
+                return response.headers.get("Content-Type", ""), response.read()
+        except HTTPError as error:
+            if error.code != 429 or attempt == 2:
+                raise
+            retry_after = error.headers.get("Retry-After", "")
+            try:
+                delay = max(5, min(60, int(retry_after)))
+            except ValueError:
+                delay = 10 * (attempt + 1)
+            print(f"Rate limited; respecting {delay}s cooldown", file=sys.stderr)
+            time.sleep(delay)
+    raise RuntimeError("Unexpected exhausted retry loop")
 
 
 def require(ok: bool, reason: str) -> None:
@@ -25,7 +39,7 @@ def require(ok: bool, reason: str) -> None:
         raise RuntimeError(reason)
 
 
-def verify(base: str, sample: int, expected_active: int, expected_categories: int, all_galleries: bool = False) -> None:
+def verify(base: str, sample: int, expected_active: int, expected_categories: int, all_galleries: bool = False, interval: float = 1.5) -> None:
     base = base.rstrip("/")
     host = urlparse(base)
     require(host.scheme == "https" and bool(host.netloc), "Only an HTTPS staging base URL is supported")
@@ -71,6 +85,7 @@ def verify(base: str, sample: int, expected_active: int, expected_categories: in
     if all_galleries:
         gallery_urls: set[str] = set()
         for product in products:
+            time.sleep(interval)
             slug = quote(str(product["slug"]), safe="")
             content_type, body = request(f"{base}/api/v1/en/products/{slug}")
             require("application/json" in content_type, f"Product detail is not JSON: {slug}")
@@ -88,6 +103,8 @@ def verify(base: str, sample: int, expected_active: int, expected_categories: in
     checks = media_urls if sample == 0 else media_urls[:sample]
     failures: list[str] = []
     for sku, url in checks:
+        if all_galleries:
+            time.sleep(interval)
         target = urlparse(urljoin(base, url))
         require(target.scheme == "https" and target.netloc == host.netloc, f"Unexpected external image hostname for {sku}")
         try:
@@ -108,10 +125,12 @@ if __name__ == "__main__":
     parser.add_argument("--expected-active", type=int, default=130)
     parser.add_argument("--expected-categories", type=int, default=8)
     parser.add_argument("--all-galleries", action="store_true", help="Fetch all active product details and test gallery URLs")
+    parser.add_argument("--interval", type=float, default=1.5, help="Pacing in seconds for optional full gallery checks")
     args = parser.parse_args()
     try:
         require(args.sample >= 0, "Sample must be non-negative")
-        verify(args.base, args.sample, args.expected_active, args.expected_categories, args.all_galleries)
+        require(0.5 <= args.interval <= 30, "Interval must be between 0.5 and 30 seconds")
+        verify(args.base, args.sample, args.expected_active, args.expected_categories, args.all_galleries, args.interval)
     except (RuntimeError, HTTPError, URLError, KeyError, ValueError, json.JSONDecodeError) as error:
         print("FAIL", error, file=sys.stderr)
         sys.exit(1)

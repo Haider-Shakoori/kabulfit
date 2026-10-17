@@ -1,0 +1,47 @@
+name: KabulFit Staging Readiness
+
+on:
+  workflow_dispatch:
+    inputs:
+      all_galleries:
+        description: Verify every active product's detail and gallery photos (pacing enabled)
+        required: true
+        type: boolean
+        default: false
+      image_sample:
+        description: Number of images to fetch (0 = all selected images)
+        required: true
+        type: string
+        default: '5'
+
+permissions:
+  contents: read
+
+jobs:
+  read-only-staging-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Python verifier syntax
+        run: python3 -m py_compile scripts/verify_staging_catalog.py
+      - name: Check staging catalog, USD prices, categories, and public photos
+        env:
+          ALL_GALLERIES: ${{ inputs.all_galleries }}
+          IMAGE_SAMPLE: ${{ inputs.image_sample }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$ALL_GALLERIES" == "true" ]]; then
+            python3 scripts/verify_staging_catalog.py \
+              --base https://kabulfit.businessos.af \
+              --sample "$IMAGE_SAMPLE" \
+              --all-galleries --interval 2
+          else
+            python3 scripts/verify_staging_catalog.py \
+              --base https://kabulfit.businessos.af \
+              --sample "$IMAGE_SAMPLE"
+          fi
