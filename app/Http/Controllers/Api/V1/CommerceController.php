@@ -20,6 +20,17 @@ class CommerceController extends Controller
 {
     public function __construct(private readonly CartService $carts, private readonly CheckoutService $checkout, private readonly PaymentService $payments) {}
 
+    public function shippingMethods(Request $r): JsonResponse
+    {
+        $currency = $this->carts->forUser($r->user())->currency;
+
+        return response()->json(['data' => ShippingMethod::query()
+            ->where('is_active', true)
+            ->where('currency', $currency)
+            ->orderBy('sort_order')
+            ->get(['code', 'name', 'currency', 'price_minor'])]);
+    }
+
     public function cart(Request $r): JsonResponse
     {
         return response()->json($this->payload($this->carts->load($this->carts->forUser($r->user()))));
