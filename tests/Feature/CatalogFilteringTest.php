@@ -55,6 +55,25 @@ class CatalogFilteringTest extends TestCase
         $this->assertLessThan($waistcoat, $perahan);
     }
 
+    public function test_original_aggregate_stock_product_uses_json_size_options_for_filters(): void
+    {
+        $product = Product::query()->where('sku', 'KF-M-PT-001')->firstOrFail();
+        $product->variants()->delete();
+        $product->update(['size_options' => ['S', 'M', 'L', 'XL'], 'stock_quantity' => 7]);
+
+        $this->getJson('/api/v1/en/catalog?size=M')
+            ->assertOk()
+            ->assertJsonFragment(['sku' => $product->sku]);
+
+        $this->getJson('/api/v1/en/catalog?size=XXL')
+            ->assertOk()
+            ->assertJsonMissing(['sku' => $product->sku]);
+
+        $this->get('/en/shop?size=L')
+            ->assertOk()
+            ->assertSee('Classic Afghan Perahan Tunban');
+    }
+
     public function test_in_stock_filter_uses_variant_inventory(): void
     {
         $product = Product::query()->where('sku', 'KF-K-VS-001')->firstOrFail();
