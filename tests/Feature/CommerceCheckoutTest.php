@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Contracts\Payments\PaymentGateway;
+use App\Models\Coupon;
 use App\Models\InventoryItem;
 use App\Models\Payment;
 use App\Models\PaymentEvent;
@@ -80,6 +81,9 @@ class CommerceCheckoutTest extends TestCase
         ])->assertCreated();
 
         $before = InventoryItem::whereHas('variant', fn ($q) => $q->where('sku', 'KF-M-PT-001-M-BLACK'))->firstOrFail()->quantity_reserved;
+
+        // This test exercises an eligible coupon without changing the production seed threshold.
+        Coupon::query()->where('code', 'WELCOME10')->update(['minimum_subtotal_minor' => 1000]);
 
         $response = $this->postJson('/api/v1/en/checkout', [
             'address_uuid' => $address->uuid,
