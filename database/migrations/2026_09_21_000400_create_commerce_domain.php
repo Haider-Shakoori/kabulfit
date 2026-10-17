@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('guest_token', 64)->nullable()->unique();
-            $table->char('currency', 3)->default('AFN');
+            $table->char('currency', 3)->default('USD');
             $table->timestamps();
             $table->index(['user_id', 'updated_at']);
         });
@@ -52,7 +52,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('name');
-            $table->char('currency', 3)->default('AFN');
+            $table->char('currency', 3)->default('USD');
             $table->unsignedBigInteger('price_minor');
             $table->boolean('is_active')->default(true)->index();
             $table->unsignedInteger('sort_order')->default(0);
