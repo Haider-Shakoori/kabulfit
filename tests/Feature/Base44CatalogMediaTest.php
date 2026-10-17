@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class Base44CatalogMediaTest extends TestCase
