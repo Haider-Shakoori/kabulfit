@@ -10,7 +10,7 @@ import argparse
 import json
 import sys
 from urllib.error import HTTPError, URLError
-from urllib.parse import urljoin, urlparse
+from urllib.parse import quote, urljoin, urlparse
 from urllib.request import Request, urlopen
 
 
@@ -25,7 +25,7 @@ def require(ok: bool, reason: str) -> None:
         raise RuntimeError(reason)
 
 
-def verify(base: str, sample: int, expected_active: int, expected_categories: int) -> None:
+def verify(base: str, sample: int, expected_active: int, expected_categories: int, all_galleries: bool = False) -> None:
     base = base.rstrip("/")
     host = urlparse(base)
     require(host.scheme == "https" and bool(host.netloc), "Only an HTTPS staging base URL is supported")
@@ -63,18 +63,39 @@ def verify(base: str, sample: int, expected_active: int, expected_categories: in
         require(media.get("url"), f"Missing primary image for {product['sku']}")
     print(f"PASS {len(products)} unique active SKUs, all USD, with primary media URLs")
 
-    checks = products if sample == 0 else products[:sample]
+    media_urls: list[tuple[str, str]] = [
+        (str(item["sku"]), str(item["primary_media"]["url"]))
+        for item in products
+    ]
+
+    if all_galleries:
+        gallery_urls: set[str] = set()
+        for product in products:
+            slug = quote(str(product["slug"]), safe="")
+            content_type, body = request(f"{base}/api/v1/en/products/{slug}")
+            require("application/json" in content_type, f"Product detail is not JSON: {slug}")
+            detail = json.loads(body)["data"]
+            require(detail.get("sku") == product["sku"], f"Product detail SKU mismatch: {slug}")
+            require(detail.get("price") == product["price"], f"Product detail price mismatch: {slug}")
+            require(isinstance(detail.get("variants"), list), f"Missing variants array: {slug}")
+            require(isinstance(detail.get("media"), list), f"Missing gallery array: {slug}")
+            for media in detail["media"]:
+                if media.get("url"):
+                    gallery_urls.add(str(media["url"]))
+        media_urls = [("gallery", url) for url in sorted(gallery_urls)]
+        print(f"PASS all {len(products)} product-detail JSON records; {len(media_urls)} distinct gallery image URLs")
+
+    checks = media_urls if sample == 0 else media_urls[:sample]
     failures: list[str] = []
-    for product in checks:
-        url = str(product["primary_media"]["url"])
+    for sku, url in checks:
         target = urlparse(urljoin(base, url))
-        require(target.scheme == "https" and target.netloc == host.netloc, f"Unexpected external image hostname for {product['sku']}")
+        require(target.scheme == "https" and target.netloc == host.netloc, f"Unexpected external image hostname for {sku}")
         try:
             content_type, body = request(target.geturl(), accept="image/avif,image/webp,image/*")
             if not content_type.startswith("image/") or not body:
-                failures.append(f"{product['sku']}: unexpected content type {content_type}")
+                failures.append(f"{sku}: unexpected content type {content_type}")
         except (HTTPError, URLError) as error:
-            failures.append(f"{product['sku']}: {error}")
+            failures.append(f"{sku}: {error}")
     if failures:
         raise RuntimeError(f"{len(failures)} of {len(checks)} tested product images failed: " + " | ".join(failures[:8]))
     print(f"PASS {len(checks)} product images served as image/* over HTTPS")
@@ -86,10 +107,11 @@ if __name__ == "__main__":
     parser.add_argument("--sample", type=int, default=5, help="Image sample size; 0 checks all primary images")
     parser.add_argument("--expected-active", type=int, default=130)
     parser.add_argument("--expected-categories", type=int, default=8)
+    parser.add_argument("--all-galleries", action="store_true", help="Fetch all active product details and test gallery URLs")
     args = parser.parse_args()
     try:
         require(args.sample >= 0, "Sample must be non-negative")
-        verify(args.base, args.sample, args.expected_active, args.expected_categories)
+        verify(args.base, args.sample, args.expected_active, args.expected_categories, args.all_galleries)
     except (RuntimeError, HTTPError, URLError, KeyError, ValueError, json.JSONDecodeError) as error:
         print("FAIL", error, file=sys.stderr)
         sys.exit(1)
