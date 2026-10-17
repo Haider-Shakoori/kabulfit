@@ -12,7 +12,15 @@ class Base44CatalogMediaController extends Controller
         // The route is a fallback for cPanel servers that rewrite new static files.
         abort_unless(preg_match('/\A[a-f0-9]{20}\.(?:webp|png|jpe?g)\z/D', $filename) === 1, 404);
 
-        $path = public_path('images/kabulfit-base44/catalog/'.$filename);
+        $relativePath = 'images/kabulfit-base44/catalog/'.$filename;
+        $path = public_path($relativePath);
+
+        // Some cPanel releases serve the app through an alternate web document root.
+        // The imported, immutable archive is kept within this Laravel release.
+        if (! is_file($path)) {
+            $path = base_path('public/'.$relativePath);
+        }
+
         abort_unless(is_file($path), 404);
 
         return response()->file($path, [

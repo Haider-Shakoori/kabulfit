@@ -86,3 +86,20 @@ Blade/Tailwind/Alpine are responsible for:
 12. Policies/about/contact/FAQ.
 13. Responsive/RTL/accessibility parity audit.
 14. Full automated regression and CI.
+
+## Staging migration and final domain cutover gate (October 2026)
+
+**Do not change the live `kabulfit.com` DNS, Apache vhost, or Base44 deployment until all staging gates below pass and the final cutover is explicitly approved.** The Laravel staging host is `https://kabulfit.businessos.af`.
+
+Original Base44 read-only export: 141 products (130 active, 11 inactive), 8 original categories, 739 original product photo references. The guarded Laravel importer archives 730 available images; the other 9 source links were already broken and belonged to inactive products. Keep the export JSON private and preserve the exact original USD prices, localized names, stock, source IDs and media mapping. The five historical non-Base44 sample products remain hidden rather than being advertised as part of the original catalog.
+
+### Staging acceptance checklist
+
+1. Run `python3 scripts/verify_staging_catalog.py --base https://kabulfit.businessos.af --sample 0` to confirm all 130 public products, 8 categories, USD-only money objects, unique source-mapped SKUs, and HTTP 200 images.
+2. Verify all 730 archived photos are readable in the *actual PHP/web-server request context*, not just present in the shell. Ensure Apache's document root, PHP-FPM/OPcache, symlinks and route cache point to the active Laravel release. Static `source/` imagery and hashed `catalog/` imagery require independent checks.
+3. Manually review EN/FA/PS + RTL home, category, search, product detail, variants, stock, size guidance, measurement entry, cart, addresses, shipping, customer account, and mobile catalog image rendering.
+4. Run Laravel CI (PHPUnit, Pint, Composer audit, Vite, MySQL migration/seed), and test checkout/payment integration using test-mode accounts before enabling real payments. Never treat demo Flutter data as production catalog.
+5. Keep a verified rollback snapshot of the existing cPanel staging database and archived assets; preserve the legacy Base44 frontend until final acceptance.
+6. Only as the **last step**, after full staging acceptance, prepare a separate production cutover plan with backups, DNS/SSL verification, redirect and SEO checks, webhook/queue checks, and documented rollback.
+
+The staging image incident is tracked in GitHub issue #29; a passing backend unit test by itself does **not** prove real cPanel static image delivery.
