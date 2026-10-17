@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\InventoryItem;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\ShippingMethod;
 use App\Models\TailoringRequest;
 use App\Models\User;
@@ -57,8 +58,15 @@ class CheckoutService
                     }
 
                     $inventory->increment('quantity_reserved', $item->quantity);
-                } elseif ($item->product->stock_quantity < $item->quantity) {
-                    throw ValidationException::withMessages(['cart' => __('commerce.insufficient_stock')]);
+                } else {
+                    // Variantless Base44 items keep one aggregate quantity across sizes.
+                    // Lock the row and reserve atomically to avoid overselling pending orders.
+                    $product = Product::query()->whereKey($item->product_id)
+                        ->lockForUpdate()->firstOrFail();
+                    if ($product->availableStock() < $item->quantity) {
+                        throw ValidationException::withMessages(['cart' => __('commerce.insufficient_stock')]);
+                    }
+                    $product->increment('stock_reserved', $item->quantity);
                 }
 
                 $subtotal += $item->lineTotalMinor();
@@ -146,7 +154,14 @@ class CheckoutService
 
     public function releaseReservations(Order $order): void
     {
-        DB::transaction(function () use ($order) {
+        DB::transaction(function () use ($order): void {
+            $order = Order::query()->whereKey($order->id)
+                ->lockForUpdate()->firstOrFail();
+
+            if ($order->reservation_state !== 'reserved') {
+                return;
+            }
+
             foreach ($order->items()->get() as $item) {
                 if ($item->tailoring_request_uuid) {
                     TailoringRequest::query()
@@ -154,40 +169,67 @@ class CheckoutService
                         ->where('status', 'ordered')
                         ->update(['status' => 'cancelled']);
                 }
-                if (! $item->product_variant_id) {
+
+                if ($item->product_variant_id) {
+                    $inventory = InventoryItem::where('product_variant_id', $item->product_variant_id)
+                        ->lockForUpdate()->first();
+
+                    if ($inventory) {
+                        $inventory->update([
+                            'quantity_reserved' => max(0, $inventory->quantity_reserved - $item->quantity),
+                        ]);
+                    }
+
                     continue;
                 }
 
-                $inventory = InventoryItem::where('product_variant_id', $item->product_variant_id)
-                    ->lockForUpdate()
-                    ->first();
+                $product = Product::query()->whereKey($item->product_id)
+                    ->lockForUpdate()->first();
 
-                if ($inventory) {
-                    $inventory->update([
-                        'quantity_reserved' => max(0, $inventory->quantity_reserved - $item->quantity),
+                if ($product) {
+                    $product->update([
+                        'stock_reserved' => max(0, $product->stock_reserved - $item->quantity),
                     ]);
                 }
             }
+
+            $order->update(['reservation_state' => 'released']);
         });
     }
 
     public function captureReservations(Order $order): void
     {
-        DB::transaction(function () use ($order) {
-            foreach ($order->items as $item) {
-                if (! $item->product_variant_id) {
+        DB::transaction(function () use ($order): void {
+            $order = Order::query()->whereKey($order->id)
+                ->lockForUpdate()->firstOrFail();
+
+            if ($order->reservation_state !== 'reserved') {
+                return;
+            }
+
+            foreach ($order->items()->get() as $item) {
+                if ($item->product_variant_id) {
+                    $inventory = InventoryItem::where('product_variant_id', $item->product_variant_id)
+                        ->lockForUpdate()->firstOrFail();
+
+                    $inventory->update([
+                        'quantity_reserved' => max(0, $inventory->quantity_reserved - $item->quantity),
+                        'quantity_on_hand' => max(0, $inventory->quantity_on_hand - $item->quantity),
+                    ]);
+
                     continue;
                 }
 
-                $inventory = InventoryItem::where('product_variant_id', $item->product_variant_id)
-                    ->lockForUpdate()
-                    ->firstOrFail();
+                $product = Product::query()->whereKey($item->product_id)
+                    ->lockForUpdate()->firstOrFail();
 
-                $inventory->update([
-                    'quantity_reserved' => max(0, $inventory->quantity_reserved - $item->quantity),
-                    'quantity_on_hand' => max(0, $inventory->quantity_on_hand - $item->quantity),
+                $product->update([
+                    'stock_reserved' => max(0, $product->stock_reserved - $item->quantity),
+                    'stock_quantity' => max(0, $product->stock_quantity - $item->quantity),
                 ]);
             }
+
+            $order->update(['reservation_state' => 'captured']);
         });
     }
 }

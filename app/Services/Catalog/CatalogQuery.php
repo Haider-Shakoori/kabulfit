@@ -110,8 +110,9 @@ class CatalogQuery
                             ->whereColumn('quantity_on_hand', '>', 'quantity_reserved')))
                     ->orWhere(function (Builder $legacyQuery): void {
                         $legacyQuery
-                            ->whereDoesntHave('variants')
-                            ->where('stock_quantity', '>', 0);
+                            ->whereDoesntHave('variants', fn (Builder $variantQuery) => $variantQuery
+                                ->where('is_active', true))
+                            ->whereColumn('stock_quantity', '>', 'stock_reserved');
                     });
             });
         }
